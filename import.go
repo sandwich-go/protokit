@@ -26,7 +26,7 @@ func (e *ImportSet) AddWithDotFullQualifiedName(dotFullyQualifiedName string, pf
 }
 
 func (e *ImportSet) Add(add *Import) {
-	if util.ContainsString(excludeImportName, add.GolangPackageName) {
+	if util.ContainsString(e.ExcludeImportName, add.GolangPackageName) {
 		return
 	}
 	duplicated := false

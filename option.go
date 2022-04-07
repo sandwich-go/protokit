@@ -18,14 +18,16 @@ func OptionsOptionDeclareWithDefault() interface{} {
 		"ProtoImportPath": []string{},
 		// annotation@ProtoFileAccessor(comment="proto import路径")
 		"ProtoFileAccessor": FileAccessor(nil),
-		// annotation@ProfoExcludeFilter(comment="proto过滤")
+		// annotation@ProtoFileExcludeFilter(comment="proto过滤")
 		"ProtoFileExcludeFilter": FileExcludeFilter(func(string) bool { return false }),
 		// annotation@ZapLogMapKeyTypes(comment="以类型为key的map的MarshalLogObject实现，使得可以直接使用zap.Object函数打印map数据")
 		"ZapLogMapKeyTypes": []string{"int", "int32", "int64", "uint32", "uint64", "string"},
 		// annotation@ZapLogBytesMode(comment="zap以何种方式输出[]byte, 可以使用base64或者bytes, 默认bytes")
 		"ZapLogBytesMode": "bytes",
-		// annotation@NamePattern(xconf="namepattern",comment="NamePattern",inline="true")
+		// annotation@NamePattern(comment="名称格式化空自己",inline="true")
 		"NamePattern": (*NamePattern)(NewNamePattern()),
+		// annotation@ImportSetExclude(comment="import set忽略指定name的package")
+		"ImportSetExclude": []string{"netutils"},
 	}
 }
 
@@ -34,18 +36,9 @@ func NamePatternOptionDeclareWithDefault() interface{} {
 	return map[string]interface{}{
 		// annotation@NamePatternServerHandler(comment="code server handler名称格式化")
 		"NamePatternServerHandler": "ServerHandler%s",
-		// annotation@NamePatternRpcClient(comment="code rpc client名称格式化")
-		"NamePatternRpcClient": "RpcClient%s",
+		// annotation@NamePatternRPCClient(comment="code rpc client名称格式化")
+		"NamePatternRPCClient": "RPCClient%s",
 		// annotation@NamePatternActorClient(comment="code actor client名称格式化")
 		"NamePatternActorClient": "ActorClient%s",
-		// annotation@NamePatternActorServerHandlerMethod(comment="actor server handler的方法名称格式化")
-		"NamePatternActorServerHandlerMethod": "%s",
-		// annotation@NamePatternSingleConfPackage(comment="生成golang conf时控制package名称，可用参数#file、#sheet")
-		"NamePatternSingleConfPackage": "%s",
 	}
-}
-
-// fixme 主要是为了摒除netutils部分的影响，这里可以考虑将template中预知的import移到ImportSet
-var excludeImportName = []string{
-	"netutils",
 }

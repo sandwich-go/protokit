@@ -18,14 +18,16 @@ type Options struct {
 	ProtoImportPath []string `xconf:"proto_import_path" usage:"proto import路径"`
 	// annotation@ProtoFileAccessor(comment="proto import路径")
 	ProtoFileAccessor FileAccessor `xconf:"proto_file_accessor" usage:"proto import路径"`
-	// annotation@ProfoExcludeFilter(comment="proto过滤")
-	ProtoFileExcludeFilter FileExcludeFilter `xconf:"proto_file_exclude_filter"`
+	// annotation@ProtoFileExcludeFilter(comment="proto过滤")
+	ProtoFileExcludeFilter FileExcludeFilter `xconf:"proto_file_exclude_filter" usage:"proto过滤"`
 	// annotation@ZapLogMapKeyTypes(comment="以类型为key的map的MarshalLogObject实现，使得可以直接使用zap.Object函数打印map数据")
 	ZapLogMapKeyTypes []string `xconf:"zap_log_map_key_types" usage:"以类型为key的map的MarshalLogObject实现，使得可以直接使用zap.Object函数打印map数据"`
 	// annotation@ZapLogBytesMode(comment="zap以何种方式输出[]byte, 可以使用base64或者bytes, 默认bytes")
 	ZapLogBytesMode string `xconf:"zap_log_bytes_mode" usage:"zap以何种方式输出[]byte, 可以使用base64或者bytes, 默认bytes"`
-	// annotation@NamePattern(xconf="namepattern",comment="NamePattern",inline="true")
-	*NamePattern `xconf:"namepattern" usage:"NamePattern"`
+	// annotation@NamePattern(comment="名称格式化空自己",inline="true")
+	*NamePattern `xconf:"name_pattern" usage:"名称格式化空自己"`
+	// annotation@ImportSetExclude(comment="import set忽略指定name的package")
+	ImportSetExclude []string `xconf:"import_set_exclude" usage:"import set忽略指定name的package"`
 }
 
 // NewOptions new Options
@@ -91,7 +93,7 @@ func WithProtoFileAccessor(v FileAccessor) Option {
 	}
 }
 
-// WithProtoFileExcludeFilter option func for filed ProtoFileExcludeFilter
+// WithProtoFileExcludeFilter proto过滤
 func WithProtoFileExcludeFilter(v FileExcludeFilter) Option {
 	return func(cc *Options) Option {
 		previous := cc.ProtoFileExcludeFilter
@@ -118,12 +120,21 @@ func WithZapLogBytesMode(v string) Option {
 	}
 }
 
-// WithNamePattern NamePattern
+// WithNamePattern 名称格式化空自己
 func WithNamePattern(v *NamePattern) Option {
 	return func(cc *Options) Option {
 		previous := cc.NamePattern
 		cc.NamePattern = v
 		return WithNamePattern(previous)
+	}
+}
+
+// WithImportSetExclude import set忽略指定name的package
+func WithImportSetExclude(v ...string) Option {
+	return func(cc *Options) Option {
+		previous := cc.ImportSetExclude
+		cc.ImportSetExclude = v
+		return WithImportSetExclude(previous...)
 	}
 }
 
@@ -146,6 +157,7 @@ func newDefaultOptions() *Options {
 		WithZapLogMapKeyTypes([]string{"int", "int32", "int64", "uint32", "uint64", "string"}...),
 		WithZapLogBytesMode("bytes"),
 		WithNamePattern(NewNamePattern()),
+		WithImportSetExclude([]string{"netutils"}...),
 	} {
 		opt(cc)
 	}
@@ -201,6 +213,7 @@ func (cc *Options) GetProtoFileExcludeFilter() FileExcludeFilter { return cc.Pro
 func (cc *Options) GetZapLogMapKeyTypes() []string               { return cc.ZapLogMapKeyTypes }
 func (cc *Options) GetZapLogBytesMode() string                   { return cc.ZapLogBytesMode }
 func (cc *Options) GetNamePattern() *NamePattern                 { return cc.NamePattern }
+func (cc *Options) GetImportSetExclude() []string                { return cc.ImportSetExclude }
 
 // OptionsVisitor visitor interface for Options
 type OptionsVisitor interface {
@@ -212,6 +225,7 @@ type OptionsVisitor interface {
 	GetZapLogMapKeyTypes() []string
 	GetZapLogBytesMode() string
 	GetNamePattern() *NamePattern
+	GetImportSetExclude() []string
 }
 
 // OptionsInterface visitor + ApplyOption interface for Options

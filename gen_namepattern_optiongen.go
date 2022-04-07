@@ -12,14 +12,10 @@ import (
 type NamePattern struct {
 	// annotation@NamePatternServerHandler(comment="code server handler名称格式化")
 	NamePatternServerHandler string `xconf:"name_pattern_server_handler" usage:"code server handler名称格式化"`
-	// annotation@NamePatternRpcClient(comment="code rpc client名称格式化")
-	NamePatternRpcClient string `xconf:"name_pattern_rpc_client" usage:"code rpc client名称格式化"`
+	// annotation@NamePatternRPCClient(comment="code rpc client名称格式化")
+	NamePatternRPCClient string `xconf:"name_pattern_rpc_client" usage:"code rpc client名称格式化"`
 	// annotation@NamePatternActorClient(comment="code actor client名称格式化")
 	NamePatternActorClient string `xconf:"name_pattern_actor_client" usage:"code actor client名称格式化"`
-	// annotation@NamePatternActorServerHandlerMethod(comment="actor server handler的方法名称格式化")
-	NamePatternActorServerHandlerMethod string `xconf:"name_pattern_actor_server_handler_method" usage:"actor server handler的方法名称格式化"`
-	// annotation@NamePatternSingleConfPackage(comment="生成golang conf时控制package名称，可用参数#file、#sheet")
-	NamePatternSingleConfPackage string `xconf:"name_pattern_single_conf_package" usage:"生成golang conf时控制package名称，可用参数#file、#sheet"`
 }
 
 // NewNamePattern new NamePattern
@@ -58,12 +54,12 @@ func WithNamePatternServerHandler(v string) NamePatternOption {
 	}
 }
 
-// WithNamePatternRpcClient code rpc client名称格式化
-func WithNamePatternRpcClient(v string) NamePatternOption {
+// WithNamePatternRPCClient code rpc client名称格式化
+func WithNamePatternRPCClient(v string) NamePatternOption {
 	return func(cc *NamePattern) NamePatternOption {
-		previous := cc.NamePatternRpcClient
-		cc.NamePatternRpcClient = v
-		return WithNamePatternRpcClient(previous)
+		previous := cc.NamePatternRPCClient
+		cc.NamePatternRPCClient = v
+		return WithNamePatternRPCClient(previous)
 	}
 }
 
@@ -73,24 +69,6 @@ func WithNamePatternActorClient(v string) NamePatternOption {
 		previous := cc.NamePatternActorClient
 		cc.NamePatternActorClient = v
 		return WithNamePatternActorClient(previous)
-	}
-}
-
-// WithNamePatternActorServerHandlerMethod actor server handler的方法名称格式化
-func WithNamePatternActorServerHandlerMethod(v string) NamePatternOption {
-	return func(cc *NamePattern) NamePatternOption {
-		previous := cc.NamePatternActorServerHandlerMethod
-		cc.NamePatternActorServerHandlerMethod = v
-		return WithNamePatternActorServerHandlerMethod(previous)
-	}
-}
-
-// WithNamePatternSingleConfPackage 生成golang conf时控制package名称，可用参数#file、#sheet
-func WithNamePatternSingleConfPackage(v string) NamePatternOption {
-	return func(cc *NamePattern) NamePatternOption {
-		previous := cc.NamePatternSingleConfPackage
-		cc.NamePatternSingleConfPackage = v
-		return WithNamePatternSingleConfPackage(previous)
 	}
 }
 
@@ -106,10 +84,8 @@ func newDefaultNamePattern() *NamePattern {
 
 	for _, opt := range [...]NamePatternOption{
 		WithNamePatternServerHandler("ServerHandler%s"),
-		WithNamePatternRpcClient("RpcClient%s"),
+		WithNamePatternRPCClient("RPCClient%s"),
 		WithNamePatternActorClient("ActorClient%s"),
-		WithNamePatternActorServerHandlerMethod("%s"),
-		WithNamePatternSingleConfPackage("%s"),
 	} {
 		opt(cc)
 	}
@@ -158,22 +134,14 @@ func AtomicNamePattern() NamePatternVisitor {
 
 // all getter func
 func (cc *NamePattern) GetNamePatternServerHandler() string { return cc.NamePatternServerHandler }
-func (cc *NamePattern) GetNamePatternRpcClient() string     { return cc.NamePatternRpcClient }
+func (cc *NamePattern) GetNamePatternRPCClient() string     { return cc.NamePatternRPCClient }
 func (cc *NamePattern) GetNamePatternActorClient() string   { return cc.NamePatternActorClient }
-func (cc *NamePattern) GetNamePatternActorServerHandlerMethod() string {
-	return cc.NamePatternActorServerHandlerMethod
-}
-func (cc *NamePattern) GetNamePatternSingleConfPackage() string {
-	return cc.NamePatternSingleConfPackage
-}
 
 // NamePatternVisitor visitor interface for NamePattern
 type NamePatternVisitor interface {
 	GetNamePatternServerHandler() string
-	GetNamePatternRpcClient() string
+	GetNamePatternRPCClient() string
 	GetNamePatternActorClient() string
-	GetNamePatternActorServerHandlerMethod() string
-	GetNamePatternSingleConfPackage() string
 }
 
 // NamePatternInterface visitor + ApplyOption interface for NamePattern

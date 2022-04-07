@@ -24,14 +24,16 @@ type ImportSet struct {
 	MessageDotFullQualifiedNameToGolangType map[string]string // GolangType是经过import纠正过package名称的，可能带着1，2之类的标记
 	PythonModules                           []*PythonModule   // python module 辅助python代码生成
 	importAliasMappingCount                 map[string]int    // 构建中使用的临时数据，记录同名但不同路径的import
+	ExcludeImportName                       []string
 }
 
-func NewImportSet(golangPackageName, golangPackagePath string) *ImportSet {
+func NewImportSet(golangPackageName, golangPackagePath string, excludeImportName []string) *ImportSet {
 	return &ImportSet{
 		GolangPackageName:                       golangPackageName,
 		GolangPackagePath:                       golangPackagePath,
 		MessageDotFullQualifiedNameToGolangType: make(map[string]string),
 		importAliasMappingCount:                 make(map[string]int),
+		ExcludeImportName:                       excludeImportName,
 	}
 }
 
@@ -74,7 +76,7 @@ type Service struct {
 
 type ServiceGroup struct {
 	ProtoFilePath string     // 当前group所属的ProtoFilePath,可以通过ProtoFilePath唯一索引到ProtoFile
-	Services      []*Service // 当前group内的service列表，一个profo文件内可能有多个service
+	Services      []*Service // 当前group内的service列表，一个proto文件内可能有多个service
 	ImportSet     *ImportSet // 同一个ServiceGroup内的service共享同一个ImportSet，目的是生成到同一个文件
 }
 
@@ -160,12 +162,12 @@ func (p *Package) GetFullPathWithFileNameIgnoreGlocalPackageDir(fileName string)
 	return path.Join(p.GolangPackagePath, name)
 }
 
-func NewPackageWithPackageName(golangPackageName, golangPackagePath string) *Package {
+func NewPackageWithPackageName(golangPackageName, golangPackagePath string, cc *Options) *Package {
 	p := &Package{}
 	p.GolangPackageName = golangPackageName
 	p.GolangPackagePath = golangPackagePath
 	p.AliasToGolangType = make(map[string]string)
-	p.ImportSet = NewImportSet(golangPackageName, golangPackagePath)
+	p.ImportSet = NewImportSet(golangPackageName, golangPackagePath, cc.ImportSetExclude)
 	return p
 }
 
@@ -204,8 +206,8 @@ type Namespace struct {
 }
 
 // NewNamespace 新建一个namespace
-func NewNamespace(name string, path string) *Namespace {
-	messageRegistryPackage := NewPackageWithPackageName(NamespaceMessageRegistryPackageName, NamespaceMessageRegistryPackageName)
+func NewNamespace(name string, path string, cc *Options) *Namespace {
+	messageRegistryPackage := NewPackageWithPackageName(NamespaceMessageRegistryPackageName, NamespaceMessageRegistryPackageName, cc)
 	messageRegistryPackage.MessageRegistryAutoInit = true
 	messageRegistryPackage.FilePath = NamespaceMessageRegistryPackageName
 	messageRegistryPackage.IsGlobal = true

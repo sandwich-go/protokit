@@ -1,8 +1,9 @@
 package protokit
 
 import (
-	"github.com/jhump/protoreflect/desc"
 	"strings"
+
+	"github.com/jhump/protoreflect/desc"
 )
 
 type ProtoMessage struct {
@@ -16,20 +17,20 @@ type ProtoMessage struct {
 	ImportSet                     *ImportSet
 }
 
-func NewProtoMessage(pf *ProtoFile, md *desc.MessageDescriptor) *ProtoMessage {
+func NewProtoMessage(pf *ProtoFile, md *desc.MessageDescriptor, cc *Options) *ProtoMessage {
 	pm := &ProtoMessage{
 		md:                            md,
 		ProtoFile:                     pf,
 		Name:                          md.GetName(),
 		Fields:                        make([]*ProtoField, 0, len(md.GetFields())),
 		goStructNameWithGolangPackage: GoStructNameWithGolangPackage(md.GetFullyQualifiedName(), pf.Package, pf.GolangPackageName),
-		ImportSet:                     NewImportSet(pf.GolangPackageName, pf.GolangPackagePath),
+		ImportSet:                     NewImportSet(pf.GolangPackageName, pf.GolangPackagePath, cc.ImportSetExclude),
 	}
 	return pm
 }
 
 func (p *Parser) BuildProtoMessage(pf *ProtoFile, md *desc.MessageDescriptor) *ProtoMessage {
-	pm := NewProtoMessage(pf, md)
+	pm := NewProtoMessage(pf, md, p.cc)
 	pm.dotFullyQualifiedTypeName = p.descriptor2DotFullyQualifiedTypeName[pm.md]
 	pm.Comment = p.comments[pm.md.AsDescriptorProto()]
 	return pm

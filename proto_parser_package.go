@@ -49,7 +49,7 @@ func (p *Parser) parsePackage(nsList []*Namespace) {
 		golangPackagePath := protoFile.GolangPackagePath
 		pi, ok := ns.Packages[golangPackagePath]
 		if !ok {
-			pi = NewPackageWithPackageName(protoFile.GolangPackageName, protoFile.GolangPackagePath)
+			pi = NewPackageWithPackageName(protoFile.GolangPackageName, protoFile.GolangPackagePath, p.cc)
 			pi.FilePath, _ = path.Split(protoFile.FilePath)
 			pi.Package = protoFile.Package
 			pi.GolangRelative = p.cc.GolangRelative

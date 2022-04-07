@@ -19,7 +19,7 @@ func (p *Parser) parseService() {
 			protoFile.ServiceGroups[serviceTag] = &ServiceGroup{
 				ProtoFilePath: protoFile.FilePath,
 				Services:      p.parseServiceForProtoFile(protoFile, serviceTag),
-				ImportSet:     NewImportSet(protoFile.GolangPackageName, protoFile.GolangPackagePath),
+				ImportSet:     NewImportSet(protoFile.GolangPackageName, protoFile.GolangPackagePath, p.cc.ImportSetExclude),
 			}
 		}
 	}
@@ -42,11 +42,11 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag) (
 			service.ServiceName = fmt.Sprintf(p.cc.NamePatternActorClient, name)
 			needRPC = false
 		} else if st == ServiceTagRPC {
-			service.ServiceName = fmt.Sprintf(p.cc.NamePatternRpcClient, name)
+			service.ServiceName = fmt.Sprintf(p.cc.NamePatternRPCClient, name)
 			needActor = false
 		}
 		service.ServerHandlerInterfaceName = fmt.Sprintf(p.cc.NamePatternServerHandler, name)
-		service.RPCClientInterfaceName = fmt.Sprintf(p.cc.NamePatternRpcClient, name)
+		service.RPCClientInterfaceName = fmt.Sprintf(p.cc.NamePatternRPCClient, name)
 		service.ActorClientInterfaceName = fmt.Sprintf(p.cc.NamePatternActorClient, name)
 		comment, ok := p.comments[protoService]
 		if ok {
@@ -131,8 +131,8 @@ func (p *Parser) typeStr(dotFullyQualifiedTypeName string) string {
 	if len(ss) == 1 {
 		return dotFullyQualifiedTypeName
 	}
-	if profoFile, ok := p.dotFullyQualifiedTypeNameToProtoFile[dotFullyQualifiedTypeName]; ok {
-		return strings.Join([]string{profoFile.GolangPackageName, ss[len(ss)-1]}, ".")
+	if protoFile, ok := p.dotFullyQualifiedTypeNameToProtoFile[dotFullyQualifiedTypeName]; ok {
+		return strings.Join([]string{protoFile.GolangPackageName, ss[len(ss)-1]}, ".")
 	}
 	return strings.Join(ss[len(ss)-2:], ".")
 }
