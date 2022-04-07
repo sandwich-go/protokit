@@ -125,7 +125,11 @@ func (p *Parser) BuildProtoField(pf *ProtoFile, fd *desc.FieldDescriptor) *Proto
 func (pf *ProtoField) AsFieldDescriptor() *desc.FieldDescriptor { return pf.fd }
 
 func ProtoFieldTypeNameToGolangFieldTypeName(protoFieldTypeName string) string {
-	return protoFieldTypeNameToGolangFieldTypeNameMapping[protoFieldTypeName]
+	s, ok := protoFieldTypeNameToGolangFieldTypeNameMapping[protoFieldTypeName]
+	if ok {
+		return s
+	}
+	return protoFieldTypeName
 }
 
 func FieldDescriptorProtoTypeToProtoFieldTypeName(t descriptorpb.FieldDescriptorProto_Type) string {
