@@ -27,13 +27,12 @@ type ImportSet struct {
 	ExcludeImportName                       []string
 }
 
-func NewImportSet(golangPackageName, golangPackagePath string, excludeImportName []string) *ImportSet {
+func NewImportSet(golangPackageName, golangPackagePath string) *ImportSet {
 	return &ImportSet{
 		GolangPackageName:                       golangPackageName,
 		GolangPackagePath:                       golangPackagePath,
 		MessageDotFullQualifiedNameToGolangType: make(map[string]string),
 		importAliasMappingCount:                 make(map[string]int),
-		ExcludeImportName:                       excludeImportName,
 	}
 }
 
@@ -162,12 +161,12 @@ func (p *Package) GetFullPathWithFileNameIgnoreGlocalPackageDir(fileName string)
 	return path.Join(p.GolangPackagePath, name)
 }
 
-func NewPackageWithPackageName(golangPackageName, golangPackagePath string, cc *Options) *Package {
+func NewPackageWithPackageName(golangPackageName, golangPackagePath string) *Package {
 	p := &Package{}
 	p.GolangPackageName = golangPackageName
 	p.GolangPackagePath = golangPackagePath
 	p.AliasToGolangType = make(map[string]string)
-	p.ImportSet = NewImportSet(golangPackageName, golangPackagePath, cc.ImportSetExclude)
+	p.ImportSet = NewImportSet(golangPackageName, golangPackagePath)
 	return p
 }
 
@@ -206,8 +205,8 @@ type Namespace struct {
 }
 
 // NewNamespace 新建一个namespace
-func NewNamespace(name string, path string, cc *Options) *Namespace {
-	messageRegistryPackage := NewPackageWithPackageName(NamespaceMessageRegistryPackageName, NamespaceMessageRegistryPackageName, cc)
+func NewNamespace(name string, path string) *Namespace {
+	messageRegistryPackage := NewPackageWithPackageName(NamespaceMessageRegistryPackageName, NamespaceMessageRegistryPackageName)
 	messageRegistryPackage.MessageRegistryAutoInit = true
 	messageRegistryPackage.FilePath = NamespaceMessageRegistryPackageName
 	messageRegistryPackage.IsGlobal = true

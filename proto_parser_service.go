@@ -19,7 +19,7 @@ func (p *Parser) parseService() {
 			protoFile.ServiceGroups[serviceTag] = &ServiceGroup{
 				ProtoFilePath: protoFile.FilePath,
 				Services:      p.parseServiceForProtoFile(protoFile, serviceTag),
-				ImportSet:     NewImportSet(protoFile.GolangPackageName, protoFile.GolangPackagePath, p.cc.ImportSetExclude),
+				ImportSet:     NewImportSet(protoFile.GolangPackageName, protoFile.GolangPackagePath),
 			}
 		}
 	}

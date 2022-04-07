@@ -17,20 +17,20 @@ type ProtoMessage struct {
 	ImportSet                     *ImportSet
 }
 
-func NewProtoMessage(pf *ProtoFile, md *desc.MessageDescriptor, cc *Options) *ProtoMessage {
+func NewProtoMessage(pf *ProtoFile, md *desc.MessageDescriptor) *ProtoMessage {
 	pm := &ProtoMessage{
 		md:                            md,
 		ProtoFile:                     pf,
 		Name:                          md.GetName(),
 		Fields:                        make([]*ProtoField, 0, len(md.GetFields())),
 		goStructNameWithGolangPackage: GoStructNameWithGolangPackage(md.GetFullyQualifiedName(), pf.Package, pf.GolangPackageName),
-		ImportSet:                     NewImportSet(pf.GolangPackageName, pf.GolangPackagePath, cc.ImportSetExclude),
+		ImportSet:                     NewImportSet(pf.GolangPackageName, pf.GolangPackagePath),
 	}
 	return pm
 }
 
 func (p *Parser) BuildProtoMessage(pf *ProtoFile, md *desc.MessageDescriptor) *ProtoMessage {
-	pm := NewProtoMessage(pf, md, p.cc)
+	pm := NewProtoMessage(pf, md)
 	pm.dotFullyQualifiedTypeName = p.descriptor2DotFullyQualifiedTypeName[pm.md]
 	pm.Comment = p.comments[pm.md.AsDescriptorProto()]
 	return pm

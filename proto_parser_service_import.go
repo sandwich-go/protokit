@@ -23,6 +23,8 @@ func (p *Parser) parseImport() {
 	reqMap := make(map[string]string)
 	for _, protoFile := range p.protoFilePathToProtoFile {
 		for _, sg := range protoFile.ServiceGroups {
+			// 设定import忽略路径
+			sg.ImportSet.ExcludeImportName = p.cc.ImportSetExclude
 			for _, service := range sg.Services {
 				for _, method := range service.Methods {
 					// 名称需要做一次修复，根据import的package名称

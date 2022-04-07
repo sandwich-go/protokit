@@ -49,10 +49,12 @@ func (p *Parser) parsePackage(nsList []*Namespace) {
 		golangPackagePath := protoFile.GolangPackagePath
 		pi, ok := ns.Packages[golangPackagePath]
 		if !ok {
-			pi = NewPackageWithPackageName(protoFile.GolangPackageName, protoFile.GolangPackagePath, p.cc)
+			pi = NewPackageWithPackageName(protoFile.GolangPackageName, protoFile.GolangPackagePath)
 			pi.FilePath, _ = path.Split(protoFile.FilePath)
 			pi.Package = protoFile.Package
 			pi.GolangRelative = p.cc.GolangRelative
+			// 设定import忽略路径
+			pi.ImportSet.ExcludeImportName = p.cc.ImportSetExclude
 			ns.Packages[golangPackagePath] = pi
 		}
 		// 本保内的消息
@@ -62,6 +64,8 @@ func (p *Parser) parsePackage(nsList []*Namespace) {
 		if globalPackage != nil {
 			// 重新赋值一次，默认的message registry package在创建的时候没有这个参数
 			globalPackage.GolangRelative = p.cc.GolangRelative
+			// 设定import忽略路径
+			globalPackage.ImportSet.ExcludeImportName = p.cc.ImportSetExclude
 			upPackage(globalPackage, dotFullyQualifiedTypeName, protoFile)
 		}
 	}
