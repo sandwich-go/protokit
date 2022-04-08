@@ -24,18 +24,21 @@ type ParserVisitor interface {
 	DotFullyQualifiedTypeNameToDescriptor(dotName string) (desc.Descriptor, bool)
 	// DotFullyQualifiedTypeNameToProtoFile 由dot名称获取对应的ProtoFile
 	DotFullyQualifiedTypeNameToProtoFile(dotName string) (*ProtoFile, bool)
+	// DotFullyQualifiedTypeNameToProtoMessage 由dot名称获取对应的ProtoMessage
+	DotFullyQualifiedTypeNameToProtoMessage(dotName string) (*ProtoMessage, bool)
 	// DescriptorToDotFullyQualifiedTypeName 由Descriptor获取dot名称
 	DescriptorToDotFullyQualifiedTypeName(d desc.Descriptor) (string, bool)
 }
 
 type Parser struct {
-	cc                                    *Options
-	comments                              map[proto.Message]*Comment
-	protoFilePathToProtoFile              map[string]*ProtoFile        // proto 文件路径(相对路径) => *ProtoFile
-	dotFullyQualifiedTypeNameToProtoFile  map[string]*ProtoFile        // 类型名(.package_path.message) => *ProtoFile
-	dotFullyQualifiedTypeNameToDescriptor map[string]desc.Descriptor   // 类型名(.package_path.message) => desc.Descriptor
-	descriptor2DotFullyQualifiedTypeName  map[desc.Descriptor]string   // desc.Descriptor => 类型名(.package_path.message)
-	tmpParsedMessageOrEnumMapping         map[desc.Descriptor]struct{} // 已经解析过的message或者enum，临时的
+	cc                                      *Options
+	comments                                map[proto.Message]*Comment
+	protoFilePathToProtoFile                map[string]*ProtoFile        // proto 文件路径(相对路径) => *ProtoFile
+	dotFullyQualifiedTypeNameToProtoFile    map[string]*ProtoFile        // 类型名(.package_path.message) => *ProtoFile
+	dotFullyQualifiedTypeNameToDescriptor   map[string]desc.Descriptor   // 类型名(.package_path.message) => desc.Descriptor
+	dotFullyQualifiedTypeNameToProtoMessage map[string]*ProtoMessage     // 类型名(.package_path.message) => *ProtoMessage
+	descriptor2DotFullyQualifiedTypeName    map[desc.Descriptor]string   // desc.Descriptor => 类型名(.package_path.message)
+	tmpParsedMessageOrEnumMapping           map[desc.Descriptor]struct{} // 已经解析过的message或者enum，临时的
 }
 
 func NewParser(opts ...Option) *Parser {
@@ -65,6 +68,7 @@ func (p *Parser) Clean() {
 	p.protoFilePathToProtoFile = make(map[string]*ProtoFile)
 	p.dotFullyQualifiedTypeNameToProtoFile = make(map[string]*ProtoFile)
 	p.dotFullyQualifiedTypeNameToDescriptor = make(map[string]desc.Descriptor)
+	p.dotFullyQualifiedTypeNameToProtoMessage = make(map[string]*ProtoMessage)
 	p.descriptor2DotFullyQualifiedTypeName = make(map[desc.Descriptor]string)
 	p.tmpParsedMessageOrEnumMapping = make(map[desc.Descriptor]struct{})
 }
@@ -193,6 +197,14 @@ func (p *Parser) DotFullyQualifiedTypeNameToDescriptor(dotName string) (desc.Des
 
 func (p *Parser) DotFullyQualifiedTypeNameToProtoFile(dotName string) (*ProtoFile, bool) {
 	v, ok := p.dotFullyQualifiedTypeNameToProtoFile[dotName]
+	if ok {
+		return v, true
+	}
+	return nil, false
+}
+
+func (p *Parser) DotFullyQualifiedTypeNameToProtoMessage(dotName string) (*ProtoMessage, bool) {
+	v, ok := p.dotFullyQualifiedTypeNameToProtoMessage[dotName]
 	if ok {
 		return v, true
 	}

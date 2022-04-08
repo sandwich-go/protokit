@@ -47,6 +47,7 @@ func (p *Parser) parseProtoFileMessage(pf *ProtoFile, md *desc.MessageDescriptor
 		_, _ = p.addImportByDotFullyQualifiedTypeName(protoField.ValueTypeName, pm.ImportSet, pf)
 	}
 	pf.Messages = append(pf.Messages, pm)
+	p.dotFullyQualifiedTypeNameToProtoMessage[pm.dotFullyQualifiedTypeName] = pm
 	for _, mt := range md.GetNestedMessageTypes() {
 		if mt.IsMapEntry() {
 			continue
