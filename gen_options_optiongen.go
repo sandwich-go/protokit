@@ -153,7 +153,7 @@ func newDefaultOptions() *Options {
 		WithGolangRelative(true),
 		WithProtoImportPath(make([]string, 0)...),
 		WithProtoFileAccessor(nil),
-		WithProtoFileExcludeFilter(func(string) bool { return false }),
+		WithProtoFileExcludeFilter(defaultFileExcludeFilter),
 		WithZapLogMapKeyTypes([]string{"int", "int32", "int64", "uint32", "uint64", "string"}...),
 		WithZapLogBytesMode("bytes"),
 		WithNamePattern(NewNamePattern()),

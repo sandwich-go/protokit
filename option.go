@@ -2,10 +2,16 @@ package protokit
 
 import (
 	"io"
+	"strings"
 )
 
 type FileExcludeFilter = func(string) bool
 type FileAccessor = func(fielRelativePath string) (io.ReadCloser, error)
+
+// 默认过滤器
+func defaultFileExcludeFilter(filePath string) bool {
+	return strings.Contains(filePath, "_exclude")
+}
 
 //go:generate optionGen   --xconf=true --usage_tag_name=usage --xconf=true
 func OptionsOptionDeclareWithDefault() interface{} {
@@ -19,7 +25,7 @@ func OptionsOptionDeclareWithDefault() interface{} {
 		// annotation@ProtoFileAccessor(comment="proto import路径")
 		"ProtoFileAccessor": FileAccessor(nil),
 		// annotation@ProtoFileExcludeFilter(comment="proto过滤")
-		"ProtoFileExcludeFilter": FileExcludeFilter(func(string) bool { return false }),
+		"ProtoFileExcludeFilter": FileExcludeFilter(defaultFileExcludeFilter),
 		// annotation@ZapLogMapKeyTypes(comment="以类型为key的map的MarshalLogObject实现，使得可以直接使用zap.Object函数打印map数据")
 		"ZapLogMapKeyTypes": []string{"int", "int32", "int64", "uint32", "uint64", "string"},
 		// annotation@ZapLogBytesMode(comment="zap以何种方式输出[]byte, 可以使用base64或者bytes, 默认bytes")
