@@ -4,8 +4,13 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"os"
+	"time"
 
+	"github.com/mattn/go-colorable"
 	"github.com/sandwich-go/boost/xpanic"
+
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 )
 
 // Parameter protokito传递过来的参数数据
@@ -27,6 +32,8 @@ type Parameter struct {
 	CSBaseNamespace          string
 	CSConfNamespace          string
 	CSRawDataNamespace       string
+	LogLevel                 int
+	LogColor                 bool
 }
 
 type Plugin struct {
@@ -44,6 +51,10 @@ func MustNewPlugin(opts ...Option) *Plugin {
 	err = json.Unmarshal(content, p.Parameter)
 	xpanic.PanicIfErrorAsFmtFirst(err, "got err:%w while unmarshal to Parameter")
 	xpanic.PanicIfTrue(p.Parameter.WorkingDir == "", "WorkingDir should not empty")
+
+	zerolog.SetGlobalLevel(zerolog.Level(p.Parameter.LogLevel))
+	log.Logger = log.Output(zerolog.ConsoleWriter{Out: colorable.NewColorableStdout(), TimeFormat: time.RFC3339, NoColor: !p.Parameter.LogColor})
+
 	// 解析namespaces
 	var nsList []*Namespace
 	for k, v := range p.Parameter.NameSpaces {
