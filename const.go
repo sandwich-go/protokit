@@ -8,3 +8,4 @@ const AnnotationSpaceFilter = "filter"
 
 const AnnotationKeyType = "type"
 const AnnotationProfoFileTypeRawdata = "rawdata"
+const AnnotationProfoFileTypeRawdataConst = "rawdata_const"
