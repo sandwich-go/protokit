@@ -3,7 +3,7 @@ package protokit
 import (
 	"strings"
 
-	"github.com/sandwich-go/protokit/util"
+	"github.com/sandwich-go/boost/xslice"
 )
 
 func (p *Parser) addImportByDotFullyQualifiedTypeName(dotFullyQualifiedTypeName string, set *ImportSet, protoFile *ProtoFile) (string, *Import) {
@@ -30,7 +30,7 @@ func (p *Parser) parseImport() {
 					// 名称需要做一次修复，根据import的package名称
 					method.TypeInput, _ = p.addImportByDotFullyQualifiedTypeName(method.TypeInputDotFullQualifiedName, sg.ImportSet, protoFile)
 					method.TypeOutput, _ = p.addImportByDotFullyQualifiedTypeName(method.TypeOutputDotFullQualifiedName, sg.ImportSet, protoFile)
-					service.InputOutputTypes = util.StringSetAdd(service.InputOutputTypes, method.TypeInput, method.TypeOutput)
+					service.InputOutputTypes = xslice.StringSetAdd(service.InputOutputTypes, method.TypeInput, method.TypeOutput)
 					// 请求使用使用的uri名称
 					uriUsing := method.TypeInput
 					if method.TypeInputAlias != "" {

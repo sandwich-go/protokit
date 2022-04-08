@@ -3,8 +3,10 @@ package protokit
 import (
 	"path"
 	"path/filepath"
+	"strings"
 
 	"github.com/jhump/protoreflect/desc"
+	"github.com/sandwich-go/boost/annotation"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -97,15 +99,29 @@ type ProtoFile struct {
 	GolangPackagePath   string                   // protokitgo逻辑内计算的golang package path
 	OptionGolangPackage string                   // 原始proto文件Option中的数据，可能为空
 	OptionCSNamespace   string                   // 原始proto文件Option中的数据，可能为空
-	Content             []byte                   // proto文件内容
+	Content             string                   // proto文件内容
 	Messages            []*ProtoMessage          // proto文件中所有的ProtoMessage
 	Enums               []*ProtoEnum             // proto文件中所有的ProtoEnum
 	ServiceGroups       map[string]*ServiceGroup // 带tag的service，用于处理用于处理RPC/Actor Client等逻辑，service可能不是全量的
 	GolangRelative      bool                     // 是否使用的是golang relative模式,数据来源于option
 	fd                  *desc.FileDescriptor     // 文件对应的FileDescriptor
+	Annotations         []annotation.Annotation
 }
 
 func (p *ProtoFile) AsFileDescriptor() *desc.FileDescriptor { return p.fd }
+func (p *ProtoFile) Annotation(name string) annotation.Annotation {
+	for _, v := range p.Annotations {
+		if v.Name == name {
+			return v
+		}
+	}
+	for _, v := range p.Annotations {
+		if strings.EqualFold(v.Name, name) {
+			return v
+		}
+	}
+	return annotation.Annotation{}
+}
 
 func (p *ProtoFile) GetFullPathWithSuffix(suffix string) string {
 	name := p.FilePath

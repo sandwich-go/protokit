@@ -10,7 +10,8 @@ import (
 	"path"
 	"strings"
 
-	"github.com/sandwich-go/protokit/util"
+	"github.com/sandwich-go/boost/xos"
+	"github.com/sandwich-go/boost/xpanic"
 )
 
 func ProtoFileContents(dirs ...string) (map[string][]byte, error) {
@@ -18,12 +19,12 @@ func ProtoFileContents(dirs ...string) (map[string][]byte, error) {
 	for _, pathProtoRoot := range dirs {
 		pathProtoRoot = path.Clean(pathProtoRoot)
 		fileList := make([]string, 0)
-		err := util.FilePathWalkFollowLink(pathProtoRoot, util.FileWalkFuncWithExcludeFilter(&fileList, nil, ".proto"))
+		err := xos.FilePathWalkFollowLink(pathProtoRoot, xos.FileWalkFuncWithExcludeFilter(&fileList, nil, ".proto"))
 		if err != nil {
 			return nil, err
 		}
 		for _, filePath := range fileList {
-			content, err := util.FileGetContents(filePath)
+			content, err := xos.FileGetContents(filePath)
 			if err != nil {
 				return nil, err
 			}
@@ -51,7 +52,7 @@ func MustGetFileAccessorWithNamespace(nsList ...*Namespace) FileAccessor {
 // MustGetFileAccessorWithDirs 获取文件加载器，会主动加载并缓存目录下的所有文件夹爱你内容
 func MustGetFileAccessorWithDirs(dirs ...string) FileAccessor {
 	contents, err := ProtoFileContents(dirs...)
-	util.PanicIfErrorAsFisrt(err, "got error:%s while load contents with:%s ", strings.Join(dirs, ","))
+	xpanic.PanicIfErrorAsFmtFirst(err, "got error:%s while load contents with:%s ", strings.Join(dirs, ","))
 	return GetFileAccessor(contents)
 }
 

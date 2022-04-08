@@ -3,8 +3,8 @@ package protokit
 import (
 	"strings"
 
-	"github.com/sandwich-go/protokit/annotation"
-	"github.com/sandwich-go/protokit/util"
+	"github.com/sandwich-go/boost/annotation"
+	"github.com/sandwich-go/boost/xstrings"
 	"google.golang.org/protobuf/types/descriptorpb"
 )
 
@@ -66,7 +66,7 @@ func NewComment(lines []string) *Comment {
 	comment.Content = strings.Join(lines, "\n")
 	comment.Annotations = annotation.NewRegistry().ResolveAnnotations(lines)
 	for _, l := range lines {
-		l = util.Trim(l)
+		l = xstrings.Trim(l)
 		arr := strings.Split(l, "@")
 		if len(arr) <= 1 {
 			continue

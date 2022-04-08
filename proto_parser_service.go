@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/sandwich-go/protokit/util"
+	"github.com/sandwich-go/boost/xstrings"
 )
 
 func nameMustHaveSuffix(s string, suffix string) string {
@@ -30,7 +30,7 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag) (
 		name := protoService.GetName()
 		service := &Service{
 			Name:           name,
-			DeprecatedName: util.CamelCase(nameMustHaveSuffix(name, "Service")),
+			DeprecatedName: xstrings.CamelCase(nameMustHaveSuffix(name, "Service")),
 			DescName:       fmt.Sprintf("%s.%s", fdp.GetPackage(), name),
 			DescProtoFile:  fdp.GetName(),
 		}
@@ -73,7 +73,7 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag) (
 			rspTypeName := strings.TrimPrefix(p.typeStr(protoMethod.GetOutputType()), ".")
 
 			method := &Method{
-				Name:                           util.CamelCase(protoMethod.GetName()),
+				Name:                           xstrings.CamelCase(protoMethod.GetName()),
 				TypeInputDotFullQualifiedName:  protoMethod.GetInputType(),
 				TypeOutputDotFullQualifiedName: protoMethod.GetOutputType(),
 				TypeInputWithSelfPackage:       reqTypeName,
