@@ -15,25 +15,30 @@ import (
 
 // Parameter protokito传递过来的参数数据
 type Parameter struct {
-	NameSpaces           map[string]string // namespace到根路径的映射,需要手动加载
-	WorkingDir           string
-	Outpath              string
-	OutpathLua           string
-	OutpathGolang        string
-	OutpathJS            string
-	OutpathCSharp        string
-	OutpathPython        string
+	NameSpaces map[string]string // namespace到根路径的映射,需要手动加载
+	WorkingDir string
+	// 输出目录
+	Outpath       string
+	OutpathLua    string
+	OutpathGolang string
+	OutpathJS     string
+	OutpathCSharp string
+	OutpathPython string
+	// raw data属性
+	RawDataPackageName   string
 	OutpathRawdataServer string
 	OutpathRawdataClient string
-
-	GolangBasePackagePath    string
-	GolangRelative           bool
-	GolangRawDataPackageName string
-	CSBaseNamespace          string
-	CSConfNamespace          string
-	CSRawDataNamespace       string
-	LogLevel                 int
-	LogColor                 bool
+	// golang 基础配置
+	GolangBasePackagePath string
+	GolangRelative        bool
+	// cs基础配置
+	CSBaseNamespace    string
+	CSConfNamespace    string
+	CSRawDataNamespace string
+	// 日志配置
+	LogLevel int
+	LogColor bool
+	Raw      []byte
 }
 
 type Plugin struct {
