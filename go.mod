@@ -14,9 +14,11 @@ require (
 	github.com/mattn/go-colorable v0.1.12
 	github.com/mitchellh/copystructure v1.2.0 // indirect
 	github.com/rs/zerolog v1.26.1
-	github.com/sandwich-go/boost v0.0.0-20220408073239-26c94175960d
+	github.com/sandwich-go/boost v0.0.0-20220411071147-266580ac14d7
 	github.com/smartystreets/goconvey v1.7.2
 	google.golang.org/genproto v0.0.0-20220405205423-9d709892a2bf
 	google.golang.org/protobuf v1.28.0
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
+
+// replace github.com/sandwich-go/boost => ../boost

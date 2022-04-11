@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"os"
 	"os/exec"
 	"path/filepath"
 
@@ -14,16 +13,16 @@ import (
 )
 
 // MustRun pluginPath目前只支持本地文件, 后续加入远程版本支持
-func MustRun(pluginPath string, args string, parameter *Parameter) {
-	ex, err := os.Executable()
-	if err != nil {
-		panic(err)
-	}
-	pluginPath, err = getCommand(pluginPath)
+func MustRun(pluginPath string, parameter *Parameter, args ...string) {
+	pluginPath, err := getCommand(pluginPath)
 	xpanic.PanicIfErrorAsFmtFirst(err, "got err:%w while check plugin")
 	bb, err := json.Marshal(parameter)
 	xpanic.PanicIfErrorAsFmtFirst(err, "got err:%w while marshal parameter")
-	content, err := xexec.Run(pluginPath+" "+args, filepath.Dir(ex), bytes.NewBuffer(bb))
+	content, err := xexec.Run(pluginPath,
+		xexec.WithArgs(args...),
+		xexec.WithWorkingDir(parameter.WorkingDir),
+		xexec.WithStdin(bytes.NewBuffer(bb)),
+	)
 	xpanic.PanicIfErrorAsFmtFirst(err, "got err:%w while run plugin :%s with args:%s ", pluginPath, args)
 	fmt.Println(content)
 }
