@@ -4,7 +4,8 @@ import (
 	"path"
 
 	"github.com/jhump/protoreflect/desc"
-	"github.com/sandwich-go/protokit/util"
+	"github.com/sandwich-go/boost/xpanic"
+	"github.com/sandwich-go/boost/xslice"
 )
 
 type IsMapEntry interface {
@@ -44,7 +45,7 @@ func (p *Parser) parsePackage(nsList []*Namespace) {
 		}
 		// 根据protoFile获取namespace
 		ns := namespace(nsList, protoFile.Namespace)
-		util.PanicIfTrue(ns == nil, "can not got namspace with name: %s", protoFile.Namespace)
+		xpanic.PanicIfTrue(ns == nil, "can not got namspace with name: %s", protoFile.Namespace)
 
 		golangPackagePath := protoFile.GolangPackagePath
 		pi, ok := ns.Packages[golangPackagePath]
@@ -76,7 +77,7 @@ func (p *Parser) parsePackage(nsList []*Namespace) {
 			continue
 		}
 		ns := namespace(nsList, protoFile.Namespace)
-		util.PanicIfTrue(ns == nil, "can not got namspace with name: %s", protoFile.Namespace)
+		xpanic.PanicIfTrue(ns == nil, "can not got namspace with name: %s", protoFile.Namespace)
 		pp := ns.Packages[NamespaceMessageRegistryPackageName]
 		if pp == nil {
 			continue
@@ -90,10 +91,10 @@ func (p *Parser) parsePackage(nsList []*Namespace) {
 					pp.AliasToGolangType[method.TypeInputAlias] = golangInputType
 				}
 				if golangInputType != "" && method.IsActor {
-					pp.ActorMessageGolangType = util.StringSetAdd(pp.ActorMessageGolangType, golangInputType)
+					pp.ActorMessageGolangType = xslice.StringSetAdd(pp.ActorMessageGolangType, golangInputType)
 				}
 				if golangOutputType != "" && method.IsActor {
-					pp.ActorMessageGolangType = util.StringSetAdd(pp.ActorMessageGolangType, golangOutputType)
+					pp.ActorMessageGolangType = xslice.StringSetAdd(pp.ActorMessageGolangType, golangOutputType)
 				}
 			}
 		}

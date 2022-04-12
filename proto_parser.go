@@ -9,8 +9,10 @@ import (
 	"github.com/jhump/protoreflect/desc"
 	"github.com/jhump/protoreflect/desc/protoparse"
 	"github.com/jhump/protoreflect/dynamic"
-	"github.com/sandwich-go/protokit/util"
 	"google.golang.org/protobuf/proto"
+
+	"github.com/sandwich-go/boost/xos"
+	"github.com/sandwich-go/boost/xpanic"
 )
 
 type ParserVisitor interface {
@@ -87,8 +89,8 @@ func (p *Parser) Parse(nsList ...*Namespace) {
 		pathProtoRoot := path.Clean(ns.Path)
 		// 获取文件列表
 		fileListAbs := make([]string, 0)
-		err := util.FilePathWalkFollowLink(pathProtoRoot, util.FileWalkFuncWithExcludeFilter(&fileListAbs, p.cc.ProtoFileExcludeFilter, ".proto"))
-		util.PanicIfErrorAsFisrt(err, "got error: %w while walk dir:%s", pathProtoRoot)
+		err := xos.FilePathWalkFollowLink(pathProtoRoot, xos.FileWalkFuncWithExcludeFilter(&fileListAbs, p.cc.ProtoFileExcludeFilter, ".proto"))
+		xpanic.PanicIfErrorAsFmtFirst(err, "got error: %w while walk dir:%s", pathProtoRoot)
 		// 路径替换为相对路径，Parser需求，按照相对proto文件名查找依赖
 		fileList := make([]string, len(fileListAbs))
 		for index, filePath := range fileListAbs {
@@ -99,7 +101,7 @@ func (p *Parser) Parse(nsList ...*Namespace) {
 		// 按照FileDescriptor解析所有proto文件
 		var fds []*desc.FileDescriptor
 		fds, err = parser.ParseFiles(fileList...)
-		util.PanicIfErrorAsFisrt(err, "got error: %w while parse files under dir:%s", pathProtoRoot)
+		xpanic.PanicIfErrorAsFmtFirst(err, "got error: %w while parse files under dir:%s", pathProtoRoot)
 		for index, fd := range fds {
 			golangPackagePath, golangPackageName := GolangPackagePathAndName(fd, p.cc.GolangBasePackagePath, p.cc.GolangRelative)
 			pf := NewProtoFile(golangPackageName, golangPackagePath)
@@ -107,8 +109,9 @@ func (p *Parser) Parse(nsList ...*Namespace) {
 			pf.Namespace = ns.Name
 			pf.FilePath = fd.GetName()
 			filePath := fileListAbs[index]
-			pf.Content, err = util.FileGetContents(filePath)
-			util.PanicIfErrorAsFisrt(err, "got error: %w while load file content:%s", filePath)
+			bb, err := xos.FileGetContents(filePath)
+			xpanic.PanicIfErrorAsFmtFirst(err, "got error: %w while load file content:%s", filePath)
+			pf.Content = string(bb)
 			pf.Package = fd.GetPackage()
 			pf.OptionGolangPackage = fd.AsFileDescriptorProto().GetOptions().GetGoPackage()
 			pf.OptionCSNamespace = fd.AsFileDescriptorProto().GetOptions().GetCsharpNamespace()
@@ -133,6 +136,7 @@ func (p *Parser) Parse(nsList ...*Namespace) {
 	p.parseValidatorForMethod()
 	// 解析package
 	p.parsePackage(nsList)
+	p.parseAnnotation()
 }
 
 func (p *Parser) setType(mdp *desc.MessageDescriptor, name string, pf *ProtoFile) {
