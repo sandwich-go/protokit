@@ -14,7 +14,7 @@ require (
 	github.com/mattn/go-colorable v0.1.12
 	github.com/mitchellh/copystructure v1.2.0 // indirect
 	github.com/rs/zerolog v1.26.1
-	github.com/sandwich-go/boost v0.1.0-alpha.1
+	github.com/sandwich-go/boost v0.1.0-alpha.1.0.20220412033208-3bcade2bc557
 	github.com/smartystreets/goconvey v1.7.2
 	google.golang.org/genproto v0.0.0-20220405205423-9d709892a2bf
 	google.golang.org/protobuf v1.28.0
