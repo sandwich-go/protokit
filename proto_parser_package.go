@@ -45,7 +45,7 @@ func (p *Parser) parsePackage(nsList []*Namespace) {
 		}
 		// 根据protoFile获取namespace
 		ns := namespace(nsList, protoFile.Namespace)
-		xpanic.PanicIfTrue(ns == nil, "can not got namspace with name: %s", protoFile.Namespace)
+		xpanic.WhenTrue(ns == nil, "can not got namspace with name: %s", protoFile.Namespace)
 
 		golangPackagePath := protoFile.GolangPackagePath
 		pi, ok := ns.Packages[golangPackagePath]
@@ -77,7 +77,7 @@ func (p *Parser) parsePackage(nsList []*Namespace) {
 			continue
 		}
 		ns := namespace(nsList, protoFile.Namespace)
-		xpanic.PanicIfTrue(ns == nil, "can not got namspace with name: %s", protoFile.Namespace)
+		xpanic.WhenTrue(ns == nil, "can not got namspace with name: %s", protoFile.Namespace)
 		pp := ns.Packages[NamespaceMessageRegistryPackageName]
 		if pp == nil {
 			continue

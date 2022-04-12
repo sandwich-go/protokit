@@ -91,8 +91,8 @@ github.com/rogpeppe/fastuuid v1.2.0/go.mod h1:jVj6XXZzXRy/MSR5jhDC/2q6DgLz+nrA6L
 github.com/rs/xid v1.3.0/go.mod h1:trrq9SKmegXys3aeAKXMUTdJsYXVwGY3RLcfgqegfbg=
 github.com/rs/zerolog v1.26.1 h1:/ihwxqH+4z8UxyI70wM1z9yCvkWcfz/a3mj48k/Zngc=
 github.com/rs/zerolog v1.26.1/go.mod h1:/wSSJWX7lVrsOwlbyTRSOJvqRlc+WjWlfes+CiJ+tmc=
-github.com/sandwich-go/boost v0.1.0-alpha.1.0.20220412033208-3bcade2bc557 h1:FcF90bcgrIIAKoD/HGNXiEYpKc84hklmMwStgrScqyg=
-github.com/sandwich-go/boost v0.1.0-alpha.1.0.20220412033208-3bcade2bc557/go.mod h1:Dg591twVALZMYFm0fuzeAH62kmzOZobb7KWNxpk0Ofo=
+github.com/sandwich-go/boost v0.1.0-alpha.1.0.20220412042933-32041af70ebb h1:5JuFNg5qNn3M/9BMux0pRCL9MnEZkkvBfBj3TmgSdKk=
+github.com/sandwich-go/boost v0.1.0-alpha.1.0.20220412042933-32041af70ebb/go.mod h1:Dg591twVALZMYFm0fuzeAH62kmzOZobb7KWNxpk0Ofo=
 github.com/smartystreets/assertions v1.2.0 h1:42S6lae5dvLc7BrLu/0ugRtcFVjoJNMC/N3yZFZkDFs=
 github.com/smartystreets/assertions v1.2.0/go.mod h1:tcbTF8ujkAEcZ8TElKY+i30BzYlVhC/LOxJk7iOWnoo=
 github.com/smartystreets/goconvey v1.7.2 h1:9RBaZCeXEQ3UselpuwUQHltGVXvdwm6cv1hgR6gDIPg=

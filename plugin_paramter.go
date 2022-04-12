@@ -52,10 +52,10 @@ func MustNewPlugin(opts ...Option) *Plugin {
 	p.Parameter = &Parameter{}
 	p.Namespaces = make(map[string]*Namespace)
 	content, err := ioutil.ReadAll(os.Stdin)
-	xpanic.PanicIfErrorAsFmtFirst(err, "got err:%w while read stdin")
+	xpanic.WhenErrorAsFmtFirst(err, "got err:%w while read stdin")
 	err = json.Unmarshal(content, p.Parameter)
-	xpanic.PanicIfErrorAsFmtFirst(err, "got err:%w while unmarshal to Parameter")
-	xpanic.PanicIfTrue(p.Parameter.WorkingDir == "", "WorkingDir should not empty")
+	xpanic.WhenErrorAsFmtFirst(err, "got err:%w while unmarshal to Parameter")
+	xpanic.WhenTrue(p.Parameter.WorkingDir == "", "WorkingDir should not empty")
 
 	zerolog.SetGlobalLevel(zerolog.Level(p.Parameter.LogLevel))
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: colorable.NewColorableStdout(), TimeFormat: time.RFC3339, NoColor: !p.Parameter.LogColor})

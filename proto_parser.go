@@ -90,7 +90,7 @@ func (p *Parser) Parse(nsList ...*Namespace) {
 		// 获取文件列表
 		fileListAbs := make([]string, 0)
 		err := xos.FilePathWalkFollowLink(pathProtoRoot, xos.FileWalkFuncWithExcludeFilter(&fileListAbs, p.cc.ProtoFileExcludeFilter, ".proto"))
-		xpanic.PanicIfErrorAsFmtFirst(err, "got error: %w while walk dir:%s", pathProtoRoot)
+		xpanic.WhenErrorAsFmtFirst(err, "got error: %w while walk dir:%s", pathProtoRoot)
 		// 路径替换为相对路径，Parser需求，按照相对proto文件名查找依赖
 		fileList := make([]string, len(fileListAbs))
 		for index, filePath := range fileListAbs {
@@ -101,7 +101,7 @@ func (p *Parser) Parse(nsList ...*Namespace) {
 		// 按照FileDescriptor解析所有proto文件
 		var fds []*desc.FileDescriptor
 		fds, err = parser.ParseFiles(fileList...)
-		xpanic.PanicIfErrorAsFmtFirst(err, "got error: %w while parse files under dir:%s", pathProtoRoot)
+		xpanic.WhenErrorAsFmtFirst(err, "got error: %w while parse files under dir:%s", pathProtoRoot)
 		for index, fd := range fds {
 			golangPackagePath, golangPackageName := GolangPackagePathAndName(fd, p.cc.GolangBasePackagePath, p.cc.GolangRelative)
 			pf := NewProtoFile(golangPackageName, golangPackagePath)
@@ -110,7 +110,7 @@ func (p *Parser) Parse(nsList ...*Namespace) {
 			pf.FilePath = fd.GetName()
 			filePath := fileListAbs[index]
 			bb, err := xos.FileGetContents(filePath)
-			xpanic.PanicIfErrorAsFmtFirst(err, "got error: %w while load file content:%s", filePath)
+			xpanic.WhenErrorAsFmtFirst(err, "got error: %w while load file content:%s", filePath)
 			pf.Content = string(bb)
 			pf.Package = fd.GetPackage()
 			pf.OptionGolangPackage = fd.AsFileDescriptorProto().GetOptions().GetGoPackage()
