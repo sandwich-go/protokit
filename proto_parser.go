@@ -20,6 +20,8 @@ type ParserVisitor interface {
 	RangeDotFullyQualifiedTypeNameToDescriptor(f func(string, desc.Descriptor) bool)
 	// Comment 访问类型对应的注释信息
 	Comment(m proto.Message) (*Comment, bool)
+	// ProtoFilePathToProtoFile 由proto file path获取对应的ProtoFile
+	ProtoFilePathToProtoFile(protoFilePath string) (*ProtoFile, bool)
 	// DotFullyQualifiedTypeNameToDescriptor 由dot名称获取Descriptor
 	DotFullyQualifiedTypeNameToDescriptor(dotName string) (desc.Descriptor, bool)
 	// DotFullyQualifiedTypeNameToProtoFile 由dot名称获取对应的ProtoFile
@@ -221,6 +223,14 @@ func (p *Parser) DescriptorToDotFullyQualifiedTypeName(d desc.Descriptor) (strin
 
 func (p *Parser) Comment(m proto.Message) (*Comment, bool) {
 	v, ok := p.comments[m]
+	if ok {
+		return v, true
+	}
+	return nil, false
+}
+
+func (p *Parser) ProtoFilePathToProtoFile(protoFilePath string) (*ProtoFile, bool) {
+	v, ok := p.protoFilePathToProtoFile[protoFilePath]
 	if ok {
 		return v, true
 	}

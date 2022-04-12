@@ -17,6 +17,9 @@ func NewProtoEnum(pf *ProtoFile, ed *desc.EnumDescriptor) *ProtoEnum {
 	}
 }
 
+func (pe *ProtoEnum) DotFullyQualifiedTypeName() string      { return pe.dotFullyQualifiedTypeName }
+func (pe *ProtoEnum) AsEnumDescriptor() *desc.EnumDescriptor { return pe.ed }
+
 func (p *Parser) BuildProtoEnum(pf *ProtoFile, ed *desc.EnumDescriptor) *ProtoEnum {
 	pe := NewProtoEnum(pf, ed)
 	pe.dotFullyQualifiedTypeName = p.descriptor2DotFullyQualifiedTypeName[pe.ed]

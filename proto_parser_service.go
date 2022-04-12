@@ -26,9 +26,10 @@ func (p *Parser) parseService() {
 }
 func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag) (ret []*Service) {
 	fdp := protoFile.fd.AsFileDescriptorProto()
-	for _, protoService := range fdp.Service {
+	for i, protoService := range fdp.Service {
 		name := protoService.GetName()
 		service := &Service{
+			sd:             protoFile.fd.GetServices()[i],
 			Name:           name,
 			DeprecatedName: util.CamelCase(nameMustHaveSuffix(name, "Service")),
 			DescName:       fmt.Sprintf("%s.%s", fdp.GetPackage(), name),
@@ -56,7 +57,7 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag) (
 		isActorService := an.GetBool("actor", false)
 		isActorServiceAllTell := an.GetBool("tell", false)
 
-		for _, protoMethod := range protoService.Method {
+		for j, protoMethod := range protoService.Method {
 			// actor参数，是否为actor是否为tell
 			isActorMethod := isActorService
 			isAsk := true
@@ -73,6 +74,7 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag) (
 			rspTypeName := strings.TrimPrefix(p.typeStr(protoMethod.GetOutputType()), ".")
 
 			method := &Method{
+				md:                             protoFile.fd.GetServices()[i].GetMethods()[j],
 				Name:                           util.CamelCase(protoMethod.GetName()),
 				TypeInputDotFullQualifiedName:  protoMethod.GetInputType(),
 				TypeOutputDotFullQualifiedName: protoMethod.GetOutputType(),

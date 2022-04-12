@@ -37,6 +37,7 @@ func NewImportSet(golangPackageName, golangPackagePath string) *ImportSet {
 }
 
 type Method struct {
+	md              *desc.MethodDescriptor
 	Name            string // 方法名称，proto中获取到的原始名称
 	Comment         string // method注释
 	ValidatorInput  bool   // 是否检验输入
@@ -57,7 +58,10 @@ type Method struct {
 	TypeOutputWithSelfPackage      string //  只携带自身package信息
 }
 
+func (m *Method) AsMethodDescriptor() *desc.MethodDescriptor { return m.md }
+
 type Service struct {
+	sd                         *desc.ServiceDescriptor
 	Name                       string    // 通过proto获取到的原始名字
 	ServiceName                string    // 当前服务的名称，格式化后的，数据源:RPCClientInterfaceName/ServerHandlerInterfaceName/ActorClientInterfaceName
 	ServerHandlerInterfaceName string    // Server Handler名称
@@ -72,6 +76,8 @@ type Service struct {
 	DescName                   string    // fdp.GetPackage().Name
 	DescProtoFile              string    // fdp.GetName() 应该是ProtoFile.FilePath
 }
+
+func (s *Service) AsServiceDescriptor() *desc.ServiceDescriptor { return s.sd }
 
 type ServiceGroup struct {
 	ProtoFilePath string     // 当前group所属的ProtoFilePath,可以通过ProtoFilePath唯一索引到ProtoFile
