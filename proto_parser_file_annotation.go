@@ -28,7 +28,7 @@ func (p *Parser) parseAnnotation() {
 		if len(annotationLines) > 0 {
 			var err error
 			protoFile.Annotations, err = annotation.NewRegistry().ResolveAnnotationsErrorDuplicate(annotationLines)
-			xpanic.PanicIfErrorAsFmtFirst(err, "got error:%w while parse file annotation for file:%s", protoFile.FilePath)
+			xpanic.WhenErrorAsFmtFirst(err, "got error:%w while parse file annotation for file:%s", protoFile.FilePath)
 		}
 	}
 }

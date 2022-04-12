@@ -52,7 +52,7 @@ func MustGetFileAccessorWithNamespace(nsList ...*Namespace) FileAccessor {
 // MustGetFileAccessorWithDirs 获取文件加载器，会主动加载并缓存目录下的所有文件夹爱你内容
 func MustGetFileAccessorWithDirs(dirs ...string) FileAccessor {
 	contents, err := ProtoFileContents(dirs...)
-	xpanic.PanicIfErrorAsFmtFirst(err, "got error:%s while load contents with:%s ", strings.Join(dirs, ","))
+	xpanic.WhenErrorAsFmtFirst(err, "got error:%s while load contents with:%s ", strings.Join(dirs, ","))
 	return GetFileAccessor(contents)
 }
 

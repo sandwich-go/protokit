@@ -36,20 +36,20 @@ func MustCallTemplate(name, templateStr string, data interface{}, fileName strin
 		panic(fmt.Sprintf("CallTemplate got invalid data,type %v", reflect.TypeOf(data)))
 	}
 	t, err := template.New(name).Funcs(funcMap).Funcs(sprig.FuncMap()).Parse(templateStr)
-	xpanic.PanicIfErrorAsFmtFirst(err, "got error:%w while parse template:%s ", name)
+	xpanic.WhenErrorAsFmtFirst(err, "got error:%w while parse template:%s ", name)
 	buf := bytes.NewBuffer(nil)
 	err = t.Execute(buf, usingData)
-	xpanic.PanicIfErrorAsFmtFirst(err, "got error:%w while Execute template:%s ", name)
+	xpanic.WhenErrorAsFmtFirst(err, "got error:%w while Execute template:%s ", name)
 	bytesUsing := buf.Bytes()
 	if filer != nil {
 		tmp, err := filer(buf.Bytes())
-		xpanic.PanicIfErrorAsFmtFirst(err, "got error:%w while run user define filter,template:%s ", name)
+		xpanic.WhenErrorAsFmtFirst(err, "got error:%w while run user define filter,template:%s ", name)
 		bytesUsing = tmp
 	}
 	if fileName != "" {
 		dirName := filepath.Dir(fileName)
 		err := os.MkdirAll(dirName, os.ModePerm)
-		xpanic.PanicIfErrorAsFmtFirst(err, "got error:%w while MkdirAll:%s template:%s ", dirName, name)
+		xpanic.WhenErrorAsFmtFirst(err, "got error:%w while MkdirAll:%s template:%s ", dirName, name)
 		xos.MustFilePutContents(fileName, bytesUsing)
 	}
 	return bytesUsing
