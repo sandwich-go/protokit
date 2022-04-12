@@ -54,6 +54,9 @@ func (p *Parser) parseProtoFileMessage(pf *ProtoFile, md *desc.MessageDescriptor
 		}
 		p.parseProtoFileMessage(pf, mt)
 	}
+	for _, et := range md.GetNestedEnumTypes() {
+		p.parseProtoFileEnum(pf, et)
+	}
 }
 
 func (p *Parser) parseProtoFileEnum(pf *ProtoFile, ed *desc.EnumDescriptor) {
