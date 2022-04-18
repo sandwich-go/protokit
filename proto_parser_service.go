@@ -103,10 +103,24 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag) (
 					// proto中指定了alias名称
 					nameAlias = anMethod.GetString("alias")
 				}
-				if !strings.Contains(nameAlias, ".") {
-					nameAlias = fmt.Sprintf("%s.%s", strings.Split(method.TypeInput, ".")[0], nameAlias)
+				if nameAlias == "grpc" {
+					// 如果指定为grpc，则使用grpc的路由名称
+					nameAlias = method.TypeInputGRPC
+				} else {
+					// name alias 必须有namespace前缀，以便于激活自动转发功能，如果没有指定，则使用与TypeInput想听的前缀
+					if !strings.Contains(nameAlias, ".") {
+						nameAlias = fmt.Sprintf("%s.%s", strings.Split(method.TypeInput, ".")[0], nameAlias)
+					}
 				}
 				method.TypeInputAlias = strings.TrimSpace(nameAlias)
+			}
+			// 允许逻辑层强制指定别名，此时不再进行namepace的添加逻辑
+			if anMethod.Has("alias_force") {
+				method.TypeInputAlias = anMethod.GetString("alias_force")
+				if method.TypeInputAlias == "grpc" {
+					// 如果指定为grpc，则使用grpc的路由名称
+					method.TypeInputAlias = method.TypeInputGRPC
+				}
 			}
 			// 默认的http请求路径
 			if pathStr, err := HTTPPath(protoMethod); err == nil && pathStr != "" {
