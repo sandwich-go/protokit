@@ -103,7 +103,7 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag) (
 					// proto中指定了alias名称
 					nameAlias = anMethod.GetString("alias")
 				}
-				if nameAlias == "grpc" {
+				if strings.EqualFold(nameAlias, "grpc") {
 					// 如果指定为grpc，则使用grpc的路由名称
 					nameAlias = method.TypeInputGRPC
 				} else {
@@ -117,7 +117,7 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag) (
 			// 允许逻辑层强制指定别名，此时不再进行namepace的添加逻辑
 			if anMethod.Has("alias_force") {
 				method.TypeInputAlias = anMethod.GetString("alias_force")
-				if method.TypeInputAlias == "grpc" {
+				if strings.EqualFold(method.TypeInputAlias, "grpc") {
 					// 如果指定为grpc，则使用grpc的路由名称
 					method.TypeInputAlias = method.TypeInputGRPC
 				}
