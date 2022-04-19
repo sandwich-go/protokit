@@ -109,7 +109,7 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag) (
 				} else {
 					// name alias 必须有namespace前缀，以便于激活自动转发功能，如果没有指定，则使用与TypeInput想听的前缀
 					if !strings.Contains(nameAlias, ".") {
-						nameAlias = fmt.Sprintf("%s.%s", strings.Split(method.TypeInput, ".")[0], nameAlias)
+						nameAlias = fmt.Sprintf("%s.%s", strings.Split(method.TypeInputWithSelfPackage, ".")[0], nameAlias)
 					}
 				}
 				method.TypeInputAlias = strings.TrimSpace(nameAlias)
