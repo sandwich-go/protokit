@@ -45,19 +45,20 @@ type Method struct {
 	ValidatorInput  bool   // 是否检验输入
 	ValidatorOutput bool   // 是否校验输出
 	// Note: golang与python使用相同的名称，类型名是golang规则,对于嵌套结构,为python生成一套类型别名
-	TypeInput                      string // Import校正后的名称，携带package信息
-	TypeOutput                     string // Import校正后的名称，携带package信息
-	TypeInputAlias                 string // Input别名
-	TypeInputGRPC                  string // GRPC模式下的Input路径
-	HTTPPath                       string // HTTP模式下的请求路径
-	HTTPPathComment                string // HTTP模式下的请求路径注释，来源
-	IsAsk                          bool   // 是否为Ask方法
-	IsTell                         bool   // 是否为Tell方法
-	IsActor                        bool   // 是否为Actor方法
-	TypeInputDotFullQualifiedName  string // proto原始Input，也就是DotFullQualifiedName
-	TypeOutputDotFullQualifiedName string // proto原始Output，也就是DotFullQualifiedName
-	TypeInputWithSelfPackage       string //  只携带自身package信息
-	TypeOutputWithSelfPackage      string //  只携带自身package信息
+	TypeInput                      string   // Import校正后的名称，携带package信息
+	TypeOutput                     string   // Import校正后的名称，携带package信息
+	TypeInputAlias                 string   // Input别名
+	TypeInputGRPC                  string   // GRPC模式下的Input路径
+	HTTPPath                       string   // HTTP模式下的请求路径
+	HTTPPathComment                string   // HTTP模式下的请求路径注释，来源
+	IsAsk                          bool     // 是否为Ask方法
+	IsTell                         bool     // 是否为Tell方法
+	IsActor                        bool     // 是否为Actor方法
+	TypeInputDotFullQualifiedName  string   // proto原始Input，也就是DotFullQualifiedName
+	TypeOutputDotFullQualifiedName string   // proto原始Output，也就是DotFullQualifiedName
+	TypeInputWithSelfPackage       string   //  只携带自身package信息
+	TypeOutputWithSelfPackage      string   //  只携带自身package信息
+	LangOffTag                     []string //  语言开启关闭标记
 }
 
 func (m *Method) AsMethodDescriptor() *desc.MethodDescriptor { return m.md }

@@ -56,9 +56,7 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag) (
 		an := GetAnnotation(comment, AnnotationService)
 		isActorService := an.GetBool("actor", false)
 		isActorServiceAllTell := an.GetBool("tell", false)
-
-		langOff := an.GetString("lang_off")
-		service.LangOffTag = strings.Split(langOff, ",")
+		service.LangOffTag = strings.Split(an.GetString("lang_off"), ",")
 		for j, protoMethod := range protoService.Method {
 			// actor参数，是否为actor是否为tell
 			isActorMethod := isActorService
@@ -132,6 +130,8 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag) (
 				method.HTTPPath = pathStr
 				method.HTTPPathComment = "from proto, user defined"
 			}
+
+			method.LangOffTag = strings.Split(anMethod.GetString("lang_off"), ",")
 
 			service.Methods = append(service.Methods, method)
 			if method.IsActor {
