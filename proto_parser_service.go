@@ -57,6 +57,8 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag) (
 		isActorService := an.GetBool("actor", false)
 		isActorServiceAllTell := an.GetBool("tell", false)
 
+		langOff := an.GetString("lang_off")
+		service.LangOffTag = strings.Split(langOff, ",")
 		for j, protoMethod := range protoService.Method {
 			// actor参数，是否为actor是否为tell
 			isActorMethod := isActorService

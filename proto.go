@@ -77,6 +77,7 @@ type Service struct {
 	HasValidator               bool      // 辅助生成的时候是否携带validator包
 	DescName                   string    // fdp.GetPackage().Name
 	DescProtoFile              string    // fdp.GetName() 应该是ProtoFile.FilePath
+	LangOffTag                 []string  // 语言开启关闭标记
 }
 
 func (s *Service) AsServiceDescriptor() *desc.ServiceDescriptor { return s.sd }
