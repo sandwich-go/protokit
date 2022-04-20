@@ -26,7 +26,7 @@ func (p *Parser) parsePackage(nsList []*Namespace) {
 		if protoPackage == nil {
 			return
 		}
-		structName, item := p.addImportByDotFullyQualifiedTypeName(dotFullyQualifiedTypeName, protoPackage.ImportSet, protoFile)
+		structName, item := p.addImportByDotFullyQualifiedTypeName(dotFullyQualifiedTypeName, protoPackage.ImportSet)
 		if item != nil {
 			p.pythonModule(dotFullyQualifiedTypeName, structName, item, protoPackage.ImportSet, protoPackage.IsGlobal, protoFile)
 		}

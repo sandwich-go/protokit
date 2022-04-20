@@ -43,8 +43,8 @@ func (p *Parser) parseProtoFileMessage(pf *ProtoFile, md *desc.MessageDescriptor
 		protoField := p.BuildProtoField(pf, f)
 		pm.Fields = append(pm.Fields, protoField)
 		// 解析import
-		_, _ = p.addImportByDotFullyQualifiedTypeName(protoField.KeyTypeName, pm.ImportSet, pf)
-		_, _ = p.addImportByDotFullyQualifiedTypeName(protoField.ValueTypeName, pm.ImportSet, pf)
+		_, _ = p.addImportByDotFullyQualifiedTypeName(protoField.KeyTypeName, pm.ImportSet)
+		_, _ = p.addImportByDotFullyQualifiedTypeName(protoField.ValueTypeName, pm.ImportSet)
 	}
 	pf.Messages = append(pf.Messages, pm)
 	p.dotFullyQualifiedTypeNameToProtoMessage[pm.dotFullyQualifiedTypeName] = pm
