@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/sandwich-go/boost/xpanic"
 	"github.com/sandwich-go/boost/xstrings"
 )
 
@@ -55,6 +56,9 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag) (
 		}
 		an := GetAnnotation(comment, AnnotationService)
 		isActorService := an.GetBool("actor", false)
+		methodAllAlias := an.GetString("alias")
+		xpanic.WhenTrue(methodAllAlias != "" && methodAllAlias != "gprc", "service annotation alias only support gprc now")
+		methodAllAliasAllAsGRPC := methodAllAlias == "grpc"
 		isActorServiceAllTell := an.GetBool("tell", false)
 		service.LangOffTag = strings.Split(an.GetString("lang_off"), ",")
 		for j, protoMethod := range protoService.Method {
@@ -97,8 +101,12 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag) (
 			}
 			method.TypeInputGRPC = fmt.Sprintf("/%s.%s/%s", fdp.GetPackage(), service.Name, method.Name)
 			// 请求别名逻辑，允许proto中设定input类型别名，在请求的proto中uri将使用此名称
+			nameAlias := ""
+			if methodAllAliasAllAsGRPC {
+				nameAlias = method.TypeInputGRPC
+			}
 			if anMethod.Has("alias") {
-				nameAlias := fmt.Sprintf("%s_%s", service.Name, method.Name) // 默认alias
+				nameAlias = fmt.Sprintf("%s_%s", service.Name, method.Name) // 默认alias
 				if autoAlias := anMethod.GetBool("alias", false); !autoAlias {
 					// proto中指定了alias名称
 					nameAlias = anMethod.GetString("alias")
@@ -112,16 +120,16 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag) (
 						nameAlias = fmt.Sprintf("%s.%s", strings.Split(method.TypeInputWithSelfPackage, ".")[0], nameAlias)
 					}
 				}
-				method.TypeInputAlias = strings.TrimSpace(nameAlias)
 			}
 			// 允许逻辑层强制指定别名，此时不再进行namepace的添加逻辑
 			if anMethod.Has("alias_force") {
-				method.TypeInputAlias = anMethod.GetString("alias_force")
-				if strings.EqualFold(method.TypeInputAlias, "grpc") {
+				nameAlias = anMethod.GetString("alias_force")
+				if strings.EqualFold(nameAlias, "grpc") {
 					// 如果指定为grpc，则使用grpc的路由名称
-					method.TypeInputAlias = method.TypeInputGRPC
+					nameAlias = method.TypeInputGRPC
 				}
 			}
+			method.TypeInputAlias = strings.TrimSpace(nameAlias)
 			// 默认的http请求路径
 			if pathStr, err := HTTPPath(protoMethod); err == nil && pathStr != "" {
 				if !strings.HasPrefix(pathStr, "/") {
