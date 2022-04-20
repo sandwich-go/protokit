@@ -28,6 +28,8 @@ type Options struct {
 	*NamePattern `xconf:"name_pattern" usage:"名称格式化空自己"`
 	// annotation@ImportSetExclude(comment="import set忽略指定name的package")
 	ImportSetExclude []string `xconf:"import_set_exclude" usage:"import set忽略指定name的package"`
+	// annotation@URIUsingGRPC(comment="service的uri是否使用GRPC模式")
+	URIUsingGRPC bool `xconf:"uri_using_grpc" usage:"service的uri是否使用GRPC模式"`
 }
 
 // NewOptions new Options
@@ -138,6 +140,15 @@ func WithImportSetExclude(v ...string) Option {
 	}
 }
 
+// WithURIUsingGRPC service的uri是否使用GRPC模式
+func WithURIUsingGRPC(v bool) Option {
+	return func(cc *Options) Option {
+		previous := cc.URIUsingGRPC
+		cc.URIUsingGRPC = v
+		return WithURIUsingGRPC(previous)
+	}
+}
+
 // InstallOptionsWatchDog the installed func will called when NewOptions  called
 func InstallOptionsWatchDog(dog func(cc *Options)) { watchDogOptions = dog }
 
@@ -158,6 +169,7 @@ func newDefaultOptions() *Options {
 		WithZapLogBytesMode("bytes"),
 		WithNamePattern(NewNamePattern()),
 		WithImportSetExclude([]string{"netutils"}...),
+		WithURIUsingGRPC(false),
 	} {
 		opt(cc)
 	}
@@ -214,6 +226,7 @@ func (cc *Options) GetZapLogMapKeyTypes() []string               { return cc.Zap
 func (cc *Options) GetZapLogBytesMode() string                   { return cc.ZapLogBytesMode }
 func (cc *Options) GetNamePattern() *NamePattern                 { return cc.NamePattern }
 func (cc *Options) GetImportSetExclude() []string                { return cc.ImportSetExclude }
+func (cc *Options) GetURIUsingGRPC() bool                        { return cc.URIUsingGRPC }
 
 // OptionsVisitor visitor interface for Options
 type OptionsVisitor interface {
@@ -226,6 +239,7 @@ type OptionsVisitor interface {
 	GetZapLogBytesMode() string
 	GetNamePattern() *NamePattern
 	GetImportSetExclude() []string
+	GetURIUsingGRPC() bool
 }
 
 // OptionsInterface visitor + ApplyOption interface for Options

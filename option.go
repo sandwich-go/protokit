@@ -34,6 +34,8 @@ func OptionsOptionDeclareWithDefault() interface{} {
 		"NamePattern": (*NamePattern)(NewNamePattern()),
 		// annotation@ImportSetExclude(comment="import set忽略指定name的package")
 		"ImportSetExclude": []string{"netutils"},
+		// annotation@URIUsingGRPC(comment="service的uri是否使用GRPC模式")
+		"URIUsingGRPC": false,
 	}
 }
 
