@@ -46,5 +46,7 @@ func NamePatternOptionDeclareWithDefault() interface{} {
 		"NamePatternRPCClient": "RPCClient%s",
 		// annotation@NamePatternActorClient(comment="code actor client名称格式化")
 		"NamePatternActorClient": "ActorClient%s",
+		// annotation@NamePatternHTTPPath(comment="自动生成的HTTP PATHG格式")
+		"NamePatternHTTPPath": "%s",
 	}
 }

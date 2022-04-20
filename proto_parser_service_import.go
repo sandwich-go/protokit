@@ -1,6 +1,7 @@
 package protokit
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/rs/zerolog/log"
@@ -49,7 +50,11 @@ func (p *Parser) parseImport() {
 					// http请求path逻辑校验，需要依赖纠正过后的TypeInput
 					if method.HTTPPath == "" {
 						method.HTTPPathComment = "auto generate by ProtoKitGo"
-						method.HTTPPath = "/auto/" + strings.TrimLeft(uriUsing, ".")
+						pathUsing := strings.TrimLeft(uriUsing, ".")
+						if !strings.HasPrefix(pathUsing, "/") {
+							pathUsing = "/" + pathUsing
+						}
+						method.HTTPPath = fmt.Sprintf(p.cc.NamePatternHTTPPath, pathUsing)
 					}
 				}
 			}
