@@ -1,3 +1,14 @@
+### v0.1.0-alpha.2 (2022-04-20 14:32:38)
+
+#### 🛠  Refactor
+  * service alias support ([cabf467](https://github.com/sandwich-go/protokit/commit/cabf467a77145c8e4658ee6d42271910ad02c0da) , [c6fb4b3](https://github.com/sandwich-go/protokit/commit/c6fb4b359d02b37a7a1549ff6340b4902c15ae12) , [94fd3db](https://github.com/sandwich-go/protokit/commit/94fd3db2b116eb9e8d702e16c1f4ee38dbd80c2b) , [431f161](https://github.com/sandwich-go/protokit/commit/431f161718becbdf94253bbd9c85c86f96ad7765)) (<small>[hui.wang](hui.wang@funplus.com)@2022-04-20 14:04:06 &#43;0800 &#43;0800</small>)
+
+#### 🤖  Tools
+  * **sem**: make changelog ([2157a38](https://github.com/sandwich-go/protokit/commit/2157a38250cfa92a1d8ebbb606e244ee0f0b1e3f)) (<small>[hui.wang](hui.wang@funplus.com)@2022-04-20 13:43:10 &#43;0800 &#43;0800</small>)
+
+#### 💪  Commit
+  * gprc path support ([f2e8874](https://github.com/sandwich-go/protokit/commit/f2e8874efc4a66287f0b6df5ed8cb59796c58e49)) (<small>[hui.wang](hui.wang@funplus.com)@2022-04-20 14:32:38 &#43;0800 &#43;0800</small>)
+
 ### v0.1.0-alpha.1 (2022-04-20 13:42:44)
 
 #### 🛠  Refactor
