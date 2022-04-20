@@ -57,7 +57,7 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag) (
 		an := GetAnnotation(comment, AnnotationService)
 		isActorService := an.GetBool("actor", false)
 		methodAllAlias := an.GetString("alias")
-		xpanic.WhenTrue(methodAllAlias != "" && methodAllAlias != "grpc", "service annotation alias only support grpc now")
+		xpanic.WhenTrue(methodAllAlias != "" && methodAllAlias != "grpc", "service annotation alias only support grpc now, got:%s", methodAllAlias)
 		methodAllAliasAllAsGRPC := methodAllAlias == "grpc"
 		isActorServiceAllTell := an.GetBool("tell", false)
 		service.LangOffTag = strings.Split(an.GetString("lang_off"), ",")
