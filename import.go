@@ -15,7 +15,9 @@ func (e *ImportSet) AddWithDotFullQualifiedName(dotFullyQualifiedName string, pf
 		ProtoFilePath:               pf.FilePath,
 		GolangPackageName:           pf.GolangPackageName,
 		GolangPackagePath:           pf.GolangPackagePath,
-		PythonModuleName:            pf.GolangPackageName, // python使用golang的package name
+		CSNamespace:                 pf.OptionCSNamespace,
+		CSNamespaceName:             pf.GolangPackageName, // cs 使用golang的packagename作为别名
+		PythonModuleName:            pf.GolangPackageName, // python使用golang的package name作为别名
 		PythonModulePath:            pythonModulePath(pf.FilePath),
 	}
 	e.Add(item)

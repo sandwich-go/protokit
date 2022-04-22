@@ -10,12 +10,17 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
+// 引用计数的规则过于依赖于golang的package等属性，可以考虑完全归结到proto的package上去
+// 如果重复，则采用proto file path的路径替换/后作为别名，比较通用
+// 但是也要约束package的定义，防止过度自由
 type Import struct {
 	ProtoFilePath               string   // 引入的proto文件名
 	GolangPackageName           string   // golang 引用的名称
 	GolangPackagePath           string   // golang 引用的路径
 	PythonModuleName            string   // python 引用的名称
 	PythonModulePath            string   // python 引用的文件路径
+	CSNamespaceName             string   // cs 引用的名称
+	CSNamespace                 string   // cs 引用的名称
 	MessageDotFullQualifiedName []string // 当前import下引入的类型列表
 }
 
@@ -45,8 +50,10 @@ type Method struct {
 	ValidatorInput  bool   // 是否检验输入
 	ValidatorOutput bool   // 是否校验输出
 	// Note: golang与python使用相同的名称，类型名是golang规则,对于嵌套结构,为python生成一套类型别名
-	TypeInput                      string   // Import校正后的名称，携带package信息
-	TypeOutput                     string   // Import校正后的名称，携带package信息
+	TypeInput                      string   // Import校正后的名称，携带golang package信息
+	TypeOutput                     string   // Import校正后的名称，携带golang package信息
+	CSTypeInput                    string   // Import校正后的名称，携带cs package信息
+	CSTypeOutput                   string   // Import校正后的名称，携带cs package信息
 	TypeInputAlias                 string   // Input别名
 	TypeInputGRPC                  string   // GRPC模式下的Input路径
 	HTTPPath                       string   // HTTP模式下的请求路径
@@ -56,9 +63,9 @@ type Method struct {
 	IsActor                        bool     // 是否为Actor方法
 	TypeInputDotFullQualifiedName  string   // proto原始Input，也就是DotFullQualifiedName
 	TypeOutputDotFullQualifiedName string   // proto原始Output，也就是DotFullQualifiedName
-	TypeInputWithSelfPackage       string   //  只携带自身package信息
-	TypeOutputWithSelfPackage      string   //  只携带自身package信息
-	LangOffTag                     []string //  语言开启关闭标记
+	TypeInputWithSelfPackage       string   // 只携带自身package信息
+	TypeOutputWithSelfPackage      string   // 只携带自身package信息
+	LangOffTag                     []string // 语言开启关闭标记
 }
 
 func (m *Method) AsMethodDescriptor() *desc.MethodDescriptor { return m.md }
