@@ -1,3 +1,11 @@
+### v0.1.0-alpha.3 (2022-04-22 20:36:43)
+
+#### 🤖  Tools
+  * **sem**: make changelog ([2978fa4](https://github.com/sandwich-go/protokit/commit/2978fa4be13ba31286dcc86222cd06196be287ae)) (<small>[hui.wang](hui.wang@funplus.com)@2022-04-20 14:34:28 &#43;0800 &#43;0800</small>)
+
+#### 💪  Commit
+  * cs service support ([87cb363](https://github.com/sandwich-go/protokit/commit/87cb363d0cf84883c3c31aa523629bfa85a6aec7)) (<small>[hui.wang](hui.wang@funplus.com)@2022-04-22 20:36:43 &#43;0800 &#43;0800</small>)
+
 ### v0.1.0-alpha.2 (2022-04-20 14:32:38)
 
 #### 🛠  Refactor
