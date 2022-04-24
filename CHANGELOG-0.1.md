@@ -1,3 +1,14 @@
+### v0.1.0-alpha.4 (2022-04-24 13:57:01)
+
+#### 🤖  Tools
+  * **sem**: make changelog ([8f5c0ca](https://github.com/sandwich-go/protokit/commit/8f5c0ca2bb8696b724a3a919ae2126efb14470a2)) (<small>[hui.wang](hui.wang@funplus.com)@2022-04-22 20:37:09 &#43;0800 &#43;0800</small>)
+
+#### 🛁  Style
+  * rm unused print ([0c2e6eb](https://github.com/sandwich-go/protokit/commit/0c2e6eb5f4e9aa166488c5b8614ccc50ee27e931)) (<small>[hui.wang](hui.wang@funplus.com)@2022-04-24 11:03:45 &#43;0800 &#43;0800</small>)
+
+#### 💪  Commit
+  * mtthod support http path ([5fdc9e5](https://github.com/sandwich-go/protokit/commit/5fdc9e5436c43967901a3322858cb4b3bf780217)) (<small>[hui.wang](hui.wang@funplus.com)@2022-04-24 13:57:01 &#43;0800 &#43;0800</small>)
+
 ### v0.1.0-alpha.3 (2022-04-22 20:36:43)
 
 #### 🤖  Tools
