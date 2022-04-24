@@ -143,6 +143,10 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag) (
 				method.HTTPPath = pathStr
 				method.HTTPPathComment = "from proto, user defined"
 			}
+			if anMethod.Has("http_path") {
+				method.HTTPPath = anMethod.GetString("http_path")
+				method.HTTPPathComment = "from proto, user defined"
+			}
 
 			method.LangOffTag = strings.Split(anMethod.GetString("lang_off"), ",")
 
