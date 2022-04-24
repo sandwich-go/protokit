@@ -116,7 +116,6 @@ func (p *Parser) Parse(nsList ...*Namespace) {
 			if pf.Package == "" {
 				pathList := strings.Split(path.Dir(pf.FilePath), "/")
 				pf.Package = pathList[len(pathList)-1]
-				fmt.Println("pf.Package ", pf.FilePath, pf.Package)
 			}
 			pf.OptionGolangPackage = fd.AsFileDescriptorProto().GetOptions().GetGoPackage()
 			pf.OptionCSNamespace = fd.AsFileDescriptorProto().GetOptions().GetCsharpNamespace()
