@@ -1,3 +1,11 @@
+### v0.1.0-alpha.6 (2022-04-25 17:38:26)
+
+#### 🚀  New Feature
+  * gen both rpc and actor ([b7fd455](https://github.com/sandwich-go/protokit/commit/b7fd4557bdc07ab3f23f81460eb2b528c9436003)) (<small>[hui.wang](hui.wang@funplus.com)@2022-04-25 17:38:26 &#43;0800 &#43;0800</small>)
+
+#### 🤖  Tools
+  * **sem**: make changelog ([b4adb74](https://github.com/sandwich-go/protokit/commit/b4adb7468c869768d43c81291e843edc42071fa7)) (<small>[hui.wang](hui.wang@funplus.com)@2022-04-25 14:44:02 &#43;0800 &#43;0800</small>)
+
 ### v0.1.0-alpha.5 (2022-04-25 14:42:32)
 
 #### 🐛  Bug Fixed
