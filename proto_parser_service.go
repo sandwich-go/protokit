@@ -55,7 +55,10 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag) (
 			service.Comment = comment.Content
 		}
 		an := GetAnnotation(comment, AnnotationService)
+		// 整个service是否完全为actor方法
 		isActorService := an.GetBool("actor", false)
+		// 整个service是否完全为tell方法
+		isServiceAllTell := an.GetBool("tell", false)
 		// URI使用是否GRPC模式
 		methodAllAliasAllAsGRPC := p.cc.URIUsingGRPC
 		if !methodAllAliasAllAsGRPC {
@@ -64,13 +67,12 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag) (
 			methodAllAliasAllAsGRPC = methodAllAlias == "grpc"
 		}
 
-		isActorServiceAllTell := an.GetBool("tell", false)
 		service.LangOffTag = strings.Split(an.GetString("lang_off"), ",")
 		for j, protoMethod := range protoService.Method {
 			// actor参数，是否为actor是否为tell
 			isActorMethod := isActorService
 			isAsk := true
-			isTell := isActorServiceAllTell
+			isTell := isServiceAllTell
 			anMethod := GetAnnotation(p.comments[protoMethod], AnnotationService)
 			isActorMethod = anMethod.GetBool("actor", isActorMethod)
 			isTell = anMethod.GetBool("tell", isTell)

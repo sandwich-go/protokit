@@ -2,6 +2,7 @@ package protokit
 
 import (
 	"fmt"
+	"path"
 	"strings"
 
 	"github.com/rs/zerolog/log"
@@ -54,7 +55,7 @@ func (p *Parser) parseImport() {
 						if !strings.HasPrefix(pathUsing, "/") {
 							pathUsing = "/" + pathUsing
 						}
-						method.HTTPPath = fmt.Sprintf(p.cc.NamePatternHTTPPath, pathUsing)
+						method.HTTPPath = path.Clean(fmt.Sprintf(p.cc.NamePatternHTTPPath, pathUsing))
 					}
 				}
 			}
