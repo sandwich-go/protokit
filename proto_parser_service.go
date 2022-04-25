@@ -2,10 +2,12 @@ package protokit
 
 import (
 	"fmt"
+	"path"
 	"strings"
 
-	"github.com/sandwich-go/boost/xpanic"
+	"github.com/jhump/protoreflect/desc"
 	"github.com/sandwich-go/boost/xstrings"
+	"google.golang.org/protobuf/types/descriptorpb"
 )
 
 func nameMustHaveSuffix(s string, suffix string) string {
@@ -25,6 +27,96 @@ func (p *Parser) parseService() {
 		}
 	}
 }
+
+func (p *Parser) method(
+	protoFile *ProtoFile,
+	serviceName string,
+	protoMethod *descriptorpb.MethodDescriptorProto,
+	md *desc.MethodDescriptor,
+	isActorMethod bool,
+	isAsk bool,
+	fixActorMethodName bool) *Method {
+	// Note:
+	// 这里只是简单的换算一次格式合法的名称，具体请求名要通过ImportSet进行纠正
+	reqTypeName := strings.TrimPrefix(p.typeStr(protoMethod.GetInputType()), ".")
+	rspTypeName := strings.TrimPrefix(p.typeStr(protoMethod.GetOutputType()), ".")
+	methodName := xstrings.CamelCase(protoMethod.GetName())
+	if isActorMethod && fixActorMethodName {
+		methodName += "ForActor"
+	}
+	method := &Method{
+		md:                             md,
+		Name:                           methodName,
+		TypeInputDotFullQualifiedName:  protoMethod.GetInputType(),
+		TypeOutputDotFullQualifiedName: protoMethod.GetOutputType(),
+		TypeInputWithSelfPackage:       reqTypeName,
+		TypeOutputWithSelfPackage:      rspTypeName,
+		IsActor:                        isActorMethod,
+		IsAsk:                          isAsk,
+		IsTell:                         !isAsk,
+	}
+	if methodComment, exist := p.comments[protoMethod]; exist && methodComment != nil {
+		method.Comment = methodComment.Content
+	}
+	fdp := protoFile.fd.AsFileDescriptorProto()
+	method.TypeInputGRPC = fmt.Sprintf("/%s.%s/%s", fdp.GetPackage(), serviceName, method.Name)
+	// 请求别名逻辑，允许proto中设定input类型别名，在请求的proto中uri将使用此名称
+	// URI使用是否GRPC模式
+	nameAlias := ""
+	if p.cc.URIUsingGRPC {
+		nameAlias = "grpc"
+	}
+	aliasCheckPrefer := []string{"alias"}
+	if isActorMethod {
+		aliasCheckPrefer = []string{"actor_alias", "alias"}
+	}
+	anMethod := GetAnnotation(p.comments[protoMethod], AnnotationService)
+	for _, aliasKey := range aliasCheckPrefer {
+		if anMethod.Has(aliasKey) {
+			nameAlias = fmt.Sprintf("%s_%s", serviceName, method.Name) // 默认alias
+			if autoAlias := anMethod.GetBool(aliasKey, false); !autoAlias {
+				// proto中指定了alias名称
+				nameAlias = anMethod.GetString(aliasKey)
+			}
+			if strings.EqualFold(nameAlias, "grpc") {
+				// 如果指定为grpc，则使用grpc的路由名称
+				nameAlias = method.TypeInputGRPC
+			} else {
+				// name alias 必须有namespace前缀，以便于激活自动转发功能，如果没有指定，则使用与TypeInput想听的前缀
+				if !strings.Contains(nameAlias, ".") {
+					nameAlias = fmt.Sprintf("%s.%s", strings.Split(method.TypeInputWithSelfPackage, ".")[0], nameAlias)
+				}
+			}
+			break
+		}
+	}
+	if strings.EqualFold(nameAlias, "grpc") {
+		// 如果指定为grpc，则使用grpc的路由名称
+		nameAlias = method.TypeInputGRPC
+	}
+
+	if fixActorMethodName && !strings.EqualFold(nameAlias, method.TypeInputGRPC) {
+		nameAlias = path.Clean(nameAlias + "/actor")
+	}
+
+	method.TypeInputAlias = strings.TrimSpace(nameAlias)
+	// 默认的http请求路径
+	if pathStr, err := HTTPPath(protoMethod); err == nil && pathStr != "" {
+		if !strings.HasPrefix(pathStr, "/") {
+			pathStr = "/" + pathStr
+		}
+		method.HTTPPath = pathStr
+		method.HTTPPathComment = "from proto, user defined"
+	}
+	if anMethod.Has("http_path") {
+		method.HTTPPath = anMethod.GetString("http_path")
+		method.HTTPPathComment = "from proto, user defined"
+	}
+
+	method.LangOffTag = strings.Split(anMethod.GetString("lang_off"), ",")
+	return method
+}
+
 func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag) (ret []*Service) {
 	fdp := protoFile.fd.AsFileDescriptorProto()
 	for i, protoService := range fdp.Service {
@@ -57,104 +149,37 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag) (
 		an := GetAnnotation(comment, AnnotationService)
 		// 整个service是否完全为actor方法
 		isActorService := an.GetBool("actor", false)
+		// 整个service是否完全为rpc方法
+		isRPCService := an.GetBool("rpc", !isActorService)
 		// 整个service是否完全为tell方法
 		isServiceAllTell := an.GetBool("tell", false)
-		// URI使用是否GRPC模式
-		methodAllAliasAllAsGRPC := p.cc.URIUsingGRPC
-		if !methodAllAliasAllAsGRPC {
-			methodAllAlias := an.GetString("alias")
-			xpanic.WhenTrue(methodAllAlias != "" && methodAllAlias != "grpc", "service annotation alias only support grpc now, got:%s", methodAllAlias)
-			methodAllAliasAllAsGRPC = methodAllAlias == "grpc"
-		}
 
 		service.LangOffTag = strings.Split(an.GetString("lang_off"), ",")
 		for j, protoMethod := range protoService.Method {
 			// actor参数，是否为actor是否为tell
 			isActorMethod := isActorService
+			isRPCMethod := isRPCService
 			isAsk := true
 			isTell := isServiceAllTell
 			anMethod := GetAnnotation(p.comments[protoMethod], AnnotationService)
 			isActorMethod = anMethod.GetBool("actor", isActorMethod)
+			isRPCMethod = anMethod.GetBool("rpc", isRPCMethod)
 			isTell = anMethod.GetBool("tell", isTell)
 			if isTell {
 				isAsk = false
 			}
-			// Note:
-			// 这里只是简单的换算一次格式合法的名称，具体请求名要通过ImportSet进行纠正
-			reqTypeName := strings.TrimPrefix(p.typeStr(protoMethod.GetInputType()), ".")
-			rspTypeName := strings.TrimPrefix(p.typeStr(protoMethod.GetOutputType()), ".")
-
-			method := &Method{
-				md:                             protoFile.fd.GetServices()[i].GetMethods()[j],
-				Name:                           xstrings.CamelCase(protoMethod.GetName()),
-				TypeInputDotFullQualifiedName:  protoMethod.GetInputType(),
-				TypeOutputDotFullQualifiedName: protoMethod.GetOutputType(),
-				TypeInputWithSelfPackage:       reqTypeName,
-				TypeOutputWithSelfPackage:      rspTypeName,
-				IsActor:                        isActorMethod,
-				IsAsk:                          isAsk,
-				IsTell:                         isTell,
-			}
-			// 只保留rpc逻辑
-			if isActorMethod && !needActor {
-				continue
-			}
-			// 只保留Acor逻辑
-			if !isActorMethod && !needRPC {
-				continue
-			}
-			if methodComment, exist := p.comments[protoMethod]; exist && methodComment != nil {
-				method.Comment = methodComment.Content
-			}
-			method.TypeInputGRPC = fmt.Sprintf("/%s.%s/%s", fdp.GetPackage(), service.Name, method.Name)
-			// 请求别名逻辑，允许proto中设定input类型别名，在请求的proto中uri将使用此名称
-			nameAlias := ""
-			if methodAllAliasAllAsGRPC {
-				nameAlias = method.TypeInputGRPC
-			}
-			if anMethod.Has("alias") {
-				nameAlias = fmt.Sprintf("%s_%s", service.Name, method.Name) // 默认alias
-				if autoAlias := anMethod.GetBool("alias", false); !autoAlias {
-					// proto中指定了alias名称
-					nameAlias = anMethod.GetString("alias")
-				}
-				if strings.EqualFold(nameAlias, "grpc") {
-					// 如果指定为grpc，则使用grpc的路由名称
-					nameAlias = method.TypeInputGRPC
-				} else {
-					// name alias 必须有namespace前缀，以便于激活自动转发功能，如果没有指定，则使用与TypeInput想听的前缀
-					if !strings.Contains(nameAlias, ".") {
-						nameAlias = fmt.Sprintf("%s.%s", strings.Split(method.TypeInputWithSelfPackage, ".")[0], nameAlias)
-					}
+			if isActorMethod {
+				if needActor {
+					m := p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], true, isAsk, isRPCMethod)
+					service.Methods = append(service.Methods, m)
+					service.HasActorMethod = true
 				}
 			}
-			// 允许逻辑层强制指定别名，此时不再进行namepace的添加逻辑
-			if anMethod.Has("alias_force") {
-				nameAlias = anMethod.GetString("alias_force")
-				if strings.EqualFold(nameAlias, "grpc") {
-					// 如果指定为grpc，则使用grpc的路由名称
-					nameAlias = method.TypeInputGRPC
+			if isRPCMethod {
+				if needRPC {
+					m := p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], false, isAsk, false)
+					service.Methods = append(service.Methods, m)
 				}
-			}
-			method.TypeInputAlias = strings.TrimSpace(nameAlias)
-			// 默认的http请求路径
-			if pathStr, err := HTTPPath(protoMethod); err == nil && pathStr != "" {
-				if !strings.HasPrefix(pathStr, "/") {
-					pathStr = "/" + pathStr
-				}
-				method.HTTPPath = pathStr
-				method.HTTPPathComment = "from proto, user defined"
-			}
-			if anMethod.Has("http_path") {
-				method.HTTPPath = anMethod.GetString("http_path")
-				method.HTTPPathComment = "from proto, user defined"
-			}
-
-			method.LangOffTag = strings.Split(anMethod.GetString("lang_off"), ",")
-
-			service.Methods = append(service.Methods, method)
-			if method.IsActor {
-				service.HasActorMethod = true
 			}
 		}
 		if len(service.Methods) > 0 {
