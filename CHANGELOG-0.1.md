@@ -1,3 +1,11 @@
+### v0.1.0-alpha.5 (2022-04-25 14:42:32)
+
+#### 🐛  Bug Fixed
+  * path clean for http path gen ([c45a7ed](https://github.com/sandwich-go/protokit/commit/c45a7ed8a7963a76c50c80f6f2138033900b8bf0)) (<small>[hui.wang](hui.wang@funplus.com)@2022-04-25 14:42:32 &#43;0800 &#43;0800</small>)
+
+#### 🤖  Tools
+  * **sem**: make changelog ([09f1c66](https://github.com/sandwich-go/protokit/commit/09f1c662fc6ab4ed5e9635b59a279337ab6fa458)) (<small>[hui.wang](hui.wang@funplus.com)@2022-04-24 13:57:32 &#43;0800 &#43;0800</small>)
+
 ### v0.1.0-alpha.4 (2022-04-24 13:57:01)
 
 #### 🤖  Tools
