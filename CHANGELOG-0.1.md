@@ -1,3 +1,11 @@
+### v0.1.0-alpha.7 (2022-04-26 16:59:57)
+
+#### 🤖  Tools
+  * **sem**: make changelog ([ef691d1](https://github.com/sandwich-go/protokit/commit/ef691d15148e5540f2c0b4eec542658910b07a10)) (<small>[hui.wang](hui.wang@funplus.com)@2022-04-25 17:41:24 &#43;0800 &#43;0800</small>)
+
+#### 💪  Commit
+  * http auto path using message with self package name ([3542d14](https://github.com/sandwich-go/protokit/commit/3542d146a9d77a650f5df08eee40044a7b15d4b0)) (<small>[hui.wang](hui.wang@funplus.com)@2022-04-26 16:59:57 &#43;0800 &#43;0800</small>)
+
 ### v0.1.0-alpha.6 (2022-04-25 17:38:26)
 
 #### 🚀  New Feature
