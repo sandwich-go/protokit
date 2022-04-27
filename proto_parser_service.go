@@ -95,7 +95,7 @@ func (p *Parser) method(
 		nameAlias = method.TypeInputGRPC
 	}
 
-	if fixActorMethodName && !strings.EqualFold(nameAlias, method.TypeInputGRPC) {
+	if nameAlias != "" && fixActorMethodName && !strings.EqualFold(nameAlias, method.TypeInputGRPC) {
 		nameAlias = path.Clean(nameAlias + "/actor")
 	}
 
@@ -151,19 +151,23 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag) (
 		isActorService := an.GetBool("actor", false)
 		// 整个service是否完全为rpc方法
 		isRPCService := an.GetBool("rpc", !isActorService)
+		hasSpecifiedRPCService := an.Has("rpc")
 		// 整个service是否完全为tell方法
 		isServiceAllTell := an.GetBool("tell", false)
 
 		service.LangOffTag = strings.Split(an.GetString("lang_off"), ",")
 		for j, protoMethod := range protoService.Method {
 			// actor参数，是否为actor是否为tell
-			isActorMethod := isActorService
-			isRPCMethod := isRPCService
 			isAsk := true
 			isTell := isServiceAllTell
 			anMethod := GetAnnotation(p.comments[protoMethod], AnnotationService)
-			isActorMethod = anMethod.GetBool("actor", isActorMethod)
-			isRPCMethod = anMethod.GetBool("rpc", isRPCMethod)
+			isActorMethod := anMethod.GetBool("actor", isActorService)
+			// 默认指定了actpr方法则不再支持生成rpc逻辑，除非明确指定:
+			// method级别的annotation指定生成RPC，service级别明确指定是rpc service
+			isRPCMethod := anMethod.GetBool("rpc", !isActorMethod)
+			if !isRPCMethod && hasSpecifiedRPCService && isRPCService {
+				isRPCMethod = true
+			}
 			isTell = anMethod.GetBool("tell", isTell)
 			if isTell {
 				isAsk = false
