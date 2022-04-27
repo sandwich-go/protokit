@@ -1,3 +1,11 @@
+### v0.1.0-alpha.8 (2022-04-27 17:40:59)
+
+#### 🐛  Bug Fixed
+  * name alias bug and rpc actor bug ([5126117](https://github.com/sandwich-go/protokit/commit/51261177ff733b441765e7d1859a985a03287d5c)) (<small>[hui.wang](hui.wang@funplus.com)@2022-04-27 17:40:59 &#43;0800 &#43;0800</small>)
+
+#### 🤖  Tools
+  * **sem**: make changelog ([c6b201f](https://github.com/sandwich-go/protokit/commit/c6b201fc3f8d1a248ff15147448bf62c6787b75f)) (<small>[hui.wang](hui.wang@funplus.com)@2022-04-26 17:00:44 &#43;0800 &#43;0800</small>)
+
 ### v0.1.0-alpha.7 (2022-04-26 16:59:57)
 
 #### 🤖  Tools
