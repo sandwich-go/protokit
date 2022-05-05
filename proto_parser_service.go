@@ -82,7 +82,7 @@ func (p *Parser) method(
 				// 如果指定为grpc，则使用grpc的路由名称
 				nameAlias = method.TypeInputGRPC
 			} else {
-				// name alias 必须有namespace前缀，以便于激活自动转发功能，如果没有指定，则使用与TypeInput想听的前缀
+				// name alias 必须有namespace前缀，以便于激活自动转发功能，如果没有指定，则使用与TypeInput相同的package前缀
 				if !strings.Contains(nameAlias, ".") {
 					nameAlias = fmt.Sprintf("%s.%s", strings.Split(method.TypeInputWithSelfPackage, ".")[0], nameAlias)
 				}
