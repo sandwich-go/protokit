@@ -28,6 +28,8 @@ func (p *Parser) parseService() {
 	}
 }
 
+const actorPathSuffix = "/actor"
+
 func (p *Parser) method(
 	protoFile *ProtoFile,
 	serviceName string,
@@ -108,13 +110,16 @@ func (p *Parser) method(
 	}
 	if anMethod.Has("http_path") {
 		method.HTTPPath = anMethod.GetString("http_path")
+		if fixActorMethodName && !strings.HasSuffix(method.HTTPPath, actorPathSuffix) {
+			method.HTTPPath = path.Clean(method.HTTPPath + actorPathSuffix)
+		}
 		// 如果通过标注指定了http path
 		nameAlias = method.HTTPPath
 		method.HTTPPathComment = "from proto, user defined"
 	}
 
-	if nameAlias != "" && fixActorMethodName && !strings.EqualFold(nameAlias, method.TypeInputGRPC) {
-		nameAlias = path.Clean(nameAlias + "/actor")
+	if nameAlias != "" && fixActorMethodName && !strings.EqualFold(nameAlias, method.TypeInputGRPC) && !strings.HasSuffix(nameAlias, actorPathSuffix) {
+		nameAlias = path.Clean(nameAlias + actorPathSuffix)
 	}
 	method.TypeInputAlias = strings.TrimSpace(nameAlias)
 	method.LangOffTag = strings.Split(anMethod.GetString("lang_off"), ",")
