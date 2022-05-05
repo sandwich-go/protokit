@@ -87,6 +87,10 @@ func (p *Parser) method(
 					nameAlias = fmt.Sprintf("%s.%s", strings.Split(method.TypeInputWithSelfPackage, ".")[0], nameAlias)
 				}
 			}
+			if aliasKey == "actor_alias" {
+				// 通过actor_alias指定的别名，不再进行/actor的修正
+				fixActorMethodName = false
+			}
 			break
 		}
 	}
@@ -99,7 +103,6 @@ func (p *Parser) method(
 		nameAlias = path.Clean(nameAlias + "/actor")
 	}
 
-	method.TypeInputAlias = strings.TrimSpace(nameAlias)
 	// 默认的http请求路径
 	if pathStr, err := HTTPPath(protoMethod); err == nil && pathStr != "" {
 		if !strings.HasPrefix(pathStr, "/") {
@@ -110,9 +113,11 @@ func (p *Parser) method(
 	}
 	if anMethod.Has("http_path") {
 		method.HTTPPath = anMethod.GetString("http_path")
+		// 如果通过标注指定了http path
+		nameAlias = method.HTTPPath
 		method.HTTPPathComment = "from proto, user defined"
 	}
-
+	method.TypeInputAlias = strings.TrimSpace(nameAlias)
 	method.LangOffTag = strings.Split(anMethod.GetString("lang_off"), ",")
 	return method
 }
@@ -162,7 +167,7 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag) (
 			isTell := isServiceAllTell
 			anMethod := GetAnnotation(p.comments[protoMethod], AnnotationService)
 			isActorMethod := anMethod.GetBool("actor", isActorService)
-			// 默认指定了actpr方法则不再支持生成rpc逻辑，除非明确指定:
+			// 默认指定了actor方法则不再支持生成rpc逻辑，除非明确指定:
 			// method级别的annotation指定生成RPC，service级别明确指定是rpc service
 			isRPCMethod := anMethod.GetBool("rpc", !isActorMethod)
 			if !isRPCMethod && hasSpecifiedRPCService && isRPCService {
