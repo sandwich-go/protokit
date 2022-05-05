@@ -98,11 +98,6 @@ func (p *Parser) method(
 		// 如果指定为grpc，则使用grpc的路由名称
 		nameAlias = method.TypeInputGRPC
 	}
-
-	if nameAlias != "" && fixActorMethodName && !strings.EqualFold(nameAlias, method.TypeInputGRPC) {
-		nameAlias = path.Clean(nameAlias + "/actor")
-	}
-
 	// 默认的http请求路径
 	if pathStr, err := HTTPPath(protoMethod); err == nil && pathStr != "" {
 		if !strings.HasPrefix(pathStr, "/") {
@@ -116,6 +111,10 @@ func (p *Parser) method(
 		// 如果通过标注指定了http path
 		nameAlias = method.HTTPPath
 		method.HTTPPathComment = "from proto, user defined"
+	}
+
+	if nameAlias != "" && fixActorMethodName && !strings.EqualFold(nameAlias, method.TypeInputGRPC) {
+		nameAlias = path.Clean(nameAlias + "/actor")
 	}
 	method.TypeInputAlias = strings.TrimSpace(nameAlias)
 	method.LangOffTag = strings.Split(anMethod.GetString("lang_off"), ",")
