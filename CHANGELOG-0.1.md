@@ -1,3 +1,23 @@
+### v0.1.0-alpha.10 (2022-05-05 14:43:00)
+
+#### 🐛  Bug Fixed
+  * 通过标注指定了http path时,http path, uri将采用用户指定的字符串,且不再追加auto标签 ([7138b1d](https://github.com/sandwich-go/protokit/commit/7138b1d186367b42bc4eafab75cd3b859b711e61)) (<small>[hui.wang](hui.wang@funplus.com)@2022-05-05 14:43:00 &#43;0800 &#43;0800</small>)
+  * 通过actor_alias指定的别名不再进行/actor的修正 ([68b7939](https://github.com/sandwich-go/protokit/commit/68b79397d86dd0dabb0fdd009c2fcd7e63daeea3)) (<small>[hui.wang](hui.wang@funplus.com)@2022-05-05 14:23:13 &#43;0800 &#43;0800</small>)
+
+#### 🤖  Tools
+  * **sem**: make changelog ([0f6516a](https://github.com/sandwich-go/protokit/commit/0f6516a4de07f0b55333c8be1420ad20c6dff88b)) (<small>[hui.wang](hui.wang@funplus.com)@2022-05-05 14:19:24 &#43;0800 &#43;0800</small>)
+
+### v0.1.0-alpha.9 (2022-05-05 14:09:41)
+
+#### 🐛  Bug Fixed
+  * 通过actor_alias指定的别名不再进行/actor的修正 ([aa59211](https://github.com/sandwich-go/protokit/commit/aa59211ecf2ce56825a00fcad925655014f3a892)) (<small>[hui.wang](hui.wang@funplus.com)@2022-05-05 14:09:41 &#43;0800 &#43;0800</small>)
+
+#### 🤖  Tools
+  * **sem**: make changelog ([b73598f](https://github.com/sandwich-go/protokit/commit/b73598f31ed108c7cfde655973a2bed0c9fb4eff)) (<small>[hui.wang](hui.wang@funplus.com)@2022-04-27 17:41:21 &#43;0800 &#43;0800</small>)
+
+#### 📝  Add Docs
+  * fix word ([bfe2676](https://github.com/sandwich-go/protokit/commit/bfe267638d9bcbe334e01d41b1aa1656a06a8f13)) (<small>[hui.wang](hui.wang@funplus.com)@2022-05-05 13:14:25 &#43;0800 &#43;0800</small>)
+
 ### v0.1.0-alpha.8 (2022-04-27 17:40:59)
 
 #### 🐛  Bug Fixed
