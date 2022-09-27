@@ -88,6 +88,7 @@ var protoFieldTypeNameMapping = map[descriptorpb.FieldDescriptorProto_Type]Proto
 
 type ProtoField struct {
 	fd            *desc.FieldDescriptor
+	RawName       string
 	Name          string   // proto field name
 	Comment       *Comment // 注释
 	Label         Label    // Label类型
@@ -97,8 +98,9 @@ type ProtoField struct {
 
 func NewProtoField(pf *ProtoFile, fd *desc.FieldDescriptor) *ProtoField {
 	return &ProtoField{
-		Name: GoFieldName(fd.GetName()),
-		fd:   fd,
+		RawName: fd.GetName(),
+		Name:    GoFieldName(fd.GetName()),
+		fd:      fd,
 	}
 }
 
