@@ -66,6 +66,49 @@ func GoStructNameWithGolangPackage(fullyQualifiedName string, protoPackagePath, 
 	return goPackageName + "." + strings.TrimPrefix(structName, ".")
 }
 
+var keywords = map[string]struct{}{
+	"Reset":        {},
+	"String":       {},
+	"ProtoMessage": {},
+	"ProtoReflect": {},
+	"Descriptor":   {},
+}
+
+func GoFieldName(s string) string {
+	s = strings.Title(s)
+	if _, ok := keywords[s]; ok {
+		return s + "_"
+	}
+	return goName(s)
+}
+
+func goName(s string) string {
+	var ns string
+	var toUpper bool
+	for j, c := range s {
+		if toUpper {
+			ns += strings.ToUpper(string(c))
+			toUpper = false
+			continue
+		}
+		if c == '_' {
+			if j == 0 {
+				ns += string('X')
+			} else if j < len(s)-1 && ('a' <= s[j+1] && s[j+1] <= 'z') {
+				toUpper = true
+			} else {
+				ns += string(c)
+			}
+		} else if '0' <= s[j] && s[j] <= '9' {
+			ns += string(c)
+			toUpper = true
+		} else {
+			ns += string(c)
+		}
+	}
+	return ns
+}
+
 // 由fullyQualifiedName 转换到 golang struct名称，fullyQualifiedName需要去除掉proto package的名称
 // 底层无法自动判定proto package名称依赖上层传递
 // FunPlus.ServerCommon.Config.ActivityData : proto package名称为FunPlus.ServerCommon.Config
@@ -74,35 +117,11 @@ func GoStructNameFromFullyQualifiedNameTrimProtoPackage(fullyQualifiedNameWithou
 	fullyQualifiedNameWithoutProtoPackage = strings.TrimPrefix(fullyQualifiedNameWithoutProtoPackage, ".")
 	nameParts := strings.Split(fullyQualifiedNameWithoutProtoPackage, ".")
 	ret := ""
-	lastIsUnderline := false
-	lastIsNumber := false
 	for i, s := range nameParts {
 		if 'A' <= s[0] && s[0] <= 'Z' && i != 0 {
 			ret += "_"
 		}
-		s = strings.Title(s)
-		sNew := ""
-		for _, c := range s {
-			if c == '_' {
-				sNew += string(c)
-			} else {
-				if lastIsUnderline {
-					if 'a' <= c && c <= 'z' {
-						// 小写字母回退一个underline
-						sNew = sNew[:len(sNew)-1]
-					}
-					sNew += strings.ToUpper(string(c))
-				} else if lastIsNumber {
-					// 上一个字符是数字，当前字符大写
-					sNew += strings.ToUpper(string(c))
-				} else {
-					sNew += string(c)
-				}
-			}
-			lastIsUnderline = c == '_'
-			lastIsNumber = c >= '0' && c <= '9'
-		}
-		ret += sNew
+		ret += goName(strings.Title(s))
 	}
 	return ret
 }

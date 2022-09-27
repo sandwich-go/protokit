@@ -97,7 +97,7 @@ type ProtoField struct {
 
 func NewProtoField(pf *ProtoFile, fd *desc.FieldDescriptor) *ProtoField {
 	return &ProtoField{
-		Name: fd.GetName(),
+		Name: GoFieldName(fd.GetName()),
 		fd:   fd,
 	}
 }
