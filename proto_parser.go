@@ -147,8 +147,10 @@ func (p *Parser) setType(mdp *desc.MessageDescriptor, name string, pf *ProtoFile
 	p.dotFullyQualifiedTypeNameToProtoFile[name] = pf
 	p.dotFullyQualifiedTypeNameToDescriptor[name] = mdp
 	for _, v := range mdp.GetNestedMessageTypes() {
-		// 过滤掉map entry,
 		if v.IsMapEntry() {
+			dotName := v.GetFullyQualifiedName()
+			p.dotFullyQualifiedTypeNameToProtoFile["."+dotName] = pf
+			p.dotFullyQualifiedTypeNameToDescriptor["."+dotName] = v
 			continue
 		}
 		p.setType(v, "."+v.GetFullyQualifiedName(), pf)
