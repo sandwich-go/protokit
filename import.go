@@ -38,14 +38,6 @@ func (e *ImportSet) Add(add *Import) {
 		add.GolangPackageName = "."
 		return
 	}
-	if add.GolangPackageName == e.GolangPackageName {
-		// path不同但是package name相同，起别名
-		n := e.importAliasMappingCount[add.GolangPackageName]
-		n++
-		add.GolangPackageName = fmt.Sprintf("%s%d", add.GolangPackageName, n)
-		e.importAliasMappingCount[add.GolangPackageName] = n
-	}
-	originalName := add.GolangPackageName
 	for _, i := range e.Set {
 		if i.GolangPackagePath == add.GolangPackagePath {
 			duplicated = true
@@ -53,19 +45,33 @@ func (e *ImportSet) Add(add *Import) {
 			i.MessageDotFullQualifiedName = xslice.StringSetAdd(i.MessageDotFullQualifiedName, add.MessageDotFullQualifiedName...)
 			break
 		}
-		// path不同但是package name相同，起别名
-		if i.GolangPackageName == add.GolangPackageName {
-			add.GolangPackageName = fmt.Sprintf("%s%d", add.GolangPackageName, e.importAliasMappingCount[originalName])
-		}
 	}
-	if !duplicated {
-		e.Set = append(e.Set, add)
-		e.importAliasMappingCount[originalName] += 1
+	if duplicated {
+		return
 	}
+	e.add(add)
+	e.sort()
+}
 
+func (e *ImportSet) add(add *Import) {
+	add.originGolangPackageName = add.GolangPackageName
+	e.Set = append(e.Set, add)
+}
+
+func (e *ImportSet) sort() {
 	sort.SliceStable(e.Set, func(i, j int) bool {
 		return e.Set[i].GolangPackagePath < e.Set[j].GolangPackagePath
 	})
+	importAliasMappingCount := make(map[string]int)
+	for _, i := range e.Set {
+		originalName := i.originGolangPackageName
+		if originalName == e.GolangPackageName {
+			i.GolangPackageName = fmt.Sprintf("%s%d", originalName, importAliasMappingCount[originalName]+1)
+		} else if _, ok := importAliasMappingCount[originalName]; ok {
+			i.GolangPackageName = fmt.Sprintf("%s%d", originalName, importAliasMappingCount[originalName])
+		}
+		importAliasMappingCount[originalName]++
+	}
 }
 
 func fileNameWithoutExtension(fileName string) string {
