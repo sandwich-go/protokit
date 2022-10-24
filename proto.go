@@ -14,9 +14,7 @@ import (
 // 如果重复，则采用proto file path的路径替换/后作为别名，比较通用
 // 但是也要约束package的定义，防止过度自由
 type Import struct {
-	ProtoFilePath               string // 引入的proto文件名
-	originGolangPackageName     string // golang 原有的引用的名称
-	sortCount                   int
+	ProtoFilePath               string   // 引入的proto文件名
 	GolangPackageName           string   // golang 引用的名称
 	GolangPackagePath           string   // golang 引用的路径
 	PythonModuleName            string   // python 引用的名称
@@ -32,8 +30,8 @@ type ImportSet struct {
 	Set                                     []*Import         // 当前import set
 	MessageDotFullQualifiedNameToGolangType map[string]string // GolangType是经过import纠正过package名称的，可能带着1，2之类的标记
 	PythonModules                           []*PythonModule   // python module 辅助python代码生成
-	//importAliasMappingCount                 map[string]int    // 构建中使用的临时数据，记录同名但不同路径的import
-	ExcludeImportName []string
+	importAliasMappingCount                 map[string]int    // 构建中使用的临时数据，记录同名但不同路径的import
+	ExcludeImportName                       []string
 }
 
 func NewImportSet(golangPackageName, golangPackagePath string) *ImportSet {
@@ -41,7 +39,7 @@ func NewImportSet(golangPackageName, golangPackagePath string) *ImportSet {
 		GolangPackageName:                       golangPackageName,
 		GolangPackagePath:                       golangPackagePath,
 		MessageDotFullQualifiedNameToGolangType: make(map[string]string),
-		//importAliasMappingCount:                 make(map[string]int),
+		importAliasMappingCount:                 make(map[string]int),
 	}
 }
 
