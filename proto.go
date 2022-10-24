@@ -14,8 +14,9 @@ import (
 // 如果重复，则采用proto file path的路径替换/后作为别名，比较通用
 // 但是也要约束package的定义，防止过度自由
 type Import struct {
-	ProtoFilePath               string   // 引入的proto文件名
-	originGolangPackageName     string   // golang 原有的引用的名称
+	ProtoFilePath               string // 引入的proto文件名
+	originGolangPackageName     string // golang 原有的引用的名称
+	sortCount                   int
 	GolangPackageName           string   // golang 引用的名称
 	GolangPackagePath           string   // golang 引用的路径
 	PythonModuleName            string   // python 引用的名称

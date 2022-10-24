@@ -65,10 +65,13 @@ func (e *ImportSet) sort() {
 	importAliasMappingCount := make(map[string]int)
 	for _, i := range e.Set {
 		originalName := i.originGolangPackageName
-		if originalName == e.GolangPackageName {
-			i.GolangPackageName = fmt.Sprintf("%s%d", originalName, importAliasMappingCount[originalName]+1)
-		} else if _, ok := importAliasMappingCount[originalName]; ok {
-			i.GolangPackageName = fmt.Sprintf("%s%d", originalName, importAliasMappingCount[originalName])
+		if i.sortCount == 0 {
+			if originalName == e.GolangPackageName {
+				i.GolangPackageName = fmt.Sprintf("%s%d", originalName, importAliasMappingCount[originalName]+1)
+			} else if _, ok := importAliasMappingCount[originalName]; ok {
+				i.GolangPackageName = fmt.Sprintf("%s%d", originalName, importAliasMappingCount[originalName])
+			}
+			i.sortCount++
 		}
 		importAliasMappingCount[originalName]++
 	}
