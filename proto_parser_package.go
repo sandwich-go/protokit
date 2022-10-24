@@ -2,6 +2,7 @@ package protokit
 
 import (
 	"path"
+	"sort"
 
 	"github.com/jhump/protoreflect/desc"
 	"github.com/sandwich-go/boost/xpanic"
@@ -33,7 +34,13 @@ func (p *Parser) parsePackage(nsList []*Namespace) {
 	}
 
 	// 处理所有注册进来的消息
-	for dotFullyQualifiedTypeName, protoFile := range p.dotFullyQualifiedTypeNameToProtoFile {
+	var ss = make([]string, 0, len(p.dotFullyQualifiedTypeNameToProtoFile))
+	for dotFullyQualifiedTypeName := range p.dotFullyQualifiedTypeNameToProtoFile {
+		ss = append(ss, dotFullyQualifiedTypeName)
+	}
+	sort.Strings(ss)
+	for _, dotFullyQualifiedTypeName := range ss {
+		protoFile := p.dotFullyQualifiedTypeNameToProtoFile[dotFullyQualifiedTypeName]
 		tt := p.dotFullyQualifiedTypeNameToDescriptor[dotFullyQualifiedTypeName]
 		if mapEntry, ok := tt.(IsMapEntry); ok && mapEntry.IsMapEntry() {
 			// map entry不做处理

@@ -3,6 +3,7 @@ package protokit
 import (
 	"fmt"
 	"path"
+	"sort"
 	"strings"
 
 	"github.com/rs/zerolog/log"
@@ -23,7 +24,13 @@ func (p *Parser) addImportByDotFullyQualifiedTypeName(dotFullyQualifiedTypeName 
 
 func (p *Parser) parseImport() {
 	// fixme 校验req rsp映射关系,TCP需要严格校验，HTTP缺可以不严格校验
-	for _, protoFile := range p.protoFilePathToProtoFile {
+	var ss = make([]string, 0, len(p.protoFilePathToProtoFile))
+	for protoFilePath := range p.protoFilePathToProtoFile {
+		ss = append(ss, protoFilePath)
+	}
+	sort.Strings(ss)
+	for _, protoFilePath := range ss {
+		protoFile := p.protoFilePathToProtoFile[protoFilePath]
 		for _, sg := range protoFile.ServiceGroups {
 			reqMap := make(map[string]string)
 			// 设定import忽略路径
