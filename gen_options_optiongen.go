@@ -30,6 +30,8 @@ type Options struct {
 	ImportSetExclude []string `xconf:"import_set_exclude" usage:"import set忽略指定name的package"`
 	// annotation@URIUsingGRPC(comment="service的uri是否使用GRPC模式")
 	URIUsingGRPC bool `xconf:"uri_using_grpc" usage:"service的uri是否使用GRPC模式"`
+	// annotation@URIUsingGRPCWithoutPackage(comment="service的uri使用GRPC模式时，是否带package名")
+	URIUsingGRPCWithoutPackage bool `xconf:"uri_using_grpc_without_package" usage:"service的uri使用GRPC模式时，是否带package名"`
 }
 
 // NewOptions new Options
@@ -44,7 +46,7 @@ func NewOptions(opts ...Option) *Options {
 	return cc
 }
 
-// ApplyOption apply mutiple new option and return the old ones
+// ApplyOption apply multiple new option and return the old ones
 // sample:
 // old := cc.ApplyOption(WithTimeout(time.Second))
 // defer cc.ApplyOption(old...)
@@ -149,6 +151,15 @@ func WithURIUsingGRPC(v bool) Option {
 	}
 }
 
+// WithURIUsingGRPCWithoutPackage service的uri使用GRPC模式时，是否带package名
+func WithURIUsingGRPCWithoutPackage(v bool) Option {
+	return func(cc *Options) Option {
+		previous := cc.URIUsingGRPCWithoutPackage
+		cc.URIUsingGRPCWithoutPackage = v
+		return WithURIUsingGRPCWithoutPackage(previous)
+	}
+}
+
 // InstallOptionsWatchDog the installed func will called when NewOptions  called
 func InstallOptionsWatchDog(dog func(cc *Options)) { watchDogOptions = dog }
 
@@ -170,6 +181,7 @@ func newDefaultOptions() *Options {
 		WithNamePattern(NewNamePattern()),
 		WithImportSetExclude([]string{"netutils"}...),
 		WithURIUsingGRPC(false),
+		WithURIUsingGRPCWithoutPackage(false),
 	} {
 		opt(cc)
 	}
@@ -227,6 +239,7 @@ func (cc *Options) GetZapLogBytesMode() string                   { return cc.Zap
 func (cc *Options) GetNamePattern() *NamePattern                 { return cc.NamePattern }
 func (cc *Options) GetImportSetExclude() []string                { return cc.ImportSetExclude }
 func (cc *Options) GetURIUsingGRPC() bool                        { return cc.URIUsingGRPC }
+func (cc *Options) GetURIUsingGRPCWithoutPackage() bool          { return cc.URIUsingGRPCWithoutPackage }
 
 // OptionsVisitor visitor interface for Options
 type OptionsVisitor interface {
@@ -240,6 +253,7 @@ type OptionsVisitor interface {
 	GetNamePattern() *NamePattern
 	GetImportSetExclude() []string
 	GetURIUsingGRPC() bool
+	GetURIUsingGRPCWithoutPackage() bool
 }
 
 // OptionsInterface visitor + ApplyOption interface for Options
