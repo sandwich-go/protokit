@@ -61,7 +61,12 @@ func (p *Parser) method(
 		method.Comment = methodComment.Content
 	}
 	fdp := protoFile.fd.AsFileDescriptorProto()
-	method.TypeInputGRPC = fmt.Sprintf("/%s.%s/%s", fdp.GetPackage(), serviceName, method.Name)
+	if p.cc.URIUsingGRPCWithoutPackage {
+		method.TypeInputGRPC = fmt.Sprintf("/%s/%s", serviceName, method.Name)
+	} else {
+		method.TypeInputGRPC = fmt.Sprintf("/%s.%s/%s", fdp.GetPackage(), serviceName, method.Name)
+	}
+
 	// 请求别名逻辑，允许proto中设定input类型别名，在请求的proto中uri将使用此名称
 	// URI使用是否GRPC模式
 	nameAlias := ""
@@ -85,7 +90,7 @@ func (p *Parser) method(
 				nameAlias = method.TypeInputGRPC
 			} else {
 				// name alias 必须有namespace前缀，以便于激活自动转发功能，如果没有指定，则使用与TypeInput相同的package前缀
-				if !strings.Contains(nameAlias, ".") && !p.cc.URIUsingGRPCWithoutPackage {
+				if !strings.Contains(nameAlias, ".") {
 					nameAlias = fmt.Sprintf("%s.%s", strings.Split(method.TypeInputWithSelfPackage, ".")[0], nameAlias)
 				}
 			}
