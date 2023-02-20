@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/jhump/protoreflect/desc"
-	"github.com/sandwich-go/boost/annotation"
+	"github.com/sandwich-go/boost/misc/annotation"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -126,16 +126,16 @@ type ProtoFile struct {
 func (p *ProtoFile) AsFileDescriptor() *desc.FileDescriptor { return p.fd }
 func (p *ProtoFile) Annotation(name string) annotation.Annotation {
 	for _, v := range p.Annotations {
-		if v.Name == name {
+		if v.Name() == name {
 			return v
 		}
 	}
 	for _, v := range p.Annotations {
-		if strings.EqualFold(v.Name, name) {
+		if strings.EqualFold(v.Name(), name) {
 			return v
 		}
 	}
-	return annotation.Annotation{}
+	return annotation.EmptyAnnotation
 }
 
 func (p *ProtoFile) GetFullPathWithSuffix(suffix string) string {

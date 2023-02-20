@@ -3,7 +3,7 @@ package protokit
 import (
 	"strings"
 
-	"github.com/sandwich-go/boost/annotation"
+	"github.com/sandwich-go/boost/misc/annotation"
 	"github.com/sandwich-go/boost/xpanic"
 )
 
@@ -27,7 +27,7 @@ func (p *Parser) parseAnnotation() {
 		}
 		if len(annotationLines) > 0 {
 			var err error
-			protoFile.Annotations, err = annotation.NewRegistry().ResolveAnnotationsErrorDuplicate(annotationLines)
+			protoFile.Annotations, err = annotation.New().ResolveNoDuplicate(annotationLines...)
 			xpanic.WhenErrorAsFmtFirst(err, "got error:%w while parse file annotation for file:%s", protoFile.FilePath)
 		}
 	}

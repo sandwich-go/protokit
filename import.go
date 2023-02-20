@@ -27,7 +27,7 @@ func (e *ImportSet) AddWithDotFullQualifiedName(dotFullyQualifiedName string, pf
 }
 
 func (e *ImportSet) Add(add *Import) {
-	if xslice.ContainString(e.ExcludeImportName, add.GolangPackageName) {
+	if xslice.StringsContain(e.ExcludeImportName, add.GolangPackageName) {
 		return
 	}
 	duplicated := false
@@ -49,7 +49,7 @@ func (e *ImportSet) Add(add *Import) {
 		if i.GolangPackagePath == add.GolangPackagePath {
 			duplicated = true
 			add.GolangPackageName = i.GolangPackageName
-			i.MessageDotFullQualifiedName = xslice.StringSetAdd(i.MessageDotFullQualifiedName, add.MessageDotFullQualifiedName...)
+			i.MessageDotFullQualifiedName = xslice.StringsSetAdd(i.MessageDotFullQualifiedName, add.MessageDotFullQualifiedName...)
 			break
 		}
 		// path不同但是package name相同，起别名

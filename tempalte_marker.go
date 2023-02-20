@@ -47,7 +47,7 @@ func (b *MarkerInfo) Format() {
 	formatList = append(formatList, b.GeneratedBy)
 	if len(b.Versions) != 0 {
 		formatList = append(formatList, "versions:")
-		xmap.WalkMapDeterministic(b.Versions, func(k string, v string) bool {
+		xmap.WalkStringStringMapDeterministic(b.Versions, func(k string, v string) bool {
 			formatList = append(formatList, fmt.Sprintf("    %s : %s", k, v))
 			return true
 		})

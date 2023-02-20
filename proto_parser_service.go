@@ -79,11 +79,11 @@ func (p *Parser) method(
 	}
 	anMethod := GetAnnotation(p.comments[protoMethod], AnnotationService)
 	for _, aliasKey := range aliasCheckPrefer {
-		if anMethod.Has(aliasKey) {
+		if anMethod.Contains(aliasKey) {
 			nameAlias = fmt.Sprintf("%s_%s", serviceName, method.Name) // 默认alias
-			if autoAlias := anMethod.GetBool(aliasKey, false); !autoAlias {
+			if autoAlias, _ := anMethod.Bool(aliasKey, false); !autoAlias {
 				// proto中指定了alias名称
-				nameAlias = anMethod.GetString(aliasKey)
+				nameAlias = anMethod.String(aliasKey)
 			}
 			if strings.EqualFold(nameAlias, "grpc") {
 				// 如果指定为grpc，则使用grpc的路由名称
@@ -113,8 +113,8 @@ func (p *Parser) method(
 		method.HTTPPath = pathStr
 		method.HTTPPathComment = "from proto, user defined"
 	}
-	if anMethod.Has("http_path") {
-		method.HTTPPath = anMethod.GetString("http_path")
+	if anMethod.Contains("http_path") {
+		method.HTTPPath = anMethod.String("http_path")
 		if fixActorMethodName && !strings.HasSuffix(method.HTTPPath, actorPathSuffix) {
 			method.HTTPPath = path.Clean(method.HTTPPath + actorPathSuffix)
 		}
@@ -127,7 +127,7 @@ func (p *Parser) method(
 		nameAlias = path.Clean(nameAlias + actorPathSuffix)
 	}
 	method.TypeInputAlias = strings.TrimSpace(nameAlias)
-	method.LangOffTag = strings.Split(anMethod.GetString("lang_off"), ",")
+	method.LangOffTag = strings.Split(anMethod.String("lang_off"), ",")
 	return method
 }
 
@@ -162,27 +162,27 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag) (
 		}
 		an := GetAnnotation(comment, AnnotationService)
 		// 整个service是否完全为actor方法
-		isActorService := an.GetBool("actor", false)
+		isActorService, _ := an.Bool("actor", false)
 		// 整个service是否完全为rpc方法
-		isRPCService := an.GetBool("rpc", !isActorService)
-		hasSpecifiedRPCService := an.Has("rpc")
+		isRPCService, _ := an.Bool("rpc", !isActorService)
+		hasSpecifiedRPCService := an.Contains("rpc")
 		// 整个service是否完全为tell方法
-		isServiceAllTell := an.GetBool("tell", false)
+		isServiceAllTell, _ := an.Bool("tell", false)
 
-		service.LangOffTag = strings.Split(an.GetString("lang_off"), ",")
+		service.LangOffTag = strings.Split(an.String("lang_off"), ",")
 		for j, protoMethod := range protoService.Method {
 			// actor参数，是否为actor是否为tell
 			isAsk := true
 			isTell := isServiceAllTell
 			anMethod := GetAnnotation(p.comments[protoMethod], AnnotationService)
-			isActorMethod := anMethod.GetBool("actor", isActorService)
+			isActorMethod, _ := anMethod.Bool("actor", isActorService)
 			// 默认指定了actor方法则不再支持生成rpc逻辑，除非明确指定:
 			// method级别的annotation指定生成RPC，service级别明确指定是rpc service
-			isRPCMethod := anMethod.GetBool("rpc", !isActorMethod)
+			isRPCMethod, _ := anMethod.Bool("rpc", !isActorMethod)
 			if !isRPCMethod && hasSpecifiedRPCService && isRPCService {
 				isRPCMethod = true
 			}
-			isTell = anMethod.GetBool("tell", isTell)
+			isTell, _ = anMethod.Bool("tell", isTell)
 			if isTell {
 				isAsk = false
 			}

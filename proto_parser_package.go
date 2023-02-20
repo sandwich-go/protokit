@@ -98,10 +98,10 @@ func (p *Parser) parsePackage(nsList []*Namespace) {
 					pp.AliasToGolangType[method.TypeInputAlias] = golangInputType
 				}
 				if golangInputType != "" && method.IsActor {
-					pp.ActorMessageGolangType = xslice.StringSetAdd(pp.ActorMessageGolangType, golangInputType)
+					pp.ActorMessageGolangType = xslice.StringsSetAdd(pp.ActorMessageGolangType, golangInputType)
 				}
 				if golangOutputType != "" && method.IsActor {
-					pp.ActorMessageGolangType = xslice.StringSetAdd(pp.ActorMessageGolangType, golangOutputType)
+					pp.ActorMessageGolangType = xslice.StringsSetAdd(pp.ActorMessageGolangType, golangOutputType)
 				}
 			}
 		}

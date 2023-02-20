@@ -40,7 +40,7 @@ func (p *Parser) parseImport() {
 					// 名称需要做一次修复，根据import的package名称
 					method.TypeInput, _ = p.addImportByDotFullyQualifiedTypeName(method.TypeInputDotFullQualifiedName, sg.ImportSet)
 					method.TypeOutput, _ = p.addImportByDotFullyQualifiedTypeName(method.TypeOutputDotFullQualifiedName, sg.ImportSet)
-					service.InputOutputTypes = xslice.StringSetAdd(service.InputOutputTypes, method.TypeInput, method.TypeOutput)
+					service.InputOutputTypes = xslice.StringsSetAdd(service.InputOutputTypes, method.TypeInput, method.TypeOutput)
 					// 请求使用使用的uri名称, 需要用这个名字来作为http请求的路径，携带自由的package名称
 					uriUsing := method.TypeInputWithSelfPackage
 					if method.TypeInputAlias != "" {

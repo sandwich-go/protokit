@@ -3,7 +3,7 @@ package protokit
 import (
 	"strings"
 
-	"github.com/sandwich-go/boost/annotation"
+	"github.com/sandwich-go/boost/misc/annotation"
 	"github.com/sandwich-go/boost/xstrings"
 	"google.golang.org/protobuf/types/descriptorpb"
 )
@@ -38,7 +38,7 @@ func CommentLines(loc *descriptorpb.SourceCodeInfo_Location) []string {
 
 func GetAnnotation(c *Comment, name string) annotation.Annotation {
 	if c == nil {
-		return annotation.Annotation{}
+		return nil
 	}
 	return c.Annotation(name)
 }
@@ -49,11 +49,11 @@ func (c *Comment) Annotation(name ...string) annotation.Annotation {
 		annotationName = name[0]
 	}
 	for _, v := range c.Annotations {
-		if v.Name == annotationName {
+		if v.Name() == annotationName {
 			return v
 		}
 	}
-	return annotation.Annotation{}
+	return annotation.EmptyAnnotation
 }
 
 func NewComment(lines []string) *Comment {
@@ -64,7 +64,7 @@ func NewComment(lines []string) *Comment {
 		return comment
 	}
 	comment.Content = strings.Join(lines, "\n")
-	comment.Annotations = annotation.NewRegistry().ResolveAnnotations(lines)
+	comment.Annotations, _ = annotation.New().ResolveMany(lines...)
 	for _, l := range lines {
 		l = xstrings.Trim(l)
 		arr := strings.Split(l, "@")
@@ -86,14 +86,11 @@ func NewComment(lines []string) *Comment {
 		}
 	}
 
-	global := annotation.Annotation{
-		Name:       AnnotationGlobal,
-		Attributes: make(map[string]string),
-	}
-
+	var attributes = make(map[string]string)
 	for k, v := range comment.Tags {
-		global.Attributes[k] = v
+		attributes[k] = v
 	}
+	global := annotation.NewAnnotation(AnnotationGlobal, attributes)
 	comment.Annotations = append(comment.Annotations, global)
 
 	return comment
