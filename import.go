@@ -26,6 +26,11 @@ func (e *ImportSet) AddWithDotFullQualifiedName(dotFullyQualifiedName string, pf
 	return structName, item
 }
 
+func (e *ImportSet) onGolangPackageNameChange(add *Import) {
+	add.CSNamespaceName = add.GolangPackageName
+	add.PythonModuleName = add.GolangPackageName
+}
+
 func (e *ImportSet) Add(add *Import) {
 	if xslice.StringsContain(e.ExcludeImportName, add.GolangPackageName) {
 		return
@@ -42,6 +47,7 @@ func (e *ImportSet) Add(add *Import) {
 		n := e.importAliasMappingCount[add.GolangPackageName]
 		n++
 		add.GolangPackageName = fmt.Sprintf("%s%d", add.GolangPackageName, n)
+		e.onGolangPackageNameChange(add)
 		e.importAliasMappingCount[add.GolangPackageName] = n
 	}
 	originalName := add.GolangPackageName
@@ -49,12 +55,14 @@ func (e *ImportSet) Add(add *Import) {
 		if i.GolangPackagePath == add.GolangPackagePath {
 			duplicated = true
 			add.GolangPackageName = i.GolangPackageName
+			e.onGolangPackageNameChange(add)
 			i.MessageDotFullQualifiedName = xslice.StringsSetAdd(i.MessageDotFullQualifiedName, add.MessageDotFullQualifiedName...)
 			break
 		}
 		// path不同但是package name相同，起别名
 		if i.GolangPackageName == add.GolangPackageName {
 			add.GolangPackageName = fmt.Sprintf("%s%d", add.GolangPackageName, e.importAliasMappingCount[originalName])
+			e.onGolangPackageNameChange(add)
 		}
 	}
 	if !duplicated {
