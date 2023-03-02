@@ -22,10 +22,12 @@ func (p *Parser) addImportByDotFullyQualifiedTypeName(dotFullyQualifiedTypeName 
 }
 
 func (p *Parser) parseImport() {
-	// fixme 校验req rsp映射关系,TCP需要严格校验，HTTP缺可以不严格校验
+	// 请求的uri校验应该在整个proto包级别 不应该在独立的文件内
+	reqMap := make(map[string]string)
+
+	// fixme 校验req rsp映射关系,TCP需要严格校验，HTTP可以不严格校验
 	for _, protoFile := range p.protoFilePathToProtoFile {
 		for _, sg := range protoFile.ServiceGroups {
-			reqMap := make(map[string]string)
 			// 设定import忽略路径
 			sg.ImportSet.ExcludeImportName = p.cc.ImportSetExclude
 			for _, service := range sg.Services {

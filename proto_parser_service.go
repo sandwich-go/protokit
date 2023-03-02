@@ -37,7 +37,9 @@ func (p *Parser) method(
 	md *desc.MethodDescriptor,
 	isActorMethod bool,
 	isAsk bool,
-	fixActorMethodName bool) *Method {
+	fixActorMethodName bool,
+	serviceUriAutoAlias bool,
+) *Method {
 	// Note:
 	// 这里只是简单的换算一次格式合法的名称，具体请求名要通过ImportSet进行纠正
 	reqTypeName := strings.TrimPrefix(p.typeStr(protoMethod.GetInputType()), ".")
@@ -65,7 +67,7 @@ func (p *Parser) method(
 	// 请求别名逻辑，允许proto中设定input类型别名，在请求的proto中uri将使用此名称
 	// URI使用是否GRPC模式
 	nameAlias := ""
-	if p.cc.URIUsingGRPC {
+	if serviceUriAutoAlias || p.cc.URIUsingGRPC {
 		nameAlias = "grpc"
 	}
 	aliasCheckPrefer := []string{"alias"}
@@ -157,6 +159,8 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag) (
 		}
 		an := GetAnnotation(comment, AnnotationService)
 		// 整个service是否完全为actor方法
+		serviceUriAutoAlias := an.GetBool("service_uri_auto_alias", false)
+		// 整个service是否完全为actor方法
 		isActorService := an.GetBool("actor", false)
 		// 整个service是否完全为rpc方法
 		isRPCService := an.GetBool("rpc", !isActorService)
@@ -183,14 +187,14 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag) (
 			}
 			if isActorMethod {
 				if needActor {
-					m := p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], true, isAsk, isRPCMethod)
+					m := p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], true, isAsk, isRPCMethod, serviceUriAutoAlias)
 					service.Methods = append(service.Methods, m)
 					service.HasActorMethod = true
 				}
 			}
 			if isRPCMethod {
 				if needRPC {
-					m := p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], false, isAsk, false)
+					m := p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], false, isAsk, false, serviceUriAutoAlias)
 					service.Methods = append(service.Methods, m)
 				}
 			}
