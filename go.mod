@@ -14,5 +14,3 @@ require (
 	google.golang.org/genproto v0.0.0-20220405205423-9d709892a2bf
 	google.golang.org/protobuf v1.28.0
 )
-
-//replace github.com/sandwich-go/boost => ../boost
