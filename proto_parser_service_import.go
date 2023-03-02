@@ -6,7 +6,6 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/rs/zerolog/log"
 	"github.com/sandwich-go/boost/xslice"
 )
 
@@ -23,8 +22,6 @@ func (p *Parser) addImportByDotFullyQualifiedTypeName(dotFullyQualifiedTypeName 
 }
 
 func (p *Parser) parseImport() {
-	// 请求的uri校验应该在整个proto包级别 不应该在独立的文件内
-	reqMap := make(map[string]string)
 	// fixme 校验req rsp映射关系,TCP需要严格校验，HTTP缺可以不严格校验
 	var ss = make([]string, 0, len(p.protoFilePathToProtoFile))
 	for protoFilePath := range p.protoFilePathToProtoFile {
@@ -47,15 +44,6 @@ func (p *Parser) parseImport() {
 					if method.TypeInputAlias != "" {
 						uriUsing = method.TypeInputAlias
 					}
-					// 校验uriUsing是否已经被使用过
-					if v, ok := reqMap[uriUsing]; ok {
-						log.Fatal().
-							Str("req", method.TypeInput).
-							Str("method_now", method.TypeInputGRPC).
-							Str("method_last", v).
-							Msg("duplicated request uri")
-					}
-					reqMap[uriUsing] = method.TypeInputGRPC
 					// http请求path逻辑校验，需要依赖纠正过后的TypeInput
 					if method.HTTPPath == "" {
 						method.HTTPPathComment = "auto generate by ProtoKitGo"

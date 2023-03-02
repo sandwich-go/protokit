@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/jhump/protoreflect/desc"
+	"github.com/rs/zerolog/log"
 	"github.com/sandwich-go/boost/xstrings"
 	"google.golang.org/protobuf/types/descriptorpb"
 )
@@ -17,11 +18,16 @@ func nameMustHaveSuffix(s string, suffix string) string {
 	return s + suffix
 }
 func (p *Parser) parseService() {
+	reqMap := make(map[string]map[string]string)
+	for _, serviceTag := range allServiceTags {
+		reqMap[serviceTag] = make(map[string]string)
+	}
 	for _, protoFile := range p.protoFilePathToProtoFile {
 		for _, serviceTag := range allServiceTags {
+			// 请求的uri校验应该在整个proto包级别 不应该在独立的文件内
 			protoFile.ServiceGroups[serviceTag] = &ServiceGroup{
 				ProtoFilePath: protoFile.FilePath,
-				Services:      p.parseServiceForProtoFile(protoFile, serviceTag),
+				Services:      p.parseServiceForProtoFile(protoFile, serviceTag, reqMap[serviceTag]),
 				ImportSet:     NewImportSet(protoFile.GolangPackageName, protoFile.GolangPackagePath),
 			}
 		}
@@ -133,7 +139,7 @@ func (p *Parser) method(
 	return method
 }
 
-func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag) (ret []*Service) {
+func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, reqMap map[string]string) (ret []*Service) {
 	fdp := protoFile.fd.AsFileDescriptorProto()
 	for i, protoService := range fdp.Service {
 		name := protoService.GetName()
@@ -189,18 +195,35 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag) (
 			if isTell {
 				isAsk = false
 			}
+			var m *Method
 			if isActorMethod {
 				if needActor {
-					m := p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], true, isAsk, isRPCMethod, serviceUriAutoAlias)
+					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], true, isAsk, isRPCMethod, serviceUriAutoAlias)
 					service.Methods = append(service.Methods, m)
 					service.HasActorMethod = true
 				}
 			}
 			if isRPCMethod {
 				if needRPC {
-					m := p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], false, isAsk, false, serviceUriAutoAlias)
+					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], false, isAsk, false, serviceUriAutoAlias)
 					service.Methods = append(service.Methods, m)
 				}
+			}
+			if m != nil {
+				checkName := m.TypeInputDotFullQualifiedName
+				if m.TypeInputAlias != "" {
+					checkName = m.TypeInputAlias
+				}
+				// 校验uriUsing是否已经被使用过
+				if v, ok := reqMap[checkName]; ok {
+					log.Fatal().
+						Str("req", m.TypeInputDotFullQualifiedName).
+						Str("method_now", m.TypeInputGRPC).
+						Str("method_last", v).
+						Str("uri", checkName).
+						Msg("duplicated request uri")
+				}
+				reqMap[checkName] = m.TypeInputGRPC
 			}
 		}
 		if len(service.Methods) > 0 {
