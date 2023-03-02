@@ -1,3 +1,11 @@
+### v0.1.0-alpha.25 (2023-03-02 15:19:26)
+
+#### 🛠  Refactor
+  * boost v1.3.1 ([70318ff](https://github.com/sandwich-go/protokit/commit/70318ffeea517156960a28037e29fee5431b3c3e)) (<small>[hui.wang](hui.wang@centurygame.com)@2023-03-02 15:19:26 &#43;0800 &#43;0800</small>)
+
+#### 🤖  Tools
+  * **sem**: make changelog ([fca89e9](https://github.com/sandwich-go/protokit/commit/fca89e92be7ed7c7c65d4fed2f134e53de4dc480)) (<small>[hui.wang](hui.wang@centurygame.com)@2023-03-02 15:17:46 &#43;0800 &#43;0800</small>)
+
 ### v0.1.0-alpha.24 (2023-03-02 15:16:09)
 
 #### 🛠  Refactor
