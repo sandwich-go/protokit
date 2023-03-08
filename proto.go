@@ -55,8 +55,11 @@ type Method struct {
 	CSTypeInput                    string   // Import校正后的名称，携带cs package信息
 	CSTypeOutput                   string   // Import校正后的名称，携带cs package信息
 	TypeInputAlias                 string   // Input别名
+	TypeInputAliasConstName        string   // Input别名 const 名
 	TypeInputGRPC                  string   // GRPC模式下的Input路径
+	TypeInputGRPCConstName         string   // GRPC模式下的Input路径 const 名
 	HTTPPath                       string   // HTTP模式下的请求路径
+	HTTPPathConstName              string   // HTTP模式下的请求路径 const 名
 	HTTPPathComment                string   // HTTP模式下的请求路径注释，来源
 	IsAsk                          bool     // 是否为Ask方法
 	IsTell                         bool     // 是否为Tell方法
