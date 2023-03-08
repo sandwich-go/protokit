@@ -1,3 +1,11 @@
+### v0.1.0-alpha.27 (2023-03-08 18:14:03)
+
+#### 🚀  New Feature
+  * golang sevice uri const ([9209372](https://github.com/sandwich-go/protokit/commit/92093722c383005dd2c9a75a9cb0d0838b6f381a)) (<small>[祝黄清](huangqing.zhu@centurygame.com)@2023-03-08 18:14:03 &#43;0800 &#43;0800</small>)
+
+#### 🤖  Tools
+  * **sem**: make changelog ([3afd172](https://github.com/sandwich-go/protokit/commit/3afd17216f241a138ab3febc313c0a0d77467bbe)) (<small>[hui.wang](hui.wang@centurygame.com)@2023-03-02 16:04:38 &#43;0800 &#43;0800</small>)
+
 ### v0.1.0-alpha.26 (2023-03-02 16:04:22)
 
 #### 🛠  Refactor
