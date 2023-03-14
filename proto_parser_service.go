@@ -219,7 +219,8 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 					checkName = m.TypeInputAlias
 				}
 				// 校验uriUsing是否已经被使用过
-				if v, ok := reqMap[checkName]; ok {
+				// 如果为严格模式，才会去校验
+				if v, ok0 := reqMap[checkName]; ok0 && p.cc.StrictMode {
 					log.Fatal().
 						Str("req", m.TypeInputDotFullQualifiedName).
 						Str("method_now", m.TypeInputGRPC).

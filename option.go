@@ -38,6 +38,8 @@ func OptionsOptionDeclareWithDefault() interface{} {
 		"URIUsingGRPC": false,
 		// annotation@URIUsingGRPCWithoutPackage(comment="service的uri使用GRPC模式时，是否带package名")
 		"URIUsingGRPCWithoutPackage": false,
+		// annotation@StrictMode(comment="是否为严格模式")
+		"StrictMode": true,
 	}
 }
 

@@ -32,6 +32,8 @@ type Options struct {
 	URIUsingGRPC bool `xconf:"uri_using_grpc" usage:"service的uri是否使用GRPC模式"`
 	// annotation@URIUsingGRPCWithoutPackage(comment="service的uri使用GRPC模式时，是否带package名")
 	URIUsingGRPCWithoutPackage bool `xconf:"uri_using_grpc_without_package" usage:"service的uri使用GRPC模式时，是否带package名"`
+	// annotation@StrictMode(comment="是否为严格模式")
+	StrictMode bool `xconf:"strict_mode" usage:"是否为严格模式"`
 }
 
 // NewOptions new Options
@@ -160,6 +162,15 @@ func WithURIUsingGRPCWithoutPackage(v bool) Option {
 	}
 }
 
+// WithStrictMode 是否为严格模式
+func WithStrictMode(v bool) Option {
+	return func(cc *Options) Option {
+		previous := cc.StrictMode
+		cc.StrictMode = v
+		return WithStrictMode(previous)
+	}
+}
+
 // InstallOptionsWatchDog the installed func will called when NewOptions  called
 func InstallOptionsWatchDog(dog func(cc *Options)) { watchDogOptions = dog }
 
@@ -182,6 +193,7 @@ func newDefaultOptions() *Options {
 		WithImportSetExclude([]string{"netutils"}...),
 		WithURIUsingGRPC(false),
 		WithURIUsingGRPCWithoutPackage(false),
+		WithStrictMode(true),
 	} {
 		opt(cc)
 	}
@@ -240,6 +252,7 @@ func (cc *Options) GetNamePattern() *NamePattern                 { return cc.Nam
 func (cc *Options) GetImportSetExclude() []string                { return cc.ImportSetExclude }
 func (cc *Options) GetURIUsingGRPC() bool                        { return cc.URIUsingGRPC }
 func (cc *Options) GetURIUsingGRPCWithoutPackage() bool          { return cc.URIUsingGRPCWithoutPackage }
+func (cc *Options) GetStrictMode() bool                          { return cc.StrictMode }
 
 // OptionsVisitor visitor interface for Options
 type OptionsVisitor interface {
@@ -254,6 +267,7 @@ type OptionsVisitor interface {
 	GetImportSetExclude() []string
 	GetURIUsingGRPC() bool
 	GetURIUsingGRPCWithoutPackage() bool
+	GetStrictMode() bool
 }
 
 // OptionsInterface visitor + ApplyOption interface for Options
