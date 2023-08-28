@@ -89,21 +89,50 @@ func (p *Parser) parsePackage(nsList []*Namespace) {
 		if pp == nil {
 			continue
 		}
+		messageDotFullQualifiedNameToGolangType := p.getMessageDotFullQualifiedNameToGolangType(nsList, ns)
 		for _, service := range sg.Services {
 			for _, method := range service.Methods {
 				// 找出类型在当前ImportSet下的类型名
-				golangInputType := pp.ImportSet.MessageDotFullQualifiedNameToGolangType[method.TypeInputDotFullQualifiedName]
-				golangOutputType := pp.ImportSet.MessageDotFullQualifiedNameToGolangType[method.TypeOutputDotFullQualifiedName]
+				golangInputType := messageDotFullQualifiedNameToGolangType[method.TypeInputDotFullQualifiedName]
+				golangOutputType := messageDotFullQualifiedNameToGolangType[method.TypeOutputDotFullQualifiedName]
 				if golangInputType != "" && method.TypeInputAlias != "" {
 					pp.AliasToGolangType[method.TypeInputAlias] = golangInputType
 				}
-				if golangInputType != "" && method.IsActor {
-					pp.ActorMessageGolangType = xslice.StringsSetAdd(pp.ActorMessageGolangType, golangInputType)
-				}
-				if golangOutputType != "" && method.IsActor {
-					pp.ActorMessageGolangType = xslice.StringsSetAdd(pp.ActorMessageGolangType, golangOutputType)
+				if method.IsActor {
+					golangInputType = pp.ImportSet.MessageDotFullQualifiedNameToGolangType[method.TypeInputDotFullQualifiedName]
+					golangOutputType = pp.ImportSet.MessageDotFullQualifiedNameToGolangType[method.TypeOutputDotFullQualifiedName]
+					if golangInputType != "" {
+						pp.ActorMessageGolangType = xslice.StringsSetAdd(pp.ActorMessageGolangType, golangInputType)
+					}
+					if golangOutputType != "" {
+						pp.ActorMessageGolangType = xslice.StringsSetAdd(pp.ActorMessageGolangType, golangOutputType)
+					}
 				}
 			}
 		}
 	}
+}
+
+func (p *Parser) getMessageDotFullQualifiedNameToGolangType(nsList []*Namespace, ns *Namespace) map[string]string {
+	if ns == nil {
+		return nil
+	}
+	pp := ns.Packages[NamespaceMessageRegistryPackageName]
+	if pp == nil {
+		return nil
+	}
+	switch ns.Name {
+	case NamespaceGoogle, NamespaceNetutils:
+		return pp.ImportSet.MessageDotFullQualifiedNameToGolangType
+	}
+	out := make(map[string]string)
+	for k, v := range pp.ImportSet.MessageDotFullQualifiedNameToGolangType {
+		out[k] = v
+	}
+	for _, name := range []string{NamespaceGoogle, NamespaceNetutils} {
+		for k, v := range p.getMessageDotFullQualifiedNameToGolangType(nsList, namespace(nsList, name)) {
+			out[k] = v
+		}
+	}
+	return out
 }
