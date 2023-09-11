@@ -173,6 +173,11 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 			service.Comment = comment.Content
 		}
 		an := GetAnnotation(comment, AnnotationService)
+		for _, v := range p.cc.GetInvalidServiceAnnotations() {
+			if an.Contains(strings.TrimSpace(v)) {
+				log.Fatal().Msg(fmt.Sprintf("invalid annotation: %s", v))
+			}
+		}
 		serviceUriAutoAlias, _ := an.Bool("service_uri_auto_alias", false)
 		// 整个service是否完全为actor方法
 		isActorService, _ := an.Bool("actor", false)
