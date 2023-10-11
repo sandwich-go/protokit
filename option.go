@@ -36,6 +36,8 @@ func OptionsOptionDeclareWithDefault() interface{} {
 		"ImportSetExclude": []string{"netutils"},
 		// annotation@URIUsingGRPC(comment="service的uri是否使用GRPC模式")
 		"URIUsingGRPC": false,
+		// annotation@InvalidServiceAnnotations(comment="非法的 service annotations")
+		"InvalidServiceAnnotations": []string{},
 		// annotation@URIUsingGRPCWithoutPackage(comment="service的uri使用GRPC模式时，是否带package名")
 		"URIUsingGRPCWithoutPackage": false,
 		// annotation@StrictMode(comment="是否为严格模式")
