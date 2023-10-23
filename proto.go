@@ -64,6 +64,7 @@ type Method struct {
 	IsAsk                          bool     // 是否为Ask方法
 	IsTell                         bool     // 是否为Tell方法
 	IsActor                        bool     // 是否为Actor方法
+	IsERPC                         bool     // 是否为ERPC方法
 	TypeInputDotFullQualifiedName  string   // proto原始Input，也就是DotFullQualifiedName
 	TypeOutputDotFullQualifiedName string   // proto原始Output，也就是DotFullQualifiedName
 	TypeInputWithSelfPackage       string   // 只携带自身package信息
@@ -80,11 +81,13 @@ type Service struct {
 	ServerHandlerInterfaceName string    // Server Handler名称
 	RPCClientInterfaceName     string    // RPC Client名称
 	ActorClientInterfaceName   string    // Actor Client 名称
+	ERPCClientInterfaceName    string    // ERPC Client 名称
 	Comment                    string    // 注释信息
 	DeprecatedName             string    // 兼容数据，弃用的结构名称
 	Methods                    []*Method // 当前服务中的Method列表
 	InputOutputTypes           []string  // 当前服务内使用的消息列表，用于加速uri生成，rpc actor中使用
 	HasActorMethod             bool      // 辅助生成的时候是否import actor包
+	HasERPCMethod              bool      // 辅助生成的时候是否import erpc包
 	HasValidator               bool      // 辅助生成的时候是否携带validator包
 	DescName                   string    // fdp.GetPackage().Name
 	DescProtoFile              string    // fdp.GetName() 应该是ProtoFile.FilePath
@@ -105,9 +108,10 @@ const (
 	ServiceTagALL   ServiceTag = "all"
 	ServiceTagRPC   ServiceTag = "rpc"
 	ServiceTagActor ServiceTag = "actor"
+	ServiceTagERPC  ServiceTag = "erpc"
 )
 
-var allServiceTags = []ServiceTag{ServiceTagALL, ServiceTagRPC, ServiceTagActor}
+var allServiceTags = []ServiceTag{ServiceTagALL, ServiceTagRPC, ServiceTagActor, ServiceTagERPC}
 
 type ProtoFile struct {
 	Namespace           string                   // 当前文件所属的NameSpace名称，在构建package信息的时候需要使用

@@ -45,14 +45,20 @@ func (p *Parser) method(
 	isAsk bool,
 	fixActorMethodName bool,
 	serviceUriAutoAlias bool,
+	isERPCMethod bool,
 ) *Method {
 	// Note:
 	// 这里只是简单的换算一次格式合法的名称，具体请求名要通过ImportSet进行纠正
 	reqTypeName := strings.TrimPrefix(p.typeStr(protoMethod.GetInputType()), ".")
 	rspTypeName := strings.TrimPrefix(p.typeStr(protoMethod.GetOutputType()), ".")
 	methodName := xstrings.CamelCase(protoMethod.GetName())
-	if isActorMethod && fixActorMethodName {
+	if isActorMethod && (fixActorMethodName || isERPCMethod) {
+		// actor 有rpc或者erpc方法
 		methodName += "ForActor"
+	}
+	if isERPCMethod && (isActorMethod || fixActorMethodName) {
+		// erpc 有actor或者rpc方法
+		methodName += "ForERPC"
 	}
 	method := &Method{
 		md:                             md,
@@ -62,6 +68,7 @@ func (p *Parser) method(
 		TypeInputWithSelfPackage:       reqTypeName,
 		TypeOutputWithSelfPackage:      rspTypeName,
 		IsActor:                        isActorMethod,
+		IsERPC:                         isERPCMethod,
 		IsAsk:                          isAsk,
 		IsTell:                         !isAsk,
 	}
@@ -156,18 +163,26 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 		}
 		needActor := true
 		needRPC := true
+		needERPC := true
 		if st == ServiceTagALL {
 			service.ServiceName = fmt.Sprintf(p.cc.NamePatternServerHandler, name)
 		} else if st == ServiceTagActor {
 			service.ServiceName = fmt.Sprintf(p.cc.NamePatternActorClient, name)
 			needRPC = false
+			needERPC = false
 		} else if st == ServiceTagRPC {
 			service.ServiceName = fmt.Sprintf(p.cc.NamePatternRPCClient, name)
 			needActor = false
+			needERPC = false
+		} else if st == ServiceTagERPC {
+			service.ServiceName = fmt.Sprintf(p.cc.NamePatternERPCClient, name)
+			needActor = false
+			needRPC = false
 		}
 		service.ServerHandlerInterfaceName = fmt.Sprintf(p.cc.NamePatternServerHandler, name)
 		service.RPCClientInterfaceName = fmt.Sprintf(p.cc.NamePatternRPCClient, name)
 		service.ActorClientInterfaceName = fmt.Sprintf(p.cc.NamePatternActorClient, name)
+		service.ERPCClientInterfaceName = fmt.Sprintf(p.cc.NamePatternERPCClient, name)
 		comment, ok := p.comments[protoService]
 		if ok {
 			service.Comment = comment.Content
@@ -181,8 +196,10 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 		serviceUriAutoAlias, _ := an.Bool("service_uri_auto_alias", false)
 		// 整个service是否完全为actor方法
 		isActorService, _ := an.Bool("actor", false)
+		// 整个service是否完全为erpc方法
+		isERPCService, _ := an.Bool("erpc", false)
 		// 整个service是否完全为rpc方法
-		isRPCService, _ := an.Bool("rpc", !isActorService)
+		isRPCService, _ := an.Bool("rpc", !isActorService && !isERPCService)
 		hasSpecifiedRPCService := an.Contains("rpc")
 		// 整个service是否完全为tell方法
 		isServiceAllTell, _ := an.Bool("tell", false)
@@ -194,9 +211,10 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 			isTell := isServiceAllTell
 			anMethod := GetAnnotation(p.comments[protoMethod], AnnotationService)
 			isActorMethod, _ := anMethod.Bool("actor", isActorService)
-			// 默认指定了actor方法则不再支持生成rpc逻辑，除非明确指定:
+			isERPCMethod, _ := anMethod.Bool("erpc", isERPCService)
+			// 默认指定了actor/erpc方法则不再支持生成rpc逻辑，除非明确指定:
 			// method级别的annotation指定生成RPC，service级别明确指定是rpc service
-			isRPCMethod, _ := anMethod.Bool("rpc", !isActorMethod)
+			isRPCMethod, _ := anMethod.Bool("rpc", !isActorMethod && !isERPCMethod)
 			if !isRPCMethod && hasSpecifiedRPCService && isRPCService {
 				isRPCMethod = true
 			}
@@ -207,14 +225,21 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 			var m *Method
 			if isActorMethod {
 				if needActor {
-					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], true, isAsk, isRPCMethod, serviceUriAutoAlias)
+					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], true, isAsk, isRPCMethod, serviceUriAutoAlias, isERPCMethod)
 					service.Methods = append(service.Methods, m)
 					service.HasActorMethod = true
 				}
 			}
+			if isERPCMethod {
+				if needERPC {
+					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], isActorMethod, isAsk, isRPCMethod, serviceUriAutoAlias, isERPCMethod)
+					service.Methods = append(service.Methods, m)
+					service.HasERPCMethod = true
+				}
+			}
 			if isRPCMethod {
 				if needRPC {
-					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], false, isAsk, false, serviceUriAutoAlias)
+					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], false, isAsk, false, serviceUriAutoAlias, isERPCMethod)
 					service.Methods = append(service.Methods, m)
 				}
 			}

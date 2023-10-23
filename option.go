@@ -45,7 +45,7 @@ func OptionsOptionDeclareWithDefault() interface{} {
 	}
 }
 
-//go:generate optionGen   --xconf=true --usage_tag_name=usage --xconf=true
+//go:generate optionGen --xconf=true --usage_tag_name=usage --xconf=true
 func NamePatternOptionDeclareWithDefault() interface{} {
 	return map[string]interface{}{
 		// annotation@NamePatternServerHandler(comment="code server handler名称格式化")
@@ -54,6 +54,8 @@ func NamePatternOptionDeclareWithDefault() interface{} {
 		"NamePatternRPCClient": "RPCClient%s",
 		// annotation@NamePatternActorClient(comment="code actor client名称格式化")
 		"NamePatternActorClient": "ActorClient%s",
+		// annotation@NamePatternERPCClient(comment="code erpc client名称格式化")
+		"NamePatternERPCClient": "ERPCClient%s",
 		// annotation@NamePatternHTTPPath(comment="自动生成的HTTP PATHG格式")
 		"NamePatternHTTPPath": "%s",
 	}
