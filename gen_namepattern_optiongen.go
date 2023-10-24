@@ -16,6 +16,8 @@ type NamePattern struct {
 	NamePatternRPCClient string `xconf:"name_pattern_rpc_client" usage:"code rpc client名称格式化"`
 	// annotation@NamePatternActorClient(comment="code actor client名称格式化")
 	NamePatternActorClient string `xconf:"name_pattern_actor_client" usage:"code actor client名称格式化"`
+	// annotation@NamePatternERPCClient(comment="code erpc client名称格式化")
+	NamePatternERPCClient string `xconf:"name_pattern_erpc_client" usage:"code erpc client名称格式化"`
 	// annotation@NamePatternHTTPPath(comment="自动生成的HTTP PATHG格式")
 	NamePatternHTTPPath string `xconf:"name_pattern_http_path" usage:"自动生成的HTTP PATHG格式"`
 }
@@ -74,6 +76,15 @@ func WithNamePatternActorClient(v string) NamePatternOption {
 	}
 }
 
+// WithNamePatternERPCClient code erpc client名称格式化
+func WithNamePatternERPCClient(v string) NamePatternOption {
+	return func(cc *NamePattern) NamePatternOption {
+		previous := cc.NamePatternERPCClient
+		cc.NamePatternERPCClient = v
+		return WithNamePatternERPCClient(previous)
+	}
+}
+
 // WithNamePatternHTTPPath 自动生成的HTTP PATHG格式
 func WithNamePatternHTTPPath(v string) NamePatternOption {
 	return func(cc *NamePattern) NamePatternOption {
@@ -97,6 +108,7 @@ func newDefaultNamePattern() *NamePattern {
 		WithNamePatternServerHandler("ServerHandler%s"),
 		WithNamePatternRPCClient("RPCClient%s"),
 		WithNamePatternActorClient("ActorClient%s"),
+		WithNamePatternERPCClient("ERPCClient%s"),
 		WithNamePatternHTTPPath("%s"),
 	} {
 		opt(cc)
@@ -148,6 +160,7 @@ func AtomicNamePattern() NamePatternVisitor {
 func (cc *NamePattern) GetNamePatternServerHandler() string { return cc.NamePatternServerHandler }
 func (cc *NamePattern) GetNamePatternRPCClient() string     { return cc.NamePatternRPCClient }
 func (cc *NamePattern) GetNamePatternActorClient() string   { return cc.NamePatternActorClient }
+func (cc *NamePattern) GetNamePatternERPCClient() string    { return cc.NamePatternERPCClient }
 func (cc *NamePattern) GetNamePatternHTTPPath() string      { return cc.NamePatternHTTPPath }
 
 // NamePatternVisitor visitor interface for NamePattern
@@ -155,6 +168,7 @@ type NamePatternVisitor interface {
 	GetNamePatternServerHandler() string
 	GetNamePatternRPCClient() string
 	GetNamePatternActorClient() string
+	GetNamePatternERPCClient() string
 	GetNamePatternHTTPPath() string
 }
 
