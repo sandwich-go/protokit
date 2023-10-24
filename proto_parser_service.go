@@ -45,14 +45,20 @@ func (p *Parser) method(
 	isAsk bool,
 	fixActorMethodName bool,
 	serviceUriAutoAlias bool,
+	isERPCMethod bool,
 ) *Method {
 	// Note:
 	// 这里只是简单的换算一次格式合法的名称，具体请求名要通过ImportSet进行纠正
 	reqTypeName := strings.TrimPrefix(p.typeStr(protoMethod.GetInputType()), ".")
 	rspTypeName := strings.TrimPrefix(p.typeStr(protoMethod.GetOutputType()), ".")
 	methodName := xstrings.CamelCase(protoMethod.GetName())
-	if isActorMethod && fixActorMethodName {
+	if isActorMethod && (fixActorMethodName || isERPCMethod) {
+		// actor 有rpc或者erpc方法
 		methodName += "ForActor"
+	}
+	if isERPCMethod && (isActorMethod || fixActorMethodName) {
+		// erpc 有actor或者rpc方法
+		methodName += "ForERPC"
 	}
 	method := &Method{
 		md:                             md,
@@ -62,6 +68,7 @@ func (p *Parser) method(
 		TypeInputWithSelfPackage:       reqTypeName,
 		TypeOutputWithSelfPackage:      rspTypeName,
 		IsActor:                        isActorMethod,
+		IsERPC:                         isERPCMethod,
 		IsAsk:                          isAsk,
 		IsTell:                         !isAsk,
 	}
@@ -134,7 +141,11 @@ func (p *Parser) method(
 	if nameAlias != "" && fixActorMethodName && !strings.EqualFold(nameAlias, method.TypeInputGRPC) && !strings.HasSuffix(nameAlias, actorPathSuffix) {
 		nameAlias = path.Clean(nameAlias + actorPathSuffix)
 	}
+	method.HTTPPathConstName = fmt.Sprintf("%s_%s_FullHTTPName", serviceName, method.Name)
+	method.TypeInputGRPCConstName = fmt.Sprintf("%s_%s_FullGRPCName", serviceName, method.Name)
 	method.TypeInputAlias = strings.TrimSpace(nameAlias)
+	// {service}_{method}_FullMethodName
+	method.TypeInputAliasConstName = fmt.Sprintf("%s_%s_FullMethodName", serviceName, method.Name)
 	method.LangOffTag = strings.Split(anMethod.String("lang_off"), ",")
 	return method
 }
@@ -152,29 +163,46 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 		}
 		needActor := true
 		needRPC := true
+		needERPC := true
 		if st == ServiceTagALL {
 			service.ServiceName = fmt.Sprintf(p.cc.NamePatternServerHandler, name)
 		} else if st == ServiceTagActor {
 			service.ServiceName = fmt.Sprintf(p.cc.NamePatternActorClient, name)
 			needRPC = false
+			needERPC = false
 		} else if st == ServiceTagRPC {
 			service.ServiceName = fmt.Sprintf(p.cc.NamePatternRPCClient, name)
 			needActor = false
+			needERPC = false
+		} else if st == ServiceTagERPC {
+			service.ServiceName = fmt.Sprintf(p.cc.NamePatternERPCClient, name)
+			needActor = false
+			needRPC = false
 		}
 		service.ServerHandlerInterfaceName = fmt.Sprintf(p.cc.NamePatternServerHandler, name)
 		service.RPCClientInterfaceName = fmt.Sprintf(p.cc.NamePatternRPCClient, name)
 		service.ActorClientInterfaceName = fmt.Sprintf(p.cc.NamePatternActorClient, name)
+		service.ERPCClientInterfaceName = fmt.Sprintf(p.cc.NamePatternERPCClient, name)
 		comment, ok := p.comments[protoService]
 		if ok {
 			service.Comment = comment.Content
 		}
 		an := GetAnnotation(comment, AnnotationService)
+
 		service.QueryPath = an.String("query_path", "")
+
+		for _, v := range p.cc.GetInvalidServiceAnnotations() {
+			if an.Contains(strings.TrimSpace(v)) {
+				log.Fatal().Msg(fmt.Sprintf("invalid annotation: %s", v))
+			}
+		}
 		serviceUriAutoAlias, _ := an.Bool("service_uri_auto_alias", false)
 		// 整个service是否完全为actor方法
 		isActorService, _ := an.Bool("actor", false)
+		// 整个service是否完全为erpc方法
+		isERPCService, _ := an.Bool("erpc", false)
 		// 整个service是否完全为rpc方法
-		isRPCService, _ := an.Bool("rpc", !isActorService)
+		isRPCService, _ := an.Bool("rpc", !isActorService && !isERPCService)
 		hasSpecifiedRPCService := an.Contains("rpc")
 		// 整个service是否完全为tell方法
 		isServiceAllTell, _ := an.Bool("tell", false)
@@ -186,9 +214,10 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 			isTell := isServiceAllTell
 			anMethod := GetAnnotation(p.comments[protoMethod], AnnotationService)
 			isActorMethod, _ := anMethod.Bool("actor", isActorService)
-			// 默认指定了actor方法则不再支持生成rpc逻辑，除非明确指定:
+			isERPCMethod, _ := anMethod.Bool("erpc", isERPCService)
+			// 默认指定了actor/erpc方法则不再支持生成rpc逻辑，除非明确指定:
 			// method级别的annotation指定生成RPC，service级别明确指定是rpc service
-			isRPCMethod, _ := anMethod.Bool("rpc", !isActorMethod)
+			isRPCMethod, _ := anMethod.Bool("rpc", !isActorMethod && !isERPCMethod)
 			if !isRPCMethod && hasSpecifiedRPCService && isRPCService {
 				isRPCMethod = true
 			}
@@ -199,14 +228,21 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 			var m *Method
 			if isActorMethod {
 				if needActor {
-					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], true, isAsk, isRPCMethod, serviceUriAutoAlias)
+					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], true, isAsk, isRPCMethod, serviceUriAutoAlias, isERPCMethod)
 					service.Methods = append(service.Methods, m)
 					service.HasActorMethod = true
 				}
 			}
+			if isERPCMethod {
+				if needERPC {
+					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], isActorMethod, isAsk, isRPCMethod, serviceUriAutoAlias, isERPCMethod)
+					service.Methods = append(service.Methods, m)
+					service.HasERPCMethod = true
+				}
+			}
 			if isRPCMethod {
 				if needRPC {
-					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], false, isAsk, false, serviceUriAutoAlias)
+					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], false, isAsk, false, serviceUriAutoAlias, isERPCMethod)
 					service.Methods = append(service.Methods, m)
 				}
 			}
@@ -216,7 +252,8 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 					checkName = m.TypeInputAlias
 				}
 				// 校验uriUsing是否已经被使用过
-				if v, ok := reqMap[checkName]; ok {
+				// 如果为严格模式，才会去校验
+				if v, ok0 := reqMap[checkName]; ok0 && p.cc.StrictMode {
 					log.Fatal().
 						Str("req", m.TypeInputDotFullQualifiedName).
 						Str("method_now", m.TypeInputGRPC).

@@ -30,8 +30,12 @@ type Options struct {
 	ImportSetExclude []string `xconf:"import_set_exclude" usage:"import set忽略指定name的package"`
 	// annotation@URIUsingGRPC(comment="service的uri是否使用GRPC模式")
 	URIUsingGRPC bool `xconf:"uri_using_grpc" usage:"service的uri是否使用GRPC模式"`
+	// annotation@InvalidServiceAnnotations(comment="非法的 service annotations")
+	InvalidServiceAnnotations []string `xconf:"invalid_service_annotations" usage:"非法的 service annotations"`
 	// annotation@URIUsingGRPCWithoutPackage(comment="service的uri使用GRPC模式时，是否带package名")
 	URIUsingGRPCWithoutPackage bool `xconf:"uri_using_grpc_without_package" usage:"service的uri使用GRPC模式时，是否带package名"`
+	// annotation@StrictMode(comment="是否为严格模式")
+	StrictMode bool `xconf:"strict_mode" usage:"是否为严格模式"`
 }
 
 // NewOptions new Options
@@ -151,12 +155,30 @@ func WithURIUsingGRPC(v bool) Option {
 	}
 }
 
+// WithInvalidServiceAnnotations 非法的 service annotations
+func WithInvalidServiceAnnotations(v ...string) Option {
+	return func(cc *Options) Option {
+		previous := cc.InvalidServiceAnnotations
+		cc.InvalidServiceAnnotations = v
+		return WithInvalidServiceAnnotations(previous...)
+	}
+}
+
 // WithURIUsingGRPCWithoutPackage service的uri使用GRPC模式时，是否带package名
 func WithURIUsingGRPCWithoutPackage(v bool) Option {
 	return func(cc *Options) Option {
 		previous := cc.URIUsingGRPCWithoutPackage
 		cc.URIUsingGRPCWithoutPackage = v
 		return WithURIUsingGRPCWithoutPackage(previous)
+	}
+}
+
+// WithStrictMode 是否为严格模式
+func WithStrictMode(v bool) Option {
+	return func(cc *Options) Option {
+		previous := cc.StrictMode
+		cc.StrictMode = v
+		return WithStrictMode(previous)
 	}
 }
 
@@ -181,7 +203,9 @@ func newDefaultOptions() *Options {
 		WithNamePattern(NewNamePattern()),
 		WithImportSetExclude([]string{"netutils"}...),
 		WithURIUsingGRPC(false),
+		WithInvalidServiceAnnotations(make([]string, 0)...),
 		WithURIUsingGRPCWithoutPackage(false),
+		WithStrictMode(true),
 	} {
 		opt(cc)
 	}
@@ -239,7 +263,9 @@ func (cc *Options) GetZapLogBytesMode() string                   { return cc.Zap
 func (cc *Options) GetNamePattern() *NamePattern                 { return cc.NamePattern }
 func (cc *Options) GetImportSetExclude() []string                { return cc.ImportSetExclude }
 func (cc *Options) GetURIUsingGRPC() bool                        { return cc.URIUsingGRPC }
+func (cc *Options) GetInvalidServiceAnnotations() []string       { return cc.InvalidServiceAnnotations }
 func (cc *Options) GetURIUsingGRPCWithoutPackage() bool          { return cc.URIUsingGRPCWithoutPackage }
+func (cc *Options) GetStrictMode() bool                          { return cc.StrictMode }
 
 // OptionsVisitor visitor interface for Options
 type OptionsVisitor interface {
@@ -253,7 +279,9 @@ type OptionsVisitor interface {
 	GetNamePattern() *NamePattern
 	GetImportSetExclude() []string
 	GetURIUsingGRPC() bool
+	GetInvalidServiceAnnotations() []string
 	GetURIUsingGRPCWithoutPackage() bool
+	GetStrictMode() bool
 }
 
 // OptionsInterface visitor + ApplyOption interface for Options

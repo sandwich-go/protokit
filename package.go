@@ -15,6 +15,9 @@ func GolangPackagePathAndName(fd *desc.FileDescriptor, basePackagePath string, g
 	rootPath := basePackagePath
 	fileBasePath := filepath.Dir(fd.GetName())
 
+	// for windows filepath.dir return a\\b
+	fileBasePath = strings.ReplaceAll(fileBasePath, "\\", "/")
+
 	// golang package 优先proto中的golang package定义 => proto package => 依赖目录结构
 	protoGolangPackage := fd.AsFileDescriptorProto().GetOptions().GetGoPackage()
 	protoProtoPackageAsGolangPackage := strings.ReplaceAll(fd.AsFileDescriptorProto().GetPackage(), ".", "_")

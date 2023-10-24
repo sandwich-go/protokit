@@ -36,12 +36,16 @@ func OptionsOptionDeclareWithDefault() interface{} {
 		"ImportSetExclude": []string{"netutils"},
 		// annotation@URIUsingGRPC(comment="service的uri是否使用GRPC模式")
 		"URIUsingGRPC": false,
+		// annotation@InvalidServiceAnnotations(comment="非法的 service annotations")
+		"InvalidServiceAnnotations": []string{},
 		// annotation@URIUsingGRPCWithoutPackage(comment="service的uri使用GRPC模式时，是否带package名")
 		"URIUsingGRPCWithoutPackage": false,
+		// annotation@StrictMode(comment="是否为严格模式")
+		"StrictMode": true,
 	}
 }
 
-//go:generate optionGen   --xconf=true --usage_tag_name=usage --xconf=true
+//go:generate optionGen --xconf=true --usage_tag_name=usage --xconf=true
 func NamePatternOptionDeclareWithDefault() interface{} {
 	return map[string]interface{}{
 		// annotation@NamePatternServerHandler(comment="code server handler名称格式化")
@@ -50,6 +54,8 @@ func NamePatternOptionDeclareWithDefault() interface{} {
 		"NamePatternRPCClient": "RPCClient%s",
 		// annotation@NamePatternActorClient(comment="code actor client名称格式化")
 		"NamePatternActorClient": "ActorClient%s",
+		// annotation@NamePatternERPCClient(comment="code erpc client名称格式化")
+		"NamePatternERPCClient": "ERPCClient%s",
 		// annotation@NamePatternHTTPPath(comment="自动生成的HTTP PATHG格式")
 		"NamePatternHTTPPath": "%s",
 	}
