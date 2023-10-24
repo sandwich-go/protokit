@@ -1,3 +1,11 @@
+### v0.1.0-alpha.33 (2023-10-24 16:55:35)
+
+#### 🚀  New Feature
+  * service query path ([6e3edc0](https://github.com/sandwich-go/protokit/commit/6e3edc07e1a70c233d42bd021457fcdb1164bbe7) , [373f9ce](https://github.com/sandwich-go/protokit/commit/373f9ce1734b5cc021bf34e0e4e214e036b29719) , [1696df2](https://github.com/sandwich-go/protokit/commit/1696df235c14e9ce0e66eb727438ef8cfa374e6b) , [c0fd6ae](https://github.com/sandwich-go/protokit/commit/c0fd6ae89202a57a4209b3db6fc849d446adebc1)) (<small>[hui.wang](hui.wang@centurygame.com)@2023-10-24 16:55:35 &#43;0800 &#43;0800</small>)
+
+#### 🤖  Tools
+  * **sem**: make changelog ([9d63fa5](https://github.com/sandwich-go/protokit/commit/9d63fa58647329ee22a496ad431f9a2dad1a3f2c)) (<small>[Daming Yang](daming.yang@centurygame.com)@2023-10-23 19:02:46 &#43;0800 &#43;0800</small>)
+
 ### v0.1.0-alpha.32 (2023-10-23 19:01:37)
 
 #### 🛠  Refactor
