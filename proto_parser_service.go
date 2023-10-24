@@ -188,6 +188,9 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 			service.Comment = comment.Content
 		}
 		an := GetAnnotation(comment, AnnotationService)
+
+		service.QueryPath = an.String("query_path", "")
+
 		for _, v := range p.cc.GetInvalidServiceAnnotations() {
 			if an.Contains(strings.TrimSpace(v)) {
 				log.Fatal().Msg(fmt.Sprintf("invalid annotation: %s", v))
