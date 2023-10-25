@@ -1,4 +1,12 @@
-### v0.1.3 🌈 (2023-10-25 12:26:10)
+### v0.1.4 🌈 (2023-10-25 14:46:57)
+
+#### 🚀  New Feature
+  * default query path and query path mapping ([09d20c0](https://github.com/sandwich-go/protokit/commit/09d20c07ad24a797729a6a7dc922c9d80315e14e)) (<small>[hui.wang](hui.wang@centurygame.com)@2023-10-25 14:46:57 &#43;0800 &#43;0800</small>)
+
+#### 🤖  Tools
+  * **sem**: make changelog ([5883ff4](https://github.com/sandwich-go/protokit/commit/5883ff4dae2a4064a3886b7992831f57003f0d86)) (<small>[hui.wang](hui.wang@centurygame.com)@2023-10-25 12:26:27 &#43;0800 &#43;0800</small>)
+
+### v0.1.3 (2023-10-25 12:26:10)
 
 #### 🚀  New Feature
   * query_path remove all suffix ([e46f290](https://github.com/sandwich-go/protokit/commit/e46f2902b0e06b510016cea7d01ed63a073ae3d7)) (<small>[hui.wang](hui.wang@centurygame.com)@2023-10-25 12:26:10 &#43;0800 &#43;0800</small>)
