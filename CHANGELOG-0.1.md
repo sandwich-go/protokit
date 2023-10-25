@@ -1,4 +1,13 @@
-### v0.1.1 🌈 (2023-10-25 11:32:04)
+### v0.1.2 🌈 (2023-10-25 11:45:09)
+
+#### 🚀  New Feature
+  * query_path remove all suffix ([eeb5cd0](https://github.com/sandwich-go/protokit/commit/eeb5cd0a61980c20151908dfce92f9230d8da2f1) , [5954581](https://github.com/sandwich-go/protokit/commit/5954581f481282b20eae08a6cfa27cf0988fa691)) (<small>[hui.wang](hui.wang@centurygame.com)@2023-10-25 11:45:09 &#43;0800 &#43;0800</small>)
+  * query_path keep just one / as prefix ([7f1f3f9](https://github.com/sandwich-go/protokit/commit/7f1f3f9ecb9313c3541b9770daf32049ad0fe0b9)) (<small>[hui.wang](hui.wang@centurygame.com)@2023-10-25 11:36:01 &#43;0800 &#43;0800</small>)
+
+#### 🤖  Tools
+  * **sem**: make changelog ([b77b6b9](https://github.com/sandwich-go/protokit/commit/b77b6b9fee2ada0ad780901f26f268512be13098)) (<small>[hui.wang](hui.wang@centurygame.com)@2023-10-25 11:32:20 &#43;0800 &#43;0800</small>)
+
+### v0.1.1 (2023-10-25 11:32:04)
 
 #### 🚀  New Feature
   * query_path default to ([e65583a](https://github.com/sandwich-go/protokit/commit/e65583a3688fc98e42f3ba314b3983326c2102b2)) (<small>[hui.wang](hui.wang@centurygame.com)@2023-10-25 11:32:04 &#43;0800 &#43;0800</small>)
