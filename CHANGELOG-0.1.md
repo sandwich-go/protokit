@@ -1,4 +1,12 @@
-### v0.1.0 🌈 (2023-10-24 16:55:51)
+### v0.1.1 🌈 (2023-10-25 11:32:04)
+
+#### 🚀  New Feature
+  * query_path default to ([e65583a](https://github.com/sandwich-go/protokit/commit/e65583a3688fc98e42f3ba314b3983326c2102b2)) (<small>[hui.wang](hui.wang@centurygame.com)@2023-10-25 11:32:04 &#43;0800 &#43;0800</small>)
+
+#### 🤖  Tools
+  * **sem**: make changelog ([1440263](https://github.com/sandwich-go/protokit/commit/1440263434045311981bb0d0190f38ee8ffb46f7)) (<small>[hui.wang](hui.wang@centurygame.com)@2023-10-24 16:57:10 &#43;0800 &#43;0800</small>)
+
+### v0.1.0 (2023-10-24 16:55:51)
 
 #### 🐛  Bug Fixed
   * 修复windows下，引入golang包名时，路径包含\的错误 ([927ba25](https://github.com/sandwich-go/protokit/commit/927ba259bb5a216ce09405fccc91ebbe9aa2d31a)) (<small>[jianwei.ma](jianwei.ma@centurygame.com)@2023-10-10 11:15:38 &#43;0800 &#43;0800</small>)
