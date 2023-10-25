@@ -3,6 +3,7 @@ package protokit
 import (
 	"fmt"
 	"path"
+	"regexp"
 	"strings"
 
 	"github.com/jhump/protoreflect/desc"
@@ -150,6 +151,34 @@ func (p *Parser) method(
 	return method
 }
 
+func camelToSnake(queryPath string) string {
+	// 使用正则表达式将大写字母前面插入下划线，并将字符串转换为小写
+	re := regexp.MustCompile(`([a-z0-9])([A-Z])`)
+	snakeCase := re.ReplaceAllString(queryPath, "${1}_${2}")
+	// 将字符串全部转为小写
+	snakeCase = strings.ToLower(snakeCase)
+	return snakeCase
+}
+
+func standardQueryPath(queryPath string, snakeCase bool) string {
+	// 保证开头有且只有一个/
+	for strings.HasPrefix(queryPath, "/") {
+		queryPath = strings.TrimPrefix(queryPath, "/")
+	}
+	queryPath = "/" + queryPath
+	// 移除结尾的/
+	for strings.HasSuffix(queryPath, "/") {
+		queryPath = strings.TrimSuffix(queryPath, "/")
+	}
+	// 移除全部空格
+	queryPath = strings.ReplaceAll(queryPath, " ", "")
+	// 全部snake case
+	if snakeCase {
+		queryPath = camelToSnake(queryPath)
+	}
+	return queryPath
+}
+
 func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, reqMap map[string]string) (ret []*Service) {
 	fdp := protoFile.fd.AsFileDescriptorProto()
 	for i, protoService := range fdp.Service {
@@ -188,16 +217,8 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 			service.Comment = comment.Content
 		}
 		an := GetAnnotation(comment, AnnotationService)
-
-		service.QueryPath = an.String("query_path")
-		for strings.HasPrefix(service.QueryPath, "/") {
-			service.QueryPath = strings.TrimPrefix(service.QueryPath, "/")
-		}
-		for strings.HasSuffix(service.QueryPath, "/") {
-			service.QueryPath = strings.TrimSuffix(service.QueryPath, "/")
-		}
-
-		service.QueryPath = "/" + service.QueryPath
+		snakeCase, _ := an.Bool("query_path_snake_case", true)
+		service.QueryPath = standardQueryPath(an.String("query_path"), snakeCase)
 
 		for _, v := range p.cc.GetInvalidServiceAnnotations() {
 			if an.Contains(strings.TrimSpace(v)) {
