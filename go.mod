@@ -6,6 +6,7 @@ require (
 	github.com/Masterminds/sprig v2.22.0+incompatible
 	github.com/golang/protobuf v1.5.2
 	github.com/google/go-cmp v0.5.6 // indirect
+	github.com/hoisie/mustache v0.0.0-20160804235033-6375acf62c69
 	github.com/jhump/protoreflect v1.12.0
 	github.com/mattn/go-colorable v0.1.12
 	github.com/rs/zerolog v1.26.1

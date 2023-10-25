@@ -36,6 +36,10 @@ type Options struct {
 	URIUsingGRPCWithoutPackage bool `xconf:"uri_using_grpc_without_package" usage:"service的uri使用GRPC模式时，是否带package名"`
 	// annotation@StrictMode(comment="是否为严格模式")
 	StrictMode bool `xconf:"strict_mode" usage:"是否为严格模式"`
+	// annotation@QueryPathMapping(comment="query path映射关系,通过 {{key}} 方式访问值")
+	QueryPathMapping map[string]string `xconf:"query_path_mapping" usage:"query path映射关系,通过 {{key}} 方式访问值"`
+	// annotation@DefaultQueryPath(comment="默认query path，支持配置 {{key}}的方式索引QueryPathMapping的key")
+	DefaultQueryPath string `xconf:"default_query_path" usage:"默认query path，支持配置 {{key}}的方式索引QueryPathMapping的key"`
 }
 
 // NewOptions new Options
@@ -182,6 +186,24 @@ func WithStrictMode(v bool) Option {
 	}
 }
 
+// WithQueryPathMapping query path映射关系,通过 {{key}} 方式访问值
+func WithQueryPathMapping(v map[string]string) Option {
+	return func(cc *Options) Option {
+		previous := cc.QueryPathMapping
+		cc.QueryPathMapping = v
+		return WithQueryPathMapping(previous)
+	}
+}
+
+// WithDefaultQueryPath 默认query path，支持配置 {{key}}的方式索引QueryPathMapping的key
+func WithDefaultQueryPath(v string) Option {
+	return func(cc *Options) Option {
+		previous := cc.DefaultQueryPath
+		cc.DefaultQueryPath = v
+		return WithDefaultQueryPath(previous)
+	}
+}
+
 // InstallOptionsWatchDog the installed func will called when NewOptions  called
 func InstallOptionsWatchDog(dog func(cc *Options)) { watchDogOptions = dog }
 
@@ -206,6 +228,10 @@ func newDefaultOptions() *Options {
 		WithInvalidServiceAnnotations(make([]string, 0)...),
 		WithURIUsingGRPCWithoutPackage(false),
 		WithStrictMode(true),
+		WithQueryPathMapping(map[string]string{
+			"root": "/",
+		}),
+		WithDefaultQueryPath("/"),
 	} {
 		opt(cc)
 	}
@@ -266,6 +292,8 @@ func (cc *Options) GetURIUsingGRPC() bool                        { return cc.URI
 func (cc *Options) GetInvalidServiceAnnotations() []string       { return cc.InvalidServiceAnnotations }
 func (cc *Options) GetURIUsingGRPCWithoutPackage() bool          { return cc.URIUsingGRPCWithoutPackage }
 func (cc *Options) GetStrictMode() bool                          { return cc.StrictMode }
+func (cc *Options) GetQueryPathMapping() map[string]string       { return cc.QueryPathMapping }
+func (cc *Options) GetDefaultQueryPath() string                  { return cc.DefaultQueryPath }
 
 // OptionsVisitor visitor interface for Options
 type OptionsVisitor interface {
@@ -282,6 +310,8 @@ type OptionsVisitor interface {
 	GetInvalidServiceAnnotations() []string
 	GetURIUsingGRPCWithoutPackage() bool
 	GetStrictMode() bool
+	GetQueryPathMapping() map[string]string
+	GetDefaultQueryPath() string
 }
 
 // OptionsInterface visitor + ApplyOption interface for Options
