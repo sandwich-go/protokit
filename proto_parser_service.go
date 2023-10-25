@@ -189,7 +189,11 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 		}
 		an := GetAnnotation(comment, AnnotationService)
 
-		service.QueryPath = an.String("query_path", "/")
+		service.QueryPath = an.String("query_path")
+		for strings.HasPrefix(service.QueryPath, "/") {
+			service.QueryPath = strings.TrimPrefix(service.QueryPath, "/")
+		}
+		service.QueryPath = "/" + service.QueryPath
 
 		for _, v := range p.cc.GetInvalidServiceAnnotations() {
 			if an.Contains(strings.TrimSpace(v)) {
