@@ -176,6 +176,9 @@ func standardQueryPath(queryPath string, snakeCase bool) string {
 	if snakeCase {
 		queryPath = camelToSnake(queryPath)
 	}
+	if queryPath == "" {
+		queryPath = "/"
+	}
 	return queryPath
 }
 
