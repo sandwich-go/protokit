@@ -193,6 +193,10 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 		for strings.HasPrefix(service.QueryPath, "/") {
 			service.QueryPath = strings.TrimPrefix(service.QueryPath, "/")
 		}
+		for strings.HasSuffix(service.QueryPath, "/") {
+			service.QueryPath = strings.TrimSuffix(service.QueryPath, "/")
+		}
+
 		service.QueryPath = "/" + service.QueryPath
 
 		for _, v := range p.cc.GetInvalidServiceAnnotations() {
