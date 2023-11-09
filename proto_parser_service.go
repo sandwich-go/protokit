@@ -46,6 +46,7 @@ func (p *Parser) method(
 	fixActorMethodName bool,
 	serviceUriAutoAlias bool,
 	isERPCMethod bool,
+	queryPath string,
 ) *Method {
 	// Note:
 	// 这里只是简单的换算一次格式合法的名称，具体请求名要通过ImportSet进行纠正
@@ -141,11 +142,24 @@ func (p *Parser) method(
 	if nameAlias != "" && fixActorMethodName && !strings.EqualFold(nameAlias, method.TypeInputGRPC) && !strings.HasSuffix(nameAlias, actorPathSuffix) {
 		nameAlias = path.Clean(nameAlias + actorPathSuffix)
 	}
+
 	method.HTTPPathConstName = fmt.Sprintf("%s_%s_FullHTTPName", serviceName, method.Name)
+
+	method.FullPathHTTP = method.HTTPPath
+	if method.FullPathHTTP != "" && !strings.HasPrefix(method.FullPathHTTP, "/") {
+		method.FullPathHTTP = "/" + method.FullPathHTTP
+	}
+	if !strings.HasPrefix(method.FullPathHTTP, queryPath) {
+		method.FullPathHTTP = path.Join(queryPath, method.FullPathHTTP)
+	}
+
+	method.FullPathHTTPConstName = fmt.Sprintf("%s_%s_FullPathHTTP", serviceName, method.Name)
+
 	method.TypeInputGRPCConstName = fmt.Sprintf("%s_%s_FullGRPCName", serviceName, method.Name)
 	method.TypeInputAlias = strings.TrimSpace(nameAlias)
 	// {service}_{method}_FullMethodName
 	method.TypeInputAliasConstName = fmt.Sprintf("%s_%s_FullMethodName", serviceName, method.Name)
+
 	method.LangOffTag = strings.Split(anMethod.String("lang_off"), ",")
 	return method
 }

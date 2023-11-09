@@ -50,16 +50,23 @@ type Method struct {
 	ValidatorInput  bool   // 是否检验输入
 	ValidatorOutput bool   // 是否校验输出
 	// Note: golang与python使用相同的名称，类型名是golang规则,对于嵌套结构,为python生成一套类型别名
-	TypeInput                      string   // Import校正后的名称，携带golang package信息
-	TypeOutput                     string   // Import校正后的名称，携带golang package信息
-	CSTypeInput                    string   // Import校正后的名称，携带cs package信息
-	CSTypeOutput                   string   // Import校正后的名称，携带cs package信息
-	TypeInputAlias                 string   // Input别名
-	TypeInputAliasConstName        string   // Input别名 const 名
-	TypeInputGRPC                  string   // GRPC模式下的Input路径
-	TypeInputGRPCConstName         string   // GRPC模式下的Input路径 const 名
-	HTTPPath                       string   // HTTP模式下的请求路径
-	HTTPPathConstName              string   // HTTP模式下的请求路径 const 名
+	TypeInput               string // Import校正后的名称，携带golang package信息
+	TypeOutput              string // Import校正后的名称，携带golang package信息
+	CSTypeInput             string // Import校正后的名称，携带cs package信息
+	CSTypeOutput            string // Import校正后的名称，携带cs package信息
+	TypeInputAlias          string // Input别名
+	TypeInputAliasConstName string // Input别名 const 名
+	TypeInputGRPC           string // GRPC模式下的Input路径
+	TypeInputGRPCConstName  string // GRPC模式下的Input路径 const 名
+
+	// 此部分定义存在歧义，有的包含了QueryPath有的没有包含，服务区已兼容，但不推荐使用，直接用FullPathHTTP
+	HTTPPath          string // HTTP模式下的请求路径
+	HTTPPathConstName string // HTTP模式下的请求路径 const 名
+
+	// http请求全路径，包含QueryPath
+	FullPathHTTP          string // HTTP模式下的请求路径
+	FullPathHTTPConstName string // HTTP模式下的请求路径 const 名
+
 	HTTPPathComment                string   // HTTP模式下的请求路径注释，来源
 	IsAsk                          bool     // 是否为Ask方法
 	IsTell                         bool     // 是否为Tell方法
