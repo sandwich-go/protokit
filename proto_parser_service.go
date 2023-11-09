@@ -243,21 +243,21 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 			var m *Method
 			if isActorMethod {
 				if needActor {
-					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], true, isAsk, isRPCMethod, serviceUriAutoAlias, isERPCMethod)
+					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], true, isAsk, isRPCMethod, serviceUriAutoAlias, isERPCMethod, service.QueryPath)
 					service.Methods = append(service.Methods, m)
 					service.HasActorMethod = true
 				}
 			}
 			if isERPCMethod {
 				if needERPC {
-					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], isActorMethod, isAsk, isRPCMethod, serviceUriAutoAlias, isERPCMethod)
+					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], isActorMethod, isAsk, isRPCMethod, serviceUriAutoAlias, isERPCMethod, service.QueryPath)
 					service.Methods = append(service.Methods, m)
 					service.HasERPCMethod = true
 				}
 			}
 			if isRPCMethod {
 				if needRPC {
-					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], false, isAsk, false, serviceUriAutoAlias, isERPCMethod)
+					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], false, isAsk, false, serviceUriAutoAlias, isERPCMethod, service.QueryPath)
 					service.Methods = append(service.Methods, m)
 				}
 			}
