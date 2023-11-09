@@ -1,6 +1,7 @@
 package protokit
 
 import (
+	"path"
 	"regexp"
 	"strings"
 
@@ -44,4 +45,15 @@ func standardQueryPath(queryPath string, snakeCase bool, mapping map[string]stri
 		queryPath = "/"
 	}
 	return queryPath
+}
+
+func standardFullPathHTTP(httpPath, queryPath string) string {
+	fullPathHTTP := httpPath
+	if fullPathHTTP != "" && !strings.HasPrefix(fullPathHTTP, "/") {
+		fullPathHTTP = "/" + fullPathHTTP
+	}
+	if !strings.HasPrefix(fullPathHTTP, queryPath) {
+		fullPathHTTP = path.Join(queryPath, fullPathHTTP)
+	}
+	return fullPathHTTP
 }

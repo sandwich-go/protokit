@@ -52,6 +52,7 @@ func (p *Parser) parseImport() {
 							pathUsing = "/" + pathUsing
 						}
 						method.HTTPPath = path.Clean(fmt.Sprintf(p.cc.NamePatternHTTPPath, pathUsing))
+						method.FullPathHTTP = standardFullPathHTTP(method.HTTPPath, service.QueryPath)
 					}
 				}
 			}

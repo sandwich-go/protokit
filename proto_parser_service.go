@@ -145,13 +145,7 @@ func (p *Parser) method(
 
 	method.HTTPPathConstName = fmt.Sprintf("%s_%s_FullHTTPName", serviceName, method.Name)
 
-	method.FullPathHTTP = method.HTTPPath
-	if method.FullPathHTTP != "" && !strings.HasPrefix(method.FullPathHTTP, "/") {
-		method.FullPathHTTP = "/" + method.FullPathHTTP
-	}
-	if !strings.HasPrefix(method.FullPathHTTP, queryPath) {
-		method.FullPathHTTP = path.Join(queryPath, method.FullPathHTTP)
-	}
+	method.FullPathHTTP = standardFullPathHTTP(method.HTTPPath, queryPath)
 
 	method.FullPathHTTPConstName = fmt.Sprintf("%s_%s_FullPathHTTP", serviceName, method.Name)
 
