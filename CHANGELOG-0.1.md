@@ -1,4 +1,12 @@
-### v0.1.7 🌈 (2023-11-09 15:22:38)
+### v0.1.8 🌈 (2023-11-16 16:35:25)
+
+#### 🐛  Bug Fixed
+  * standardFullPathHTTP ([ee8f032](https://github.com/sandwich-go/protokit/commit/ee8f032d4302ca9ce0318fbe48019f029b7744ed)) (<small>[hui.wang](hui.wang@centurygame.com)@2023-11-16 16:35:25 &#43;0800 &#43;0800</small>)
+
+#### 🤖  Tools
+  * **sem**: make changelog ([e874057](https://github.com/sandwich-go/protokit/commit/e874057524aca5de4170660a04d67bee9eaecbe3)) (<small>[hui.wang](hui.wang@centurygame.com)@2023-11-09 15:22:57 &#43;0800 &#43;0800</small>)
+
+### v0.1.7 (2023-11-09 15:22:38)
 
 #### 🐛  Bug Fixed
   * full path http with query path support ([b0c256f](https://github.com/sandwich-go/protokit/commit/b0c256f491136a17ec002bccfe10a73a0cec5fa9)) (<small>[hui.wang](hui.wang@centurygame.com)@2023-11-09 15:22:38 &#43;0800 &#43;0800</small>)
