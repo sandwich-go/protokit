@@ -212,7 +212,6 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 		isERPCService, _ := an.Bool(ServiceTagERPC, false)
 		// 整个service是否完全为rpc方法
 		isRPCService, _ := an.Bool(ServiceTagRPC, !isActorService && !isERPCService)
-		hasSpecifiedRPCService := an.Contains(ServiceTagRPC)
 		// 整个service是否完全为tell方法
 		isServiceAllTell, _ := an.Bool(Tell, false)
 
@@ -224,12 +223,7 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 			anMethod := GetAnnotation(p.comments[protoMethod], AnnotationService)
 			isActorMethod, _ := anMethod.Bool(ServiceTagActor, isActorService)
 			isERPCMethod, _ := anMethod.Bool(ServiceTagERPC, isERPCService)
-			// 默认指定了actor/erpc方法则不再支持生成rpc逻辑，除非明确指定:
-			// method级别的annotation指定生成RPC，service级别明确指定是rpc service
-			isRPCMethod, _ := anMethod.Bool(ServiceTagRPC, !isActorMethod && !isERPCMethod)
-			if !isRPCMethod && hasSpecifiedRPCService && isRPCService {
-				isRPCMethod = true
-			}
+			isRPCMethod, _ := anMethod.Bool(ServiceTagRPC, isRPCService)
 			isTell, _ = anMethod.Bool(Tell, isTell)
 			if isTell {
 				isAsk = false
@@ -237,7 +231,7 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 			var m *Method
 			if isActorMethod {
 				if needActor {
-					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], true, isAsk, isRPCMethod, serviceUriAutoAlias, isERPCMethod, service.QueryPath)
+					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], true, isAsk, isActorMethod, serviceUriAutoAlias, isERPCMethod, service.QueryPath)
 					service.Methods = append(service.Methods, m)
 					service.HasActorMethod = true
 				}
