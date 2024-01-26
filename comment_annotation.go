@@ -8,9 +8,6 @@ import (
 	"google.golang.org/protobuf/types/descriptorpb"
 )
 
-const AnnotationService = "service"
-const AnnotationGlobal = "global"
-
 type Comment struct {
 	Content     string
 	Tags        map[string]string

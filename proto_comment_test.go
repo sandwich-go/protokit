@@ -16,24 +16,24 @@ func TestComments(t *testing.T) {
 			{
 				in: []string{"@actor @tell"},
 				comment: &Comment{
-					Tags:    map[string]string{
-						"actor":"true",
-						"tell":"true",
+					Tags: map[string]string{
+						"actor": "true",
+						"tell":  "true",
 					},
 				},
 			},
 			{
 				in: []string{"@actor @tell some words"},
 				comment: &Comment{
-					Tags:    map[string]string{
-						"actor":"true",
-						"tell some words":"true",
+					Tags: map[string]string{
+						"actor":           "true",
+						"tell some words": "true",
 					},
 				},
 			},
 		} {
 			c := NewComment(t.in)
-			So(c.Tags,ShouldResemble,t.comment.Tags)
+			So(c.Tags, ShouldResemble, t.comment.Tags)
 		}
 	})
 }

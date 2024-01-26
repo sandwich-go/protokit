@@ -154,7 +154,7 @@ func (p *Parser) method(
 	// {service}_{method}_FullMethodName
 	method.TypeInputAliasConstName = fmt.Sprintf("%s_%s_FullMethodName", serviceName, method.Name)
 
-	method.LangOffTag = strings.Split(anMethod.String("lang_off"), ",")
+	method.LangOffTag = strings.Split(anMethod.String(LangOff), ",")
 	return method
 }
 
@@ -196,41 +196,41 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 			service.Comment = comment.Content
 		}
 		an := GetAnnotation(comment, AnnotationService)
-		snakeCase, _ := an.Bool("query_path_snake_case", true)
+		snakeCase, _ := an.Bool(QueryPathSnakeCase, true)
 
-		service.QueryPath = standardQueryPath(an.String("query_path", p.cc.DefaultQueryPath), snakeCase, p.cc.QueryPathMapping)
+		service.QueryPath = standardQueryPath(an.String(QueryPath, p.cc.DefaultQueryPath), snakeCase, p.cc.QueryPathMapping)
 
 		for _, v := range p.cc.GetInvalidServiceAnnotations() {
 			if an.Contains(strings.TrimSpace(v)) {
 				log.Fatal().Msg(fmt.Sprintf("invalid annotation: %s", v))
 			}
 		}
-		serviceUriAutoAlias, _ := an.Bool("service_uri_auto_alias", false)
+		serviceUriAutoAlias, _ := an.Bool(ServiceUriAutoAlias, false)
 		// 整个service是否完全为actor方法
-		isActorService, _ := an.Bool("actor", false)
+		isActorService, _ := an.Bool(ServiceTagActor, false)
 		// 整个service是否完全为erpc方法
-		isERPCService, _ := an.Bool("erpc", false)
+		isERPCService, _ := an.Bool(ServiceTagERPC, false)
 		// 整个service是否完全为rpc方法
-		isRPCService, _ := an.Bool("rpc", !isActorService && !isERPCService)
-		hasSpecifiedRPCService := an.Contains("rpc")
+		isRPCService, _ := an.Bool(ServiceTagRPC, !isActorService && !isERPCService)
+		hasSpecifiedRPCService := an.Contains(ServiceTagRPC)
 		// 整个service是否完全为tell方法
-		isServiceAllTell, _ := an.Bool("tell", false)
+		isServiceAllTell, _ := an.Bool(Tell, false)
 
-		service.LangOffTag = strings.Split(an.String("lang_off"), ",")
+		service.LangOffTag = strings.Split(an.String(LangOff), ",")
 		for j, protoMethod := range protoService.Method {
 			// actor参数，是否为actor是否为tell
 			isAsk := true
 			isTell := isServiceAllTell
 			anMethod := GetAnnotation(p.comments[protoMethod], AnnotationService)
-			isActorMethod, _ := anMethod.Bool("actor", isActorService)
-			isERPCMethod, _ := anMethod.Bool("erpc", isERPCService)
+			isActorMethod, _ := anMethod.Bool(ServiceTagActor, isActorService)
+			isERPCMethod, _ := anMethod.Bool(ServiceTagERPC, isERPCService)
 			// 默认指定了actor/erpc方法则不再支持生成rpc逻辑，除非明确指定:
 			// method级别的annotation指定生成RPC，service级别明确指定是rpc service
-			isRPCMethod, _ := anMethod.Bool("rpc", !isActorMethod && !isERPCMethod)
+			isRPCMethod, _ := anMethod.Bool(ServiceTagRPC, !isActorMethod && !isERPCMethod)
 			if !isRPCMethod && hasSpecifiedRPCService && isRPCService {
 				isRPCMethod = true
 			}
-			isTell, _ = anMethod.Bool("tell", isTell)
+			isTell, _ = anMethod.Bool(Tell, isTell)
 			if isTell {
 				isAsk = false
 			}

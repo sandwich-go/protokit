@@ -110,15 +110,6 @@ type ServiceGroup struct {
 	ImportSet     *ImportSet // 同一个ServiceGroup内的service共享同一个ImportSet，目的是生成到同一个文件
 }
 
-type ServiceTag = string
-
-const (
-	ServiceTagALL   ServiceTag = "all"
-	ServiceTagRPC   ServiceTag = "rpc"
-	ServiceTagActor ServiceTag = "actor"
-	ServiceTagERPC  ServiceTag = "erpc"
-)
-
 var allServiceTags = []ServiceTag{ServiceTagALL, ServiceTagRPC, ServiceTagActor, ServiceTagERPC}
 
 type ProtoFile struct {
