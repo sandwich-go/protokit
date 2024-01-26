@@ -1,4 +1,15 @@
-### v0.1.8 🌈 (2023-11-16 16:35:25)
+### v0.1.9 🌈 (2024-01-26 18:57:55)
+
+#### 🐛  Bug Fixed
+  * method 级别rpc false参数无效 ([b36f2c5](https://github.com/sandwich-go/protokit/commit/b36f2c51b79c09035422680e2dbf99026296340c)) (<small>[zhengyang.zhu](zhengyang.zhu@centurygame.com)@2024-01-26 18:57:55 &#43;0800 &#43;0800</small>)
+
+#### 🛠  Refactor
+  * move tag to const.go and execute goimports ([35bd8cb](https://github.com/sandwich-go/protokit/commit/35bd8cbfc282e4aaf51f0d08929e6e456d244044)) (<small>[zhengyang.zhu](zhengyang.zhu@centurygame.com)@2024-01-26 18:04:44 &#43;0800 &#43;0800</small>)
+
+#### 🤖  Tools
+  * **sem**: make changelog ([37cf39d](https://github.com/sandwich-go/protokit/commit/37cf39d24d8329dd4a582d6c27b72be406dd8456)) (<small>[hui.wang](hui.wang@centurygame.com)@2023-11-16 16:35:54 &#43;0800 &#43;0800</small>)
+
+### v0.1.8 (2023-11-16 16:35:25)
 
 #### 🐛  Bug Fixed
   * standardFullPathHTTP ([ee8f032](https://github.com/sandwich-go/protokit/commit/ee8f032d4302ca9ce0318fbe48019f029b7744ed)) (<small>[hui.wang](hui.wang@centurygame.com)@2023-11-16 16:35:25 &#43;0800 &#43;0800</small>)
