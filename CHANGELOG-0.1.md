@@ -1,4 +1,12 @@
-### v0.1.9 🌈 (2024-01-26 18:57:55)
+### v0.1.10 🌈 (2024-01-31 15:56:22)
+
+#### 🛠  Refactor
+  * erpc fix suffix ForERPC ([1621848](https://github.com/sandwich-go/protokit/commit/1621848a9059c72e624a177901fa6fc5a65ef734)) (<small>[Daming Yang](daming.yang@centurygame.com)@2024-01-31 15:56:22 &#43;0800 &#43;0800</small>)
+
+#### 🤖  Tools
+  * **sem**: make changelog ([33e6bbd](https://github.com/sandwich-go/protokit/commit/33e6bbd093a388782600aa6bee4e6206bc10ccae)) (<small>[zhengyang.zhu](zhengyang.zhu@centurygame.com)@2024-01-26 18:58:13 &#43;0800 &#43;0800</small>)
+
+### v0.1.9 (2024-01-26 18:57:55)
 
 #### 🐛  Bug Fixed
   * method 级别rpc false参数无效 ([b36f2c5](https://github.com/sandwich-go/protokit/commit/b36f2c51b79c09035422680e2dbf99026296340c)) (<small>[zhengyang.zhu](zhengyang.zhu@centurygame.com)@2024-01-26 18:57:55 &#43;0800 &#43;0800</small>)
