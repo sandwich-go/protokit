@@ -57,8 +57,8 @@ func (p *Parser) method(
 		// actor 有rpc或者erpc方法
 		methodName += "ForActor"
 	}
-	if isERPCMethod && (isActorMethod || fixActorMethodName) {
-		// erpc 有actor或者rpc方法
+	if isERPCMethod {
+		// erpc 固定带这种歌后缀
 		methodName += "ForERPC"
 	}
 	method := &Method{
