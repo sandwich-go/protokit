@@ -211,9 +211,29 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 		// 整个service是否完全为erpc方法
 		isERPCService, _ := an.Bool(ServiceTagERPC, false)
 		// 整个service是否完全为rpc方法
-		isRPCService, _ := an.Bool(ServiceTagRPC, !isActorService && !isERPCService)
+		isRPCService, _ := an.Bool(ServiceTagRPC, false)
 		// 整个service是否完全为tell方法
 		isServiceAllTell, _ := an.Bool(Tell, false)
+
+		if !isERPCService && !isActorService && !isRPCService {
+			// service级别没有任何定义，则如果任意一个方法既不是actor也不是erpc那么这个service就是rpc
+			// 否则这个就不是rpc的service（没有任何一个方法是rpc）
+			for _, protoMethod := range protoService.Method {
+				anMethod := GetAnnotation(p.comments[protoMethod], AnnotationService)
+				if isRpcMethod, _ := anMethod.Bool(ServiceTagRPC, false); isRpcMethod {
+					// 任意一个方法是rpc，那么这个service就是rpc service
+					isRPCService = true
+					break
+				}
+				isActorMethod, _ := anMethod.Bool(ServiceTagActor, false)
+				isErpcMethod, _ := anMethod.Bool(ServiceTagERPC, false)
+				if !isActorMethod && !isErpcMethod {
+					// 任意一个方法不是actor也不是erpc，那么这个service就是rpc service
+					isRPCService = true
+					break
+				}
+			}
+		}
 
 		service.LangOffTag = strings.Split(an.String(LangOff), ",")
 		for j, protoMethod := range protoService.Method {
@@ -245,7 +265,7 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 			}
 			if isRPCMethod {
 				if needRPC {
-					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], false, isAsk, false, serviceUriAutoAlias, isERPCMethod, service.QueryPath)
+					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], false, isAsk, false, serviceUriAutoAlias, false, service.QueryPath)
 					service.Methods = append(service.Methods, m)
 				}
 			}
