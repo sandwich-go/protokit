@@ -1,4 +1,12 @@
-### v0.1.10 🌈 (2024-01-31 15:56:22)
+### v0.1.11 🌈 (2024-02-22 14:24:42)
+
+#### 🛠  Refactor
+  * erpc service 判断 ([1bcc028](https://github.com/sandwich-go/protokit/commit/1bcc0284c4087c14f0d01254dfa98bfa7dc67b81)) (<small>[Daming Yang](daming.yang@centurygame.com)@2024-02-22 14:24:42 &#43;0800 &#43;0800</small>)
+
+#### 🤖  Tools
+  * **sem**: make changelog ([028281f](https://github.com/sandwich-go/protokit/commit/028281f1a0c81861e7f56c116ad5da8422d096f7)) (<small>[Daming Yang](daming.yang@centurygame.com)@2024-01-31 15:56:48 &#43;0800 &#43;0800</small>)
+
+### v0.1.10 (2024-01-31 15:56:22)
 
 #### 🛠  Refactor
   * erpc fix suffix ForERPC ([1621848](https://github.com/sandwich-go/protokit/commit/1621848a9059c72e624a177901fa6fc5a65ef734)) (<small>[Daming Yang](daming.yang@centurygame.com)@2024-01-31 15:56:22 &#43;0800 &#43;0800</small>)
