@@ -2,6 +2,8 @@ package protokit
 
 import (
 	"github.com/jhump/protoreflect/desc"
+	protokit2 "github.com/sandwich-go/protokit/option/gen/golang/protokit"
+	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/descriptorpb"
 )
 
@@ -148,4 +150,13 @@ func (pf *ProtoField) KeyGoTypeName() string {
 
 func (pf *ProtoField) ValueGoTypeName() string {
 	return ProtoFieldTypeNameToGolangFieldTypeName(pf.ValueTypeName)
+}
+
+func (pf *ProtoField) GetOrmField() *protokit2.OrmFieldOptions {
+	descOpts := pf.AsFieldDescriptor().GetFieldOptions()
+	opts, ok := proto.GetExtension(descOpts, protokit2.E_OrmFiled).(*protokit2.OrmFieldOptions)
+	if ok {
+		return opts
+	}
+	return nil
 }

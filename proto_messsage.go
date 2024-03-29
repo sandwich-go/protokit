@@ -1,6 +1,8 @@
 package protokit
 
 import (
+	protokit2 "github.com/sandwich-go/protokit/option/gen/golang/protokit"
+	"google.golang.org/protobuf/proto"
 	"strings"
 
 	"github.com/jhump/protoreflect/desc"
@@ -60,4 +62,13 @@ func (pm *ProtoMessage) HasCommentField(comment string) bool {
 		}
 	}
 	return false
+}
+
+func (pm *ProtoMessage) GetOrmOption() *protokit2.OrmMessageOptions {
+	msgO := pm.AsMessageDescriptor().GetMessageOptions()
+	opts, ok := proto.GetExtension(msgO, protokit2.E_OrmMessage).(*protokit2.OrmMessageOptions)
+	if ok {
+		return opts
+	}
+	return nil
 }
