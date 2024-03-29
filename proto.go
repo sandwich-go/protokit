@@ -218,6 +218,7 @@ func NewProtoFile(golangPackageName, golangPackagePath string) *ProtoFile {
 const (
 	NamespaceGoogle   = "google"   // google sdk
 	NamespaceNetutils = "netutils" // netutils sdk
+	NamespaceProtokit = "protokit" // protokit sdk
 	NamespaceUser     = "user"     // user proto files
 )
 
