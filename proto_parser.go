@@ -21,6 +21,7 @@ type ParserVisitor interface {
 	// RangeDotFullyQualifiedTypeNameToDescriptor 遍历dot名称到Descriptor的映射
 	RangeDotFullyQualifiedTypeNameToDescriptor(f func(string, desc.Descriptor) bool)
 	// Comment 访问类型对应的注释信息
+	// deprecated 使用option的方式替代
 	Comment(m proto.Message) (*Comment, bool)
 	// ProtoFilePathToProtoFile 由proto file path获取对应的ProtoFile
 	ProtoFilePathToProtoFile(protoFilePath string) (*ProtoFile, bool)

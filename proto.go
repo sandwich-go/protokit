@@ -45,11 +45,13 @@ func NewImportSet(golangPackageName, golangPackagePath string) *ImportSet {
 }
 
 type Method struct {
-	md              *desc.MethodDescriptor
-	Name            string // 方法名称，proto中获取到的原始名称
-	Comment         string // method注释
-	ValidatorInput  bool   // 是否检验输入
-	ValidatorOutput bool   // 是否校验输出
+	md               *desc.MethodDescriptor
+	RpcOption        *protokit2.RpcMethodOptions
+	BackOfficeOption *protokit2.BackOfficeMethodOptions
+	Name             string // 方法名称，proto中获取到的原始名称
+	Comment          string // method注释
+	ValidatorInput   bool   // 是否检验输入
+	ValidatorOutput  bool   // 是否校验输出
 	// Note: golang与python使用相同的名称，类型名是golang规则,对于嵌套结构,为python生成一套类型别名
 	TypeInput               string // Import校正后的名称，携带golang package信息
 	TypeOutput              string // Import校正后的名称，携带golang package信息
@@ -84,8 +86,8 @@ func (m *Method) AsMethodDescriptor() *desc.MethodDescriptor { return m.md }
 
 type Service struct {
 	sd                         *desc.ServiceDescriptor
-	rpcOption                  *protokit2.RpcServiceOptions
-	backOfficeOption           *protokit2.BackOfficeServiceOptions
+	RpcOption                  *protokit2.RpcServiceOptions
+	BackOfficeOption           *protokit2.BackOfficeServiceOptions
 	Name                       string    // 通过proto获取到的原始名字
 	ServiceName                string    // 当前服务的名称，格式化后的，数据源:RPCClientInterfaceName/ServerHandlerInterfaceName/ActorClientInterfaceName
 	ServerHandlerInterfaceName string    // Server Handler名称
