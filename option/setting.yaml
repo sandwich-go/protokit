@@ -1,0 +1,19 @@
+golang:
+  create_go_mod: false
+  enable_zap_log_marshal: false
+  proto_enable_clone: false
+  proto_enable_equal: false
+  proto_enable_validate: false
+  gen_global_message_registry: false
+  base_package_path: github.com/sandwich-go/protokit/option/gen/golang
+
+csharp:
+  gen_csharp_code: false
+lua:
+  gen_lua_code: false
+python:
+  gen_python_code: false
+vue:
+  gen_vue_code: false
+java_script:
+  gen_js_code: false
