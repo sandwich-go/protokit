@@ -1,6 +1,7 @@
 package protokit
 
 import (
+	protokit2 "github.com/sandwich-go/protokit/option/gen/golang/protokit"
 	"path"
 	"path/filepath"
 	"strings"
@@ -83,6 +84,8 @@ func (m *Method) AsMethodDescriptor() *desc.MethodDescriptor { return m.md }
 
 type Service struct {
 	sd                         *desc.ServiceDescriptor
+	rpcOption                  *protokit2.RpcServiceOptions
+	backOfficeOption           *protokit2.BackOfficeServiceOptions
 	Name                       string    // 通过proto获取到的原始名字
 	ServiceName                string    // 当前服务的名称，格式化后的，数据源:RPCClientInterfaceName/ServerHandlerInterfaceName/ActorClientInterfaceName
 	ServerHandlerInterfaceName string    // Server Handler名称

@@ -27,3 +27,6 @@ const QueryPath = "query_path"
 const ServiceUriAutoAlias = "service_uri_auto_alias"
 const Tell = "tell"
 const LangOff = "lang_off"
+
+const Alias = "alias"
+const ActorAlias = "actor_alias"

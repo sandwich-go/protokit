@@ -89,17 +89,21 @@ func (p *Parser) method(
 	if serviceUriAutoAlias || p.cc.URIUsingGRPC {
 		nameAlias = "grpc"
 	}
-	aliasCheckPrefer := []string{"alias"}
+	aliasCheckPrefer := []string{Alias}
 	if isActorMethod {
-		aliasCheckPrefer = []string{"actor_alias", "alias"}
+		aliasCheckPrefer = []string{ActorAlias, Alias}
 	}
-	anMethod := GetAnnotation(p.comments[protoMethod], AnnotationService)
+	var anMethod methodeAnnotation
+	if rpcMethodOption := getRpcMethodOption(protoMethod); rpcMethodOption != nil {
+		anMethod = &methodOptionAnnotation{rpcMethodOption}
+	} else {
+		anMethod = GetAnnotation(p.comments[protoMethod], AnnotationService)
+	}
 	for _, aliasKey := range aliasCheckPrefer {
 		if anMethod.Contains(aliasKey) {
-			nameAlias = fmt.Sprintf("%s_%s", serviceName, method.Name) // 默认alias
-			if autoAlias, _ := anMethod.Bool(aliasKey, false); !autoAlias {
-				// proto中指定了alias名称
-				nameAlias = anMethod.String(aliasKey)
+			nameAlias = anMethod.String(aliasKey)
+			if nameAlias == "" {
+				nameAlias = fmt.Sprintf("%s_%s", serviceName, method.Name) // 默认alias
 			}
 			if strings.EqualFold(nameAlias, "grpc") {
 				// 如果指定为grpc，则使用grpc的路由名称
@@ -169,6 +173,8 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 			DescName:       fmt.Sprintf("%s.%s", fdp.GetPackage(), name),
 			DescProtoFile:  fdp.GetName(),
 		}
+		service.rpcOption = getRpcServiceOption(service.sd)
+		service.backOfficeOption = getBackOfficeServiceOption(service.sd)
 		needActor := true
 		needRPC := true
 		needERPC := true
@@ -195,7 +201,12 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 		if ok {
 			service.Comment = comment.Content
 		}
-		an := GetAnnotation(comment, AnnotationService)
+		var an serviceAnnotation
+		if service.rpcOption != nil {
+			an = &serviceOptionAnnotation{service.rpcOption}
+		} else {
+			an = GetAnnotation(comment, AnnotationService)
+		}
 		snakeCase, _ := an.Bool(QueryPathSnakeCase, true)
 
 		service.QueryPath = standardQueryPath(an.String(QueryPath, p.cc.DefaultQueryPath), snakeCase, p.cc.QueryPathMapping)
@@ -215,11 +226,17 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 		// 整个service是否完全为tell方法
 		isServiceAllTell, _ := an.Bool(Tell, false)
 
+		var anMethod methodeAnnotation
 		if !isERPCService && !isActorService && !isRPCService {
 			// service级别没有任何定义，则如果任意一个方法既不是actor也不是erpc那么这个service就是rpc
 			// 否则这个就不是rpc的service（没有任何一个方法是rpc）
 			for _, protoMethod := range protoService.Method {
-				anMethod := GetAnnotation(p.comments[protoMethod], AnnotationService)
+				rpcMethodOption := getRpcMethodOption(protoMethod)
+				if rpcMethodOption != nil {
+					anMethod = &methodOptionAnnotation{rpcMethodOption}
+				} else {
+					anMethod = GetAnnotation(p.comments[protoMethod], AnnotationService)
+				}
 				if isRpcMethod, _ := anMethod.Bool(ServiceTagRPC, false); isRpcMethod {
 					// 任意一个方法是rpc，那么这个service就是rpc service
 					isRPCService = true
@@ -240,7 +257,12 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 			// actor参数，是否为actor是否为tell
 			isAsk := true
 			isTell := isServiceAllTell
-			anMethod := GetAnnotation(p.comments[protoMethod], AnnotationService)
+			rpcMethodOption := getRpcMethodOption(protoMethod)
+			if rpcMethodOption != nil {
+				anMethod = &methodOptionAnnotation{rpcMethodOption}
+			} else {
+				anMethod = GetAnnotation(p.comments[protoMethod], AnnotationService)
+			}
 			isActorMethod, _ := anMethod.Bool(ServiceTagActor, isActorService)
 			isERPCMethod, _ := anMethod.Bool(ServiceTagERPC, isERPCService)
 			isRPCMethod, _ := anMethod.Bool(ServiceTagRPC, isRPCService)
