@@ -1,4 +1,18 @@
-### v0.1.11 🌈 (2024-02-22 14:24:42)
+### v0.1.12 🌈 (2024-04-02 15:48:02)
+
+#### 🚀  New Feature
+  * protokit/rpc.proto ([3796ea4](https://github.com/sandwich-go/protokit/commit/3796ea4ebfdc602475141c709e9dace902ef3566)) (<small>[zhengyang.zhu](zhengyang.zhu@centurygame.com)@2024-04-02 14:43:27 &#43;0800 &#43;0800</small>)
+  * support protokit sdk ([fa601ac](https://github.com/sandwich-go/protokit/commit/fa601ac71edd52fd0d26a68055a057579ed164fe)) (<small>[zhengyang.zhu](zhengyang.zhu@centurygame.com)@2024-03-29 17:57:47 &#43;0800 &#43;0800</small>)
+
+#### 🤖  Tools
+  * **sem**: make changelog ([d81e37d](https://github.com/sandwich-go/protokit/commit/d81e37d69f1cd7e28e1d0d30d6a532619132b84f)) (<small>[Daming Yang](daming.yang@centurygame.com)@2024-02-22 14:25:02 &#43;0800 &#43;0800</small>)
+
+#### 💪  Commit
+  * Merge branch '0.1/feat-option' into 0.1/release ([b5cfee5](https://github.com/sandwich-go/protokit/commit/b5cfee5ec98a9a4888c480bab5d417b7e8256647)) (<small>[zhengyang.zhu](zhengyang.zhu@centurygame.com)@2024-04-02 15:48:02 &#43;0800 &#43;0800</small>)
+  * feat:support backoffice option ([989fba2](https://github.com/sandwich-go/protokit/commit/989fba2653100e7906c9ff79f6c5b860b7120641)) (<small>[zhengyang.zhu](zhengyang.zhu@centurygame.com)@2024-04-02 15:47:08 &#43;0800 &#43;0800</small>)
+  * add option/protos/protokit/orm.proto ([1040df6](https://github.com/sandwich-go/protokit/commit/1040df6c98afd02ec4266296b6556314ece1ec7e)) (<small>[zhengyang.zhu](zhengyang.zhu@centurygame.com)@2024-03-29 15:25:59 &#43;0800 &#43;0800</small>)
+
+### v0.1.11 (2024-02-22 14:24:42)
 
 #### 🛠  Refactor
   * erpc service 判断 ([1bcc028](https://github.com/sandwich-go/protokit/commit/1bcc0284c4087c14f0d01254dfa98bfa7dc67b81)) (<small>[Daming Yang](daming.yang@centurygame.com)@2024-02-22 14:24:42 &#43;0800 &#43;0800</small>)
