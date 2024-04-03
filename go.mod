@@ -35,6 +35,4 @@ require (
 	golang.org/x/sys v0.5.0 // indirect
 )
 
-replace (
-	github.com/sandwich-go/protokit/option => ./option
-)
+replace github.com/sandwich-go/protokit/option => ./option
