@@ -17,6 +17,7 @@ type ProtoMessage struct {
 	Fields                        []*ProtoField // 所有的属性
 	Comment                       *Comment      // 注释
 	ImportSet                     *ImportSet
+	Store                         map[interface{}]interface{}
 }
 
 func NewProtoMessage(pf *ProtoFile, md *desc.MessageDescriptor) *ProtoMessage {
@@ -27,6 +28,7 @@ func NewProtoMessage(pf *ProtoFile, md *desc.MessageDescriptor) *ProtoMessage {
 		Fields:                        make([]*ProtoField, 0, len(md.GetFields())),
 		goStructNameWithGolangPackage: GoStructNameWithGolangPackage(md.GetFullyQualifiedName(), pf.Package, pf.GolangPackageName),
 		ImportSet:                     NewImportSet(pf.GolangPackageName, pf.GolangPackagePath),
+		Store:                         map[interface{}]interface{}{},
 	}
 	return pm
 }
@@ -38,6 +40,7 @@ func (p *Parser) BuildProtoMessage(pf *ProtoFile, md *desc.MessageDescriptor) *P
 	return pm
 }
 
+func (pm *ProtoMessage) AddToStore(k, v interface{})                  { pm.Store[k] = v }
 func (pm *ProtoMessage) AsMessageDescriptor() *desc.MessageDescriptor { return pm.md }
 func (pm *ProtoMessage) DotFullyQualifiedTypeName() string            { return pm.dotFullyQualifiedTypeName }
 func (pm *ProtoMessage) GoStructNameWithGolangPackage() string {
