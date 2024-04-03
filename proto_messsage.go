@@ -18,6 +18,7 @@ type ProtoMessage struct {
 	Comment                       *Comment      // 注释
 	ImportSet                     *ImportSet
 	Store                         map[interface{}]interface{}
+	Parser                        *Parser
 }
 
 func NewProtoMessage(pf *ProtoFile, md *desc.MessageDescriptor) *ProtoMessage {
@@ -37,6 +38,7 @@ func (p *Parser) BuildProtoMessage(pf *ProtoFile, md *desc.MessageDescriptor) *P
 	pm := NewProtoMessage(pf, md)
 	pm.dotFullyQualifiedTypeName = p.descriptor2DotFullyQualifiedTypeName[pm.md]
 	pm.Comment = p.comments[pm.md.AsDescriptorProto()]
+	pm.Parser = p
 	return pm
 }
 
