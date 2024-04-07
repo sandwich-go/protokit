@@ -43,6 +43,7 @@ func (p *Parser) BuildProtoMessage(pf *ProtoFile, md *desc.MessageDescriptor) *P
 }
 
 func (pm *ProtoMessage) AddToStore(k, v interface{})                  { pm.Store[k] = v }
+func (pm *ProtoMessage) GetFromStore(k interface{}) interface{}       { return pm.Store[k] }
 func (pm *ProtoMessage) AsMessageDescriptor() *desc.MessageDescriptor { return pm.md }
 func (pm *ProtoMessage) DotFullyQualifiedTypeName() string            { return pm.dotFullyQualifiedTypeName }
 func (pm *ProtoMessage) GoStructNameWithGolangPackage() string {

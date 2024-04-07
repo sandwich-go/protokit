@@ -82,7 +82,42 @@ func GoFieldName(s string) string {
 	if _, ok := keywords[s]; ok {
 		return s + "_"
 	}
-	return goName(s)
+	return goFieldName(s)
+}
+
+func goFieldName(s string) string {
+	var ns string
+	var skip, toUpper bool
+	for j, c := range s {
+		if skip {
+			skip = false
+			continue
+		}
+		if toUpper {
+			ns += strings.ToUpper(string(c))
+			toUpper = c == '_'
+			continue
+		}
+		if c == '_' {
+			if j == 0 {
+				ns += string('X')
+				toUpper = true
+			} else if j < len(s)-1 && ('a' <= s[j+1] && s[j+1] <= 'z') {
+				toUpper = true
+			} else {
+				ns += string(c)
+			}
+		} else if '0' <= s[j] && s[j] <= '9' {
+			ns += string(c)
+			toUpper = true
+			if j < len(s)-1 && '_' == s[j+1] {
+				skip = true
+			}
+		} else {
+			ns += string(c)
+		}
+	}
+	return ns
 }
 
 func goName(s string) string {

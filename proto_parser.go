@@ -42,6 +42,7 @@ type Parser struct {
 	dotFullyQualifiedTypeNameToProtoFile    map[string]*ProtoFile        // 类型名(.package_path.message) => *ProtoFile
 	dotFullyQualifiedTypeNameToDescriptor   map[string]desc.Descriptor   // 类型名(.package_path.message) => desc.Descriptor
 	dotFullyQualifiedTypeNameToProtoMessage map[string]*ProtoMessage     // 类型名(.package_path.message) => *ProtoMessage
+	dotFullyQualifiedTypeNameToProtoEnum    map[string]*ProtoEnum        // 类型名(.package_path.enum) => *ProtoEnum
 	descriptor2DotFullyQualifiedTypeName    map[desc.Descriptor]string   // desc.Descriptor => 类型名(.package_path.message)
 	tmpParsedMessageOrEnumMapping           map[desc.Descriptor]struct{} // 已经解析过的message或者enum，临时的
 }
@@ -74,6 +75,7 @@ func (p *Parser) Clean() {
 	p.dotFullyQualifiedTypeNameToProtoFile = make(map[string]*ProtoFile)
 	p.dotFullyQualifiedTypeNameToDescriptor = make(map[string]desc.Descriptor)
 	p.dotFullyQualifiedTypeNameToProtoMessage = make(map[string]*ProtoMessage)
+	p.dotFullyQualifiedTypeNameToProtoEnum = make(map[string]*ProtoEnum)
 	p.descriptor2DotFullyQualifiedTypeName = make(map[desc.Descriptor]string)
 	p.tmpParsedMessageOrEnumMapping = make(map[desc.Descriptor]struct{})
 }
@@ -222,6 +224,30 @@ func (p *Parser) DotFullyQualifiedTypeNameToProtoMessage(dotName string) (*Proto
 		return v, true
 	}
 	return nil, false
+}
+
+func (p *Parser) MustDotFullyQualifiedTypeNameToProtoMessage(dotName string) *ProtoMessage {
+	v, ok := p.DotFullyQualifiedTypeNameToProtoMessage(dotName)
+	if !ok {
+		panic(fmt.Errorf("not found message for '%s'", dotName))
+	}
+	return v
+}
+
+func (p *Parser) DotFullyQualifiedTypeNameToProtoEnum(dotName string) (*ProtoEnum, bool) {
+	v, ok := p.dotFullyQualifiedTypeNameToProtoEnum[dotName]
+	if ok {
+		return v, true
+	}
+	return nil, false
+}
+
+func (p *Parser) MustDotFullyQualifiedTypeNameToProtoEnum(dotName string) *ProtoEnum {
+	v, ok := p.DotFullyQualifiedTypeNameToProtoEnum(dotName)
+	if !ok {
+		panic(fmt.Errorf("not found enum for '%s'", dotName))
+	}
+	return v
 }
 
 func (p *Parser) DescriptorToDotFullyQualifiedTypeName(d desc.Descriptor) (string, bool) {

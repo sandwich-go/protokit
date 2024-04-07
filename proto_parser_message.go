@@ -63,7 +63,9 @@ func (p *Parser) parseProtoFileEnum(pf *ProtoFile, ed *desc.EnumDescriptor) {
 	if p.parsedMessageOrEnumGuard(ed) {
 		return
 	}
-	pf.Enums = append(pf.Enums, p.BuildProtoEnum(pf, ed))
+	bpe := p.BuildProtoEnum(pf, ed)
+	pf.Enums = append(pf.Enums, bpe)
+	p.dotFullyQualifiedTypeNameToProtoEnum[bpe.dotFullyQualifiedTypeName] = bpe
 }
 
 func (p *Parser) parseProtoFileMessages(pf *ProtoFile) {

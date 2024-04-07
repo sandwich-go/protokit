@@ -8,6 +8,19 @@ import (
 )
 
 func TestProto(t *testing.T) {
+	Convey("proto field name converter", t, func() {
+		for _, test := range []struct {
+			rawName    string
+			golangName string
+		}{
+			{rawName: "_tags_", golangName: "XTags_"},
+			{rawName: "_tags", golangName: "XTags"},
+			{rawName: "param1_args1", golangName: "Param1Args1"},
+			{rawName: "param1__args1", golangName: "Param1_Args1"},
+		} {
+			So(GoFieldName(test.rawName), ShouldEqual, test.golangName)
+		}
+	})
 	Convey("proto struct name converter", t, func() {
 
 		//(*OuterTestT1)(nil),             // 2: msg.Outer.test_t1
