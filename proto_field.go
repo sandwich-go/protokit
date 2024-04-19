@@ -1,10 +1,13 @@
 package protokit
 
 import (
+	"fmt"
 	"github.com/jhump/protoreflect/desc"
+	"github.com/sandwich-go/boost/xstrings"
 	protokit2 "github.com/sandwich-go/protokit/option/gen/golang/protokit"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/descriptorpb"
+	"strings"
 )
 
 type Label = string
@@ -159,4 +162,34 @@ func (pf *ProtoField) GetOrmField() *protokit2.OrmFieldOptions {
 		return opts
 	}
 	return nil
+}
+
+type OrmFieldAlias protokit2.Alias
+
+func (a *OrmFieldAlias) NameWithPackage() string {
+	name := a.NameWithoutPackage()
+	ss := strings.Split(a.PackagePath, "/")
+	if len(ss) == 0 {
+		return name
+	}
+	return fmt.Sprintf("%s.%s", ss[len(ss)-1], name)
+}
+
+func (a *OrmFieldAlias) NameWithoutPackage() string {
+	return xstrings.FirstUpper(a.Name)
+}
+
+func (a *OrmFieldAlias) GetPackagePath() string  { return a.PackagePath }
+func (a *OrmFieldAlias) GetPackageAlias() string { return a.PackageAlias }
+
+func (pf *ProtoField) OrmFieldAlias() *OrmFieldAlias {
+	opts := pf.GetOrmField()
+	if opts == nil {
+		return nil
+	}
+	alias := opts.GetAlias()
+	if alias == nil {
+		return nil
+	}
+	return (*OrmFieldAlias)(alias)
 }
