@@ -154,7 +154,7 @@ func (pf *ProtoField) ValueGoTypeName() string {
 
 func (pf *ProtoField) GetOrmField() *protokit2.OrmFieldOptions {
 	descOpts := pf.AsFieldDescriptor().GetFieldOptions()
-	opts, ok := proto.GetExtension(descOpts, protokit2.E_OrmFiled).(*protokit2.OrmFieldOptions)
+	opts, ok := proto.GetExtension(descOpts, protokit2.E_OrmField).(*protokit2.OrmFieldOptions)
 	if ok {
 		return opts
 	}
