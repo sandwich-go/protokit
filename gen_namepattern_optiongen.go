@@ -24,6 +24,8 @@ type NamePattern struct {
 	NamePatternJobClient string `xconf:"name_pattern_job_client" usage:"job client 的名称格式化"`
 	// annotation@NamePatternJobService(comment="job service 的名称格式化")
 	NamePatternJobService string `xconf:"name_pattern_job_service" usage:"job service 的名称格式化"`
+	// annotation@NamePatternJobMethod(comment="job method 的名称格式化")
+	NamePatternJobMethod string `xconf:"name_pattern_job_method" usage:"job method 的名称格式化"`
 }
 
 // NewNamePattern new NamePattern
@@ -116,6 +118,15 @@ func WithNamePatternJobService(v string) NamePatternOption {
 	}
 }
 
+// WithNamePatternJobMethod job method 的名称格式化
+func WithNamePatternJobMethod(v string) NamePatternOption {
+	return func(cc *NamePattern) NamePatternOption {
+		previous := cc.NamePatternJobMethod
+		cc.NamePatternJobMethod = v
+		return WithNamePatternJobMethod(previous)
+	}
+}
+
 // InstallNamePatternWatchDog the installed func will called when NewNamePattern  called
 func InstallNamePatternWatchDog(dog func(cc *NamePattern)) { watchDogNamePattern = dog }
 
@@ -132,6 +143,7 @@ func setNamePatternDefaultValue(cc *NamePattern) {
 		WithNamePatternHTTPPath("%s"),
 		WithNamePatternJobClient("JobClient%s"),
 		WithNamePatternJobService("JobService%s"),
+		WithNamePatternJobMethod("%sForJob"),
 	} {
 		opt(cc)
 	}
@@ -191,6 +203,7 @@ func (cc *NamePattern) GetNamePatternERPCClient() string    { return cc.NamePatt
 func (cc *NamePattern) GetNamePatternHTTPPath() string      { return cc.NamePatternHTTPPath }
 func (cc *NamePattern) GetNamePatternJobClient() string     { return cc.NamePatternJobClient }
 func (cc *NamePattern) GetNamePatternJobService() string    { return cc.NamePatternJobService }
+func (cc *NamePattern) GetNamePatternJobMethod() string     { return cc.NamePatternJobMethod }
 
 // NamePatternVisitor visitor interface for NamePattern
 type NamePatternVisitor interface {
@@ -201,6 +214,7 @@ type NamePatternVisitor interface {
 	GetNamePatternHTTPPath() string
 	GetNamePatternJobClient() string
 	GetNamePatternJobService() string
+	GetNamePatternJobMethod() string
 }
 
 // NamePatternInterface visitor + ApplyOption interface for NamePattern

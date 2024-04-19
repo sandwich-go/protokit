@@ -68,5 +68,7 @@ func NamePatternOptionDeclareWithDefault() interface{} {
 		"NamePatternJobClient": "JobClient%s",
 		// annotation@NamePatternJobService(comment="job service 的名称格式化")
 		"NamePatternJobService": "JobService%s",
+		// annotation@NamePatternJobMethod(comment="job method 的名称格式化")
+		"NamePatternJobMethod": "%sForJob",
 	}
 }

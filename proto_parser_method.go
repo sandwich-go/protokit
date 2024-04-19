@@ -37,8 +37,8 @@ func (p *Parser) method(
 		// erpc 固定带这种歌后缀
 		methodName += "ForERPC"
 	}
-	if isJob {
-		methodName += "ForJob"
+	if isJob && len(p.cc.NamePatternJobMethod) > 0 {
+		methodName = fmt.Sprintf(p.cc.NamePatternJobMethod, methodName)
 	}
 	method := &Method{
 		md:                             md,
