@@ -64,5 +64,9 @@ func NamePatternOptionDeclareWithDefault() interface{} {
 		"NamePatternERPCClient": "ERPCClient%s",
 		// annotation@NamePatternHTTPPath(comment="自动生成的HTTP PATHG格式")
 		"NamePatternHTTPPath": "%s",
+		// annotation@NamePatternJobClient(comment="job client 的名称格式化")
+		"NamePatternJobClient": "JobClient%s",
+		// annotation@NamePatternJobService(comment="job service 的名称格式化")
+		"NamePatternJobService": "JobService%s",
 	}
 }

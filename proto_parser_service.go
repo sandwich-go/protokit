@@ -36,6 +36,7 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 	for i, protoService := range fdp.Service {
 		name := protoService.GetName()
 		service := &Service{
+			Parser:         p,
 			sd:             protoFile.fd.GetServices()[i],
 			Name:           name,
 			DeprecatedName: xstrings.CamelCase(nameMustHaveSuffix(name, "Service")),
@@ -44,28 +45,44 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 		}
 		service.RpcOption = getRpcServiceOption(service.sd)
 		service.BackOfficeOption = getBackOfficeServiceOption(service.sd)
+		service.IsJob = isJobService(service.sd)
 		needActor := true
 		needRPC := true
 		needERPC := true
+		needJob := true
 		if st == ServiceTagALL {
 			service.ServiceName = fmt.Sprintf(p.cc.NamePatternServerHandler, name)
+			if service.IsJob {
+				needJob = false
+			}
 		} else if st == ServiceTagActor {
 			service.ServiceName = fmt.Sprintf(p.cc.NamePatternActorClient, name)
 			needRPC = false
 			needERPC = false
+			needJob = false
 		} else if st == ServiceTagRPC {
 			service.ServiceName = fmt.Sprintf(p.cc.NamePatternRPCClient, name)
 			needActor = false
 			needERPC = false
+			needJob = false
 		} else if st == ServiceTagERPC {
 			service.ServiceName = fmt.Sprintf(p.cc.NamePatternERPCClient, name)
 			needActor = false
 			needRPC = false
+			needJob = false
+		} else if st == ServiceTagJob {
+			service.ServiceName = fmt.Sprintf(p.cc.NamePatternERPCClient, name)
+			needActor = false
+			needRPC = false
+			needERPC = false
+			needJob = true
 		}
 		service.ServerHandlerInterfaceName = fmt.Sprintf(p.cc.NamePatternServerHandler, name)
 		service.RPCClientInterfaceName = fmt.Sprintf(p.cc.NamePatternRPCClient, name)
 		service.ActorClientInterfaceName = fmt.Sprintf(p.cc.NamePatternActorClient, name)
 		service.ERPCClientInterfaceName = fmt.Sprintf(p.cc.NamePatternERPCClient, name)
+		service.JobClientInterfaceName = fmt.Sprintf(p.cc.NamePatternJobClient, name)
+		service.JobServiceInterfaceName = fmt.Sprintf(p.cc.NamePatternJobService, name)
 		comment, ok := p.comments[protoService]
 		if ok {
 			service.Comment = comment.Content
@@ -96,7 +113,7 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 		isServiceAllTell, _ := an.Bool(Tell, false)
 
 		var anMethod methodeAnnotation
-		if !isERPCService && !isActorService && !isRPCService {
+		if !isERPCService && !isActorService && !isRPCService && !service.IsJob {
 			// service级别没有任何定义，则如果任意一个方法既不是actor也不是erpc那么这个service就是rpc
 			// 否则这个就不是rpc的service（没有任何一个方法是rpc）
 			for _, protoMethod := range protoService.Method {
@@ -140,23 +157,33 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 				isAsk = false
 			}
 			var m *Method
+			if service.IsJob {
+				jobMethodOption := getJobMethodOption(protoMethod)
+				if jobMethodOption != nil && jobMethodOption.Creator != nil {
+					if needJob {
+						m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], false, false, false, serviceUriAutoAlias, false, service.QueryPath, true)
+						service.HasJobCreatorMethod = true
+						service.Methods = append(service.Methods, m)
+					}
+				}
+			}
 			if isActorMethod {
 				if needActor {
-					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], true, isAsk, isActorMethod, serviceUriAutoAlias, isERPCMethod, service.QueryPath)
+					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], true, isAsk, isActorMethod, serviceUriAutoAlias, isERPCMethod, service.QueryPath, false)
 					service.Methods = append(service.Methods, m)
 					service.HasActorMethod = true
 				}
 			}
 			if isERPCMethod {
 				if needERPC {
-					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], isActorMethod, isAsk, isRPCMethod, serviceUriAutoAlias, isERPCMethod, service.QueryPath)
+					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], isActorMethod, isAsk, isRPCMethod, serviceUriAutoAlias, isERPCMethod, service.QueryPath, false)
 					service.Methods = append(service.Methods, m)
 					service.HasERPCMethod = true
 				}
 			}
 			if isRPCMethod {
 				if needRPC {
-					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], false, isAsk, false, serviceUriAutoAlias, false, service.QueryPath)
+					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], false, isAsk, false, serviceUriAutoAlias, false, service.QueryPath, false)
 					service.Methods = append(service.Methods, m)
 				}
 			}

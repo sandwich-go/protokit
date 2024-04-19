@@ -17,6 +17,15 @@ func getRpcServiceOption(sd *desc.ServiceDescriptor) *protokit2.RpcServiceOption
 	return nil
 }
 
+func isJobService(sd *desc.ServiceDescriptor) bool {
+	msgO := sd.GetServiceOptions()
+	opts, ok := proto.GetExtension(msgO, protokit2.E_JobService).(bool)
+	if ok {
+		return opts
+	}
+	return false
+}
+
 func getBackOfficeServiceOption(sd *desc.ServiceDescriptor) *protokit2.BackOfficeServiceOptions {
 	msgO := sd.GetServiceOptions()
 	opts, ok := proto.GetExtension(msgO, protokit2.E_BackOfficeService).(*protokit2.BackOfficeServiceOptions)
@@ -29,6 +38,15 @@ func getBackOfficeServiceOption(sd *desc.ServiceDescriptor) *protokit2.BackOffic
 func getRpcMethodOption(md *descriptorpb.MethodDescriptorProto) *protokit2.RpcMethodOptions {
 	msgO := md.GetOptions()
 	opts, ok := proto.GetExtension(msgO, protokit2.E_RpcMethod).(*protokit2.RpcMethodOptions)
+	if ok {
+		return opts
+	}
+	return nil
+}
+
+func getJobMethodOption(md *descriptorpb.MethodDescriptorProto) *protokit2.JobMethodOptions {
+	msgO := md.GetOptions()
+	opts, ok := proto.GetExtension(msgO, protokit2.E_JobMethod).(*protokit2.JobMethodOptions)
 	if ok {
 		return opts
 	}

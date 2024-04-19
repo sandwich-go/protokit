@@ -96,6 +96,15 @@ func WithProtoImportPath(v ...string) Option {
 	}
 }
 
+// AppendProtoImportPath proto import路径
+func AppendProtoImportPath(v ...string) Option {
+	return func(cc *Options) Option {
+		previous := cc.ProtoImportPath
+		cc.ProtoImportPath = append(cc.ProtoImportPath, v...)
+		return WithProtoImportPath(previous...)
+	}
+}
+
 // WithProtoFileAccessor proto import路径
 func WithProtoFileAccessor(v FileAccessor) Option {
 	return func(cc *Options) Option {
@@ -119,6 +128,15 @@ func WithZapLogMapKeyTypes(v ...string) Option {
 	return func(cc *Options) Option {
 		previous := cc.ZapLogMapKeyTypes
 		cc.ZapLogMapKeyTypes = v
+		return WithZapLogMapKeyTypes(previous...)
+	}
+}
+
+// AppendZapLogMapKeyTypes 以类型为key的map的MarshalLogObject实现，使得可以直接使用zap.Object函数打印map数据
+func AppendZapLogMapKeyTypes(v ...string) Option {
+	return func(cc *Options) Option {
+		previous := cc.ZapLogMapKeyTypes
+		cc.ZapLogMapKeyTypes = append(cc.ZapLogMapKeyTypes, v...)
 		return WithZapLogMapKeyTypes(previous...)
 	}
 }
@@ -150,6 +168,15 @@ func WithImportSetExclude(v ...string) Option {
 	}
 }
 
+// AppendImportSetExclude import set忽略指定name的package
+func AppendImportSetExclude(v ...string) Option {
+	return func(cc *Options) Option {
+		previous := cc.ImportSetExclude
+		cc.ImportSetExclude = append(cc.ImportSetExclude, v...)
+		return WithImportSetExclude(previous...)
+	}
+}
+
 // WithURIUsingGRPC service的uri是否使用GRPC模式
 func WithURIUsingGRPC(v bool) Option {
 	return func(cc *Options) Option {
@@ -164,6 +191,15 @@ func WithInvalidServiceAnnotations(v ...string) Option {
 	return func(cc *Options) Option {
 		previous := cc.InvalidServiceAnnotations
 		cc.InvalidServiceAnnotations = v
+		return WithInvalidServiceAnnotations(previous...)
+	}
+}
+
+// AppendInvalidServiceAnnotations 非法的 service annotations
+func AppendInvalidServiceAnnotations(v ...string) Option {
+	return func(cc *Options) Option {
+		previous := cc.InvalidServiceAnnotations
+		cc.InvalidServiceAnnotations = append(cc.InvalidServiceAnnotations, v...)
 		return WithInvalidServiceAnnotations(previous...)
 	}
 }
@@ -210,10 +246,8 @@ func InstallOptionsWatchDog(dog func(cc *Options)) { watchDogOptions = dog }
 // watchDogOptions global watch dog
 var watchDogOptions func(cc *Options)
 
-// newDefaultOptions new default Options
-func newDefaultOptions() *Options {
-	cc := &Options{}
-
+// setOptionsDefaultValue default Options value
+func setOptionsDefaultValue(cc *Options) {
 	for _, opt := range [...]Option{
 		WithGolangBasePackagePath(""),
 		WithGolangRelative(true),
@@ -235,7 +269,12 @@ func newDefaultOptions() *Options {
 	} {
 		opt(cc)
 	}
+}
 
+// newDefaultOptions new default Options
+func newDefaultOptions() *Options {
+	cc := &Options{}
+	setOptionsDefaultValue(cc)
 	return cc
 }
 

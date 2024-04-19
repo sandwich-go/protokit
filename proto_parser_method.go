@@ -22,6 +22,7 @@ func (p *Parser) method(
 	serviceUriAutoAlias bool,
 	isERPCMethod bool,
 	queryPath string,
+	isJob bool,
 ) *Method {
 	// Note:
 	// 这里只是简单的换算一次格式合法的名称，具体请求名要通过ImportSet进行纠正
@@ -36,10 +37,14 @@ func (p *Parser) method(
 		// erpc 固定带这种歌后缀
 		methodName += "ForERPC"
 	}
+	if isJob {
+		methodName += "ForJob"
+	}
 	method := &Method{
 		md:                             md,
 		RpcOption:                      getRpcMethodOption(protoMethod),
 		BackOfficeOption:               getBackOfficeMethodOption(protoMethod),
+		JobOption:                      getJobMethodOption(protoMethod),
 		Name:                           methodName,
 		TypeInputDotFullQualifiedName:  protoMethod.GetInputType(),
 		TypeOutputDotFullQualifiedName: protoMethod.GetOutputType(),

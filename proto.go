@@ -48,6 +48,7 @@ type Method struct {
 	md               *desc.MethodDescriptor
 	RpcOption        *protokit2.RpcMethodOptions
 	BackOfficeOption *protokit2.BackOfficeMethodOptions
+	JobOption        *protokit2.JobMethodOptions
 	Name             string // 方法名称，proto中获取到的原始名称
 	Comment          string // method注释
 	ValidatorInput   bool   // 是否检验输入
@@ -85,21 +86,26 @@ type Method struct {
 func (m *Method) AsMethodDescriptor() *desc.MethodDescriptor { return m.md }
 
 type Service struct {
+	Parser                     *Parser
 	sd                         *desc.ServiceDescriptor
 	RpcOption                  *protokit2.RpcServiceOptions
 	BackOfficeOption           *protokit2.BackOfficeServiceOptions
+	IsJob                      bool
 	Name                       string    // 通过proto获取到的原始名字
 	ServiceName                string    // 当前服务的名称，格式化后的，数据源:RPCClientInterfaceName/ServerHandlerInterfaceName/ActorClientInterfaceName
 	ServerHandlerInterfaceName string    // Server Handler名称
 	RPCClientInterfaceName     string    // RPC Client名称
 	ActorClientInterfaceName   string    // Actor Client 名称
 	ERPCClientInterfaceName    string    // ERPC Client 名称
+	JobClientInterfaceName     string    // job Client 名称
+	JobServiceInterfaceName    string    // job Service 名称
 	Comment                    string    // 注释信息
 	DeprecatedName             string    // 兼容数据，弃用的结构名称
 	Methods                    []*Method // 当前服务中的Method列表
 	InputOutputTypes           []string  // 当前服务内使用的消息列表，用于加速uri生成，rpc actor中使用
 	HasActorMethod             bool      // 辅助生成的时候是否import actor包
 	HasERPCMethod              bool      // 辅助生成的时候是否import erpc包
+	HasJobCreatorMethod        bool      // 辅助生成的时候是否import job包
 	HasValidator               bool      // 辅助生成的时候是否携带validator包
 	DescName                   string    // fdp.GetPackage().Name
 	DescProtoFile              string    // fdp.GetName() 应该是ProtoFile.FilePath
@@ -115,7 +121,7 @@ type ServiceGroup struct {
 	ImportSet     *ImportSet // 同一个ServiceGroup内的service共享同一个ImportSet，目的是生成到同一个文件
 }
 
-var allServiceTags = []ServiceTag{ServiceTagALL, ServiceTagRPC, ServiceTagActor, ServiceTagERPC}
+var allServiceTags = []ServiceTag{ServiceTagALL, ServiceTagRPC, ServiceTagActor, ServiceTagERPC, ServiceTagJob}
 
 type ProtoFile struct {
 	Namespace           string                   // 当前文件所属的NameSpace名称，在构建package信息的时候需要使用

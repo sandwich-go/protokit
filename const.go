@@ -20,6 +20,7 @@ const (
 	ServiceTagRPC   ServiceTag = "rpc"
 	ServiceTagActor ServiceTag = "actor"
 	ServiceTagERPC  ServiceTag = "erpc"
+	ServiceTagJob   ServiceTag = "job"
 )
 
 const QueryPathSnakeCase = "query_path_snake_case"

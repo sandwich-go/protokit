@@ -20,6 +20,10 @@ type NamePattern struct {
 	NamePatternERPCClient string `xconf:"name_pattern_erpc_client" usage:"code erpc client名称格式化"`
 	// annotation@NamePatternHTTPPath(comment="自动生成的HTTP PATHG格式")
 	NamePatternHTTPPath string `xconf:"name_pattern_http_path" usage:"自动生成的HTTP PATHG格式"`
+	// annotation@NamePatternJobClient(comment="job client 的名称格式化")
+	NamePatternJobClient string `xconf:"name_pattern_job_client" usage:"job client 的名称格式化"`
+	// annotation@NamePatternJobService(comment="job service 的名称格式化")
+	NamePatternJobService string `xconf:"name_pattern_job_service" usage:"job service 的名称格式化"`
 }
 
 // NewNamePattern new NamePattern
@@ -94,26 +98,49 @@ func WithNamePatternHTTPPath(v string) NamePatternOption {
 	}
 }
 
+// WithNamePatternJobClient job client 的名称格式化
+func WithNamePatternJobClient(v string) NamePatternOption {
+	return func(cc *NamePattern) NamePatternOption {
+		previous := cc.NamePatternJobClient
+		cc.NamePatternJobClient = v
+		return WithNamePatternJobClient(previous)
+	}
+}
+
+// WithNamePatternJobService job service 的名称格式化
+func WithNamePatternJobService(v string) NamePatternOption {
+	return func(cc *NamePattern) NamePatternOption {
+		previous := cc.NamePatternJobService
+		cc.NamePatternJobService = v
+		return WithNamePatternJobService(previous)
+	}
+}
+
 // InstallNamePatternWatchDog the installed func will called when NewNamePattern  called
 func InstallNamePatternWatchDog(dog func(cc *NamePattern)) { watchDogNamePattern = dog }
 
 // watchDogNamePattern global watch dog
 var watchDogNamePattern func(cc *NamePattern)
 
-// newDefaultNamePattern new default NamePattern
-func newDefaultNamePattern() *NamePattern {
-	cc := &NamePattern{}
-
+// setNamePatternDefaultValue default NamePattern value
+func setNamePatternDefaultValue(cc *NamePattern) {
 	for _, opt := range [...]NamePatternOption{
 		WithNamePatternServerHandler("ServerHandler%s"),
 		WithNamePatternRPCClient("RPCClient%s"),
 		WithNamePatternActorClient("ActorClient%s"),
 		WithNamePatternERPCClient("ERPCClient%s"),
 		WithNamePatternHTTPPath("%s"),
+		WithNamePatternJobClient("JobClient%s"),
+		WithNamePatternJobService("JobService%s"),
 	} {
 		opt(cc)
 	}
+}
 
+// newDefaultNamePattern new default NamePattern
+func newDefaultNamePattern() *NamePattern {
+	cc := &NamePattern{}
+	setNamePatternDefaultValue(cc)
 	return cc
 }
 
@@ -162,6 +189,8 @@ func (cc *NamePattern) GetNamePatternRPCClient() string     { return cc.NamePatt
 func (cc *NamePattern) GetNamePatternActorClient() string   { return cc.NamePatternActorClient }
 func (cc *NamePattern) GetNamePatternERPCClient() string    { return cc.NamePatternERPCClient }
 func (cc *NamePattern) GetNamePatternHTTPPath() string      { return cc.NamePatternHTTPPath }
+func (cc *NamePattern) GetNamePatternJobClient() string     { return cc.NamePatternJobClient }
+func (cc *NamePattern) GetNamePatternJobService() string    { return cc.NamePatternJobService }
 
 // NamePatternVisitor visitor interface for NamePattern
 type NamePatternVisitor interface {
@@ -170,6 +199,8 @@ type NamePatternVisitor interface {
 	GetNamePatternActorClient() string
 	GetNamePatternERPCClient() string
 	GetNamePatternHTTPPath() string
+	GetNamePatternJobClient() string
+	GetNamePatternJobService() string
 }
 
 // NamePatternInterface visitor + ApplyOption interface for NamePattern
