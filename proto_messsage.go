@@ -1,9 +1,10 @@
 package protokit
 
 import (
+	"strings"
+
 	protokit2 "github.com/sandwich-go/protokit/option/gen/golang/protokit"
 	"google.golang.org/protobuf/proto"
-	"strings"
 
 	"github.com/jhump/protoreflect/desc"
 )

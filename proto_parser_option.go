@@ -2,6 +2,7 @@ package protokit
 
 import (
 	"fmt"
+
 	"github.com/jhump/protoreflect/desc"
 	protokit2 "github.com/sandwich-go/protokit/option/gen/golang/protokit"
 	"google.golang.org/protobuf/proto"
@@ -86,6 +87,8 @@ func (so *serviceOptionAnnotation) Bool(key string, defaultVal ...bool) (bool, e
 		return so.Rpc, nil
 	case Tell:
 		return so.AskTell == protokit2.MethodAskType_TELL, nil
+	case ActorAskReentrant:
+		return so.ActorAskReentrant, nil
 	default:
 		panic(fmt.Sprintf("RpcServiceOptions get bool unknown key: %s", key))
 	}
@@ -133,6 +136,8 @@ func (so *methodOptionAnnotation) Bool(key string, defaultVal ...bool) (bool, er
 		return so.Rpc || dft, nil
 	case Tell:
 		return (so.AskTell == protokit2.MethodAskType_TELL) || dft, nil
+	case ActorAskReentrant:
+		return so.ActorAskReentrant, nil
 	default:
 		panic(fmt.Sprintf("RpcMethodOptions get bool unknown key: %s", key))
 	}

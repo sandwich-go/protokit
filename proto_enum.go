@@ -1,8 +1,9 @@
 package protokit
 
 import (
-	"github.com/jhump/protoreflect/desc"
 	"strings"
+
+	"github.com/jhump/protoreflect/desc"
 )
 
 type ProtoEnumField struct {

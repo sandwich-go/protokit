@@ -1,10 +1,11 @@
 package protokit
 
 import (
-	protokit2 "github.com/sandwich-go/protokit/option/gen/golang/protokit"
 	"path"
 	"path/filepath"
 	"strings"
+
+	protokit2 "github.com/sandwich-go/protokit/option/gen/golang/protokit"
 
 	"github.com/jhump/protoreflect/desc"
 	"github.com/sandwich-go/boost/misc/annotation"
@@ -75,6 +76,7 @@ type Method struct {
 	IsAsk                          bool     // 是否为Ask方法
 	IsTell                         bool     // 是否为Tell方法
 	IsActor                        bool     // 是否为Actor方法
+	IsActorAskReentrant            bool     // 是否为Actor Ask Reentrant方法
 	IsERPC                         bool     // 是否为ERPC方法
 	TypeInputDotFullQualifiedName  string   // proto原始Input，也就是DotFullQualifiedName
 	TypeOutputDotFullQualifiedName string   // proto原始Output，也就是DotFullQualifiedName

@@ -31,3 +31,4 @@ const LangOff = "lang_off"
 
 const Alias = "alias"
 const ActorAlias = "actor_alias"
+const ActorAskReentrant = "actor_ask_reentrant"

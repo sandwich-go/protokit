@@ -2,11 +2,12 @@ package protokit
 
 import (
 	"fmt"
+	"path"
+	"strings"
+
 	"github.com/jhump/protoreflect/desc"
 	"github.com/sandwich-go/boost/xstrings"
 	"google.golang.org/protobuf/types/descriptorpb"
-	"path"
-	"strings"
 )
 
 const actorPathSuffix = "/actor"
@@ -23,6 +24,7 @@ func (p *Parser) method(
 	isERPCMethod bool,
 	queryPath string,
 	isJob bool,
+	isAskReentrant bool,
 ) *Method {
 	// Note:
 	// 这里只是简单的换算一次格式合法的名称，具体请求名要通过ImportSet进行纠正
@@ -54,6 +56,7 @@ func (p *Parser) method(
 		IsERPC:                         isERPCMethod,
 		IsAsk:                          isAsk,
 		IsTell:                         !isAsk,
+		IsActorAskReentrant:            isAskReentrant,
 	}
 	if methodComment, exist := p.comments[protoMethod]; exist && methodComment != nil {
 		method.Comment = methodComment.Content
