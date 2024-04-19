@@ -1,7 +1,1 @@
-rm -rf gen
-protokitgo export --config=setting.yaml --log_level=0
-rm -rf protos/rawdata
-rm -rf gen/rawdata
-rm -rf gen/golang/message_registry
-rm -rf gen/golang/protokit/*.hack.go
-go mod tidy -v
+../../protokitgo/bin/osx/protoc_3.14.0 -I../../protokitgo/sdk/proto_google_3.14.0 -Iprotos --go_out=module=github.com/sandwich-go/protokit/option:. --plugin=protoc-gen-go=../../protokitgo/bin/osx/protoc-gen-go  protos/protokit/orm.proto protos/protokit/rpc.proto
