@@ -327,7 +327,7 @@ type OrmMessageOptions struct {
 	Charset string `protobuf:"bytes,3,opt,name=charset,proto3" json:"charset,omitempty" db:"charset"`
 	// 表前缀，对应原注释中的 Prefix 标签
 	Prefix string `protobuf:"bytes,4,opt,name=prefix,proto3" json:"prefix,omitempty" db:"prefix"`
-	// 是否生成属性同步 message
+	// 是否生成属性同步 message，同时也会生成 数据库 message
 	Bean bool `protobuf:"varint,5,opt,name=bean,proto3" json:"bean,omitempty" db:"bean"`
 	// 是否是全局 hint，对应原注释中的 GlobalHint/Hint 标签
 	Hint *Hint `protobuf:"bytes,6,opt,name=hint,proto3" json:"hint,omitempty" db:"hint"`
