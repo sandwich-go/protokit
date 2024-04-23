@@ -25,6 +25,7 @@ func (p *Parser) method(
 	queryPath string,
 	isJob bool,
 	isAskReentrant bool,
+	isQuit bool,
 ) *Method {
 	// Note:
 	// 这里只是简单的换算一次格式合法的名称，具体请求名要通过ImportSet进行纠正
@@ -42,6 +43,11 @@ func (p *Parser) method(
 	if isJob && len(p.cc.NamePatternJobMethod) > 0 {
 		methodName = fmt.Sprintf(p.cc.NamePatternJobMethod, methodName)
 	}
+
+	isTell := !isAsk
+	if isQuit {
+		isTell, isAsk = false, false
+	}
 	method := &Method{
 		md:                             md,
 		RpcOption:                      getRpcMethodOption(protoMethod),
@@ -55,7 +61,8 @@ func (p *Parser) method(
 		IsActor:                        isActorMethod,
 		IsERPC:                         isERPCMethod,
 		IsAsk:                          isAsk,
-		IsTell:                         !isAsk,
+		IsTell:                         isTell,
+		IsQuit:                         isQuit,
 		IsActorAskReentrant:            isAskReentrant,
 	}
 	if methodComment, exist := p.comments[protoMethod]; exist && methodComment != nil {

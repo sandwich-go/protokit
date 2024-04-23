@@ -75,6 +75,7 @@ type Method struct {
 	HTTPPathComment                string   // HTTP模式下的请求路径注释，来源
 	IsAsk                          bool     // 是否为Ask方法
 	IsTell                         bool     // 是否为Tell方法
+	IsQuit                         bool     // 是否为Quit方法
 	IsActor                        bool     // 是否为Actor方法
 	IsActorAskReentrant            bool     // 是否为Actor Ask Reentrant方法
 	IsERPC                         bool     // 是否为ERPC方法
