@@ -138,6 +138,8 @@ func (so *methodOptionAnnotation) Bool(key string, defaultVal ...bool) (bool, er
 		return (so.AskTell == protokit2.MethodAskType_TELL) || dft, nil
 	case ActorAskReentrant:
 		return so.ActorAskReentrant, nil
+	case ServiceTagQuit:
+		return so.Quit, nil
 	default:
 		panic(fmt.Sprintf("RpcMethodOptions get bool unknown key: %s", key))
 	}
