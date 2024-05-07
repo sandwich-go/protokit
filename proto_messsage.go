@@ -79,3 +79,27 @@ func (pm *ProtoMessage) GetOrmOption() *protokit2.OrmMessageOptions {
 	}
 	return nil
 }
+
+func (pm *ProtoMessage) OrmNoLog() bool {
+	opts := pm.GetOrmOption()
+	if opts == nil {
+		return false
+	}
+	return opts.GetNoLog()
+}
+
+func (pm *ProtoMessage) OrmAlias() *OrmFieldAlias {
+	opts := pm.GetOrmOption()
+	if opts == nil {
+		return nil
+	}
+	bean := opts.GetBean()
+	if bean == nil {
+		return nil
+	}
+	alias := bean.GetDynamicGeneric()
+	if alias == nil {
+		return nil
+	}
+	return (*OrmFieldAlias)(alias)
+}

@@ -164,19 +164,14 @@ func (pf *ProtoField) GetOrmField() *protokit2.OrmFieldOptions {
 	return nil
 }
 
-type OrmFieldAlias protokit2.Alias
+type OrmFieldAlias protokit2.GoType
 
 func (a *OrmFieldAlias) NameWithPackage() string {
-	name := a.NameWithoutPackage()
-	ss := strings.Split(a.PackagePath, "/")
-	if len(ss) == 0 {
-		return name
+	if len(a.PackagePath) == 0 && len(a.PackageAlias) == 0 {
+		return a.Name
 	}
-	return fmt.Sprintf("%s.%s", ss[len(ss)-1], name)
-}
-
-func (a *OrmFieldAlias) NameWithoutPackage() string {
-	return xstrings.FirstUpper(a.Name)
+	ss := strings.Split(a.PackagePath, "/")
+	return fmt.Sprintf("%s.%s", ss[len(ss)-1], xstrings.FirstUpper(a.Name))
 }
 
 func (a *OrmFieldAlias) GetPackagePath() string  { return a.PackagePath }
@@ -187,9 +182,17 @@ func (pf *ProtoField) OrmFieldAlias() *OrmFieldAlias {
 	if opts == nil {
 		return nil
 	}
-	alias := opts.GetAlias()
+	alias := opts.GetGoType()
 	if alias == nil {
 		return nil
 	}
 	return (*OrmFieldAlias)(alias)
+}
+
+func (pf *ProtoField) OrmNoLog() bool {
+	opts := pf.GetOrmField()
+	if opts == nil {
+		return false
+	}
+	return opts.GetNoLog()
 }
