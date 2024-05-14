@@ -25,10 +25,10 @@ const (
 type BlobSize int32
 
 const (
-	BlobSize_BLOB_SIZE_BLOB   BlobSize = 0 // 默认的，blob
-	BlobSize_BLOB_SIZE_LONG   BlobSize = 1 // long blob
-	BlobSize_BLOB_SIZE_MEDIUM BlobSize = 2 // medium blob
-	BlobSize_BLOB_SIZE_TINY   BlobSize = 3 // tiny blob
+	BlobSize_BLOB_SIZE_BLOB   BlobSize = 0 // 默认的，blob，65K
+	BlobSize_BLOB_SIZE_LONG   BlobSize = 1 // long blob，4G
+	BlobSize_BLOB_SIZE_MEDIUM BlobSize = 2 // medium blob，16M
+	BlobSize_BLOB_SIZE_TINY   BlobSize = 3 // tiny blob, 255b
 )
 
 // Enum value maps for BlobSize.
@@ -132,10 +132,10 @@ type TextSize int32
 
 const (
 	TextSize_TEXT_SIZE_NONE   TextSize = 0 // 非 text
-	TextSize_TEXT_SIZE_TEXT   TextSize = 1 // text
-	TextSize_TEXT_SIZE_LONG   TextSize = 2 // long text
-	TextSize_TEXT_SIZE_MEDIUM TextSize = 3 // medium text
-	TextSize_TEXT_SIZE_TINY   TextSize = 4 // tiny blob
+	TextSize_TEXT_SIZE_TEXT   TextSize = 1 // text，65535个字符
+	TextSize_TEXT_SIZE_LONG   TextSize = 2 // long text，4G个字符
+	TextSize_TEXT_SIZE_MEDIUM TextSize = 3 // medium text，16M个字符
+	TextSize_TEXT_SIZE_TINY   TextSize = 4 // tiny blob, 255个字符
 )
 
 // Enum value maps for TextSize.

@@ -113,6 +113,8 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 		isServiceAllTell, _ := an.Bool(Tell, false)
 		// 整个service是否完全为ask reentrant方法
 		isServiceAllAskReentrant, _ := an.Bool(ActorAskReentrant, false)
+		// 整个service是否完全为grpc style方法
+		isServiceAllGrpcStyle, _ := an.Bool(GrpcStyle, false)
 
 		var anMethod methodeAnnotation
 		if !isERPCService && !isActorService && !isRPCService && !service.IsJob {
@@ -152,9 +154,27 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 			} else {
 				anMethod = GetAnnotation(p.comments[protoMethod], AnnotationService)
 			}
+			isGrpcStyle, _ := anMethod.Bool(GrpcStyle, isServiceAllGrpcStyle)
 			isActorMethod, _ := anMethod.Bool(ServiceTagActor, isActorService)
 			isERPCMethod, _ := anMethod.Bool(ServiceTagERPC, isERPCService)
 			isRPCMethod, _ := anMethod.Bool(ServiceTagRPC, isRPCService)
+			if isGrpcStyle {
+				var cnt int
+				for _, v := range []bool{isActorMethod, isERPCMethod, isRPCMethod} {
+					if v {
+						cnt++
+					}
+					if cnt > 1 {
+						log.Fatal().
+							Str("proto service", protoService.GetName()).
+							Str("method", protoMethod.GetName()).
+							Bool("isActorMethod", isActorMethod).
+							Bool("isERPCMethod", isERPCMethod).
+							Bool("isRPCMethod", isRPCMethod).
+							Msg("开启了grpc style, rpc actor erpc 只能存在一个")
+					}
+				}
+			}
 			isTell, _ = anMethod.Bool(Tell, isTell)
 			isAskReentrant, _ = anMethod.Bool(ActorAskReentrant, isAskReentrant)
 			isQuit, _ := anMethod.Bool(ServiceTagQuit, false)
@@ -166,7 +186,7 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 				jobMethodOption := getJobMethodOption(protoMethod)
 				if jobMethodOption != nil && jobMethodOption.Creator != nil {
 					if needJob {
-						m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], false, false, false, serviceUriAutoAlias, false, service.QueryPath, true, false, false)
+						m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], false, false, false, serviceUriAutoAlias, false, service.QueryPath, true, false, false, isGrpcStyle)
 						service.HasJobCreatorMethod = true
 						service.Methods = append(service.Methods, m)
 					}
@@ -174,21 +194,21 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 			}
 			if isActorMethod {
 				if needActor {
-					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], true, isAsk, isActorMethod, serviceUriAutoAlias, isERPCMethod, service.QueryPath, false, isAskReentrant, isQuit)
+					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], true, isAsk, isActorMethod, serviceUriAutoAlias, isERPCMethod, service.QueryPath, false, isAskReentrant, isQuit, isGrpcStyle)
 					service.Methods = append(service.Methods, m)
 					service.HasActorMethod = true
 				}
 			}
 			if isERPCMethod {
 				if needERPC {
-					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], isActorMethod, isAsk, isRPCMethod, serviceUriAutoAlias, isERPCMethod, service.QueryPath, false, false, false)
+					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], isActorMethod, isAsk, isRPCMethod, serviceUriAutoAlias, isERPCMethod, service.QueryPath, false, false, false, isGrpcStyle)
 					service.Methods = append(service.Methods, m)
 					service.HasERPCMethod = true
 				}
 			}
 			if isRPCMethod {
 				if needRPC {
-					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], false, isAsk, false, serviceUriAutoAlias, false, service.QueryPath, false, false, false)
+					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], false, isAsk, false, serviceUriAutoAlias, false, service.QueryPath, false, false, false, isGrpcStyle)
 					service.Methods = append(service.Methods, m)
 				}
 			}

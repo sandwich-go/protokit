@@ -89,6 +89,8 @@ func (so *serviceOptionAnnotation) Bool(key string, defaultVal ...bool) (bool, e
 		return so.AskTell == protokit2.MethodAskType_TELL, nil
 	case ActorAskReentrant:
 		return so.ActorAskReentrant, nil
+	case GrpcStyle:
+		return so.GrpcStyle, nil
 	default:
 		panic(fmt.Sprintf("RpcServiceOptions get bool unknown key: %s", key))
 	}
@@ -140,6 +142,8 @@ func (so *methodOptionAnnotation) Bool(key string, defaultVal ...bool) (bool, er
 		return so.ActorAskReentrant, nil
 	case ServiceTagQuit:
 		return so.Quit, nil
+	case GrpcStyle:
+		return so.GrpcStyle || dft, nil
 	default:
 		panic(fmt.Sprintf("RpcMethodOptions get bool unknown key: %s", key))
 	}

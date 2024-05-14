@@ -26,17 +26,18 @@ func (p *Parser) method(
 	isJob bool,
 	isAskReentrant bool,
 	isQuit bool,
+	isGrpcStyle bool,
 ) *Method {
 	// Note:
 	// 这里只是简单的换算一次格式合法的名称，具体请求名要通过ImportSet进行纠正
 	reqTypeName := strings.TrimPrefix(p.typeStr(protoMethod.GetInputType()), ".")
 	rspTypeName := strings.TrimPrefix(p.typeStr(protoMethod.GetOutputType()), ".")
 	methodName := xstrings.CamelCase(protoMethod.GetName())
-	if isActorMethod && (fixActorMethodName || isERPCMethod) {
+	if !isGrpcStyle && isActorMethod && (fixActorMethodName || isERPCMethod) {
 		// actor 有rpc或者erpc方法
 		methodName += "ForActor"
 	}
-	if isERPCMethod {
+	if !isGrpcStyle && isERPCMethod {
 		// erpc 固定带这种歌后缀
 		methodName += "ForERPC"
 	}
