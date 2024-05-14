@@ -158,6 +158,9 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 			isActorMethod, _ := anMethod.Bool(ServiceTagActor, isActorService)
 			isERPCMethod, _ := anMethod.Bool(ServiceTagERPC, isERPCService)
 			isRPCMethod, _ := anMethod.Bool(ServiceTagRPC, isRPCService)
+			if p.cc.ForceGrpcStyle {
+				isGrpcStyle = true
+			}
 			if isGrpcStyle {
 				var cnt int
 				for _, v := range []bool{isActorMethod, isERPCMethod, isRPCMethod} {
@@ -171,7 +174,7 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 							Bool("isActorMethod", isActorMethod).
 							Bool("isERPCMethod", isERPCMethod).
 							Bool("isRPCMethod", isRPCMethod).
-							Msg("开启了grpc style, rpc actor erpc 只能存在一个")
+							Msg("开启了grpc style, rpc actor erpc 只能存在一个 否则会重名")
 					}
 				}
 			}

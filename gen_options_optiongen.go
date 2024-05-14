@@ -40,6 +40,8 @@ type Options struct {
 	QueryPathMapping map[string]string `xconf:"query_path_mapping" usage:"query path映射关系,通过 {{key}} 方式访问值"`
 	// annotation@DefaultQueryPath(comment="默认query path，支持配置 {{key}}的方式索引QueryPathMapping的key")
 	DefaultQueryPath string `xconf:"default_query_path" usage:"默认query path，支持配置 {{key}}的方式索引QueryPathMapping的key"`
+	// annotation@ForceGrpcStyle(comment="rpc actor erpc改用grpc风格的名称，不可同时存在")
+	ForceGrpcStyle bool `xconf:"force_grpc_style" usage:"rpc actor erpc改用grpc风格的名称，不可同时存在"`
 }
 
 // NewOptions new Options
@@ -240,6 +242,15 @@ func WithDefaultQueryPath(v string) Option {
 	}
 }
 
+// WithForceGrpcStyle rpc actor erpc改用grpc风格的名称，不可同时存在
+func WithForceGrpcStyle(v bool) Option {
+	return func(cc *Options) Option {
+		previous := cc.ForceGrpcStyle
+		cc.ForceGrpcStyle = v
+		return WithForceGrpcStyle(previous)
+	}
+}
+
 // InstallOptionsWatchDog the installed func will called when NewOptions  called
 func InstallOptionsWatchDog(dog func(cc *Options)) { watchDogOptions = dog }
 
@@ -266,6 +277,7 @@ func setOptionsDefaultValue(cc *Options) {
 			"root": "/",
 		}),
 		WithDefaultQueryPath("/"),
+		WithForceGrpcStyle(false),
 	} {
 		opt(cc)
 	}
@@ -333,6 +345,7 @@ func (cc *Options) GetURIUsingGRPCWithoutPackage() bool          { return cc.URI
 func (cc *Options) GetStrictMode() bool                          { return cc.StrictMode }
 func (cc *Options) GetQueryPathMapping() map[string]string       { return cc.QueryPathMapping }
 func (cc *Options) GetDefaultQueryPath() string                  { return cc.DefaultQueryPath }
+func (cc *Options) GetForceGrpcStyle() bool                      { return cc.ForceGrpcStyle }
 
 // OptionsVisitor visitor interface for Options
 type OptionsVisitor interface {
@@ -351,6 +364,7 @@ type OptionsVisitor interface {
 	GetStrictMode() bool
 	GetQueryPathMapping() map[string]string
 	GetDefaultQueryPath() string
+	GetForceGrpcStyle() bool
 }
 
 // OptionsInterface visitor + ApplyOption interface for Options

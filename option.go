@@ -48,6 +48,8 @@ func OptionsOptionDeclareWithDefault() interface{} {
 		}),
 		// annotation@DefaultQueryPath(comment="默认query path，支持配置 {{key}}的方式索引QueryPathMapping的key")
 		"DefaultQueryPath": "/",
+		// annotation@ForceGrpcStyle(comment="rpc actor erpc改用grpc风格的名称，不可同时存在")
+		"ForceGrpcStyle": false,
 	}
 }
 
