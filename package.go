@@ -33,7 +33,7 @@ func GolangPackagePathAndName(fd *desc.FileDescriptor, basePackagePath string, g
 	packageSlice := strings.Split(protoGolangPackage, "/")
 	packageName = packageSlice[len(packageSlice)-1]
 	// protoGolangPackage的最后一个字段作为package名称,但是path是目录相关的
-	if golangRelative && fileBasePath != "google/protobuf" {
+	if golangRelative && fileBasePath != "google/protobuf" && fileBasePath != "claim/protocol" {
 		if fileBasePath == "" || fileBasePath == "." {
 			// fixme FunPlus Puzzle Game使用问题兼容
 			// fixme 如果获取到的proto在根目录下，relative模式下，package path不再完全依赖于file path，将package name纳package path

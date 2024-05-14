@@ -234,6 +234,7 @@ const (
 	NamespaceNetutils = "netutils" // netutils sdk
 	NamespaceProtokit = "protokit" // protokit sdk
 	NamespaceUser     = "user"     // user proto files
+	NamespaceClaim    = "claim"
 )
 
 // NamespaceMessageRegistryPackageName namespace根目录下聚合message注册的包名
