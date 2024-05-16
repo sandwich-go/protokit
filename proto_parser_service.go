@@ -116,6 +116,7 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 		// 整个service是否完全为grpc style方法
 		isServiceAllGrpcStyle, _ := an.Bool(GrpcStyle, false)
 
+		isRPCServiceWithRevision := isRPCService
 		var anMethod methodeAnnotation
 		if !isERPCService && !isActorService && !isRPCService && !service.IsJob {
 			// service级别没有任何定义，则如果任意一个方法既不是actor也不是erpc那么这个service就是rpc
@@ -129,14 +130,14 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 				}
 				if isRpcMethod, _ := anMethod.Bool(ServiceTagRPC, false); isRpcMethod {
 					// 任意一个方法是rpc，那么这个service就是rpc service
-					isRPCService = true
+					isRPCServiceWithRevision = true
 					break
 				}
 				isActorMethod, _ := anMethod.Bool(ServiceTagActor, false)
 				isErpcMethod, _ := anMethod.Bool(ServiceTagERPC, false)
 				if !isActorMethod && !isErpcMethod {
 					// 任意一个方法不是actor也不是erpc，那么这个service就是rpc service
-					isRPCService = true
+					isRPCServiceWithRevision = true
 					break
 				}
 			}
@@ -157,7 +158,15 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 			isGrpcStyle, _ := anMethod.Bool(GrpcStyle, isServiceAllGrpcStyle)
 			isActorMethod, _ := anMethod.Bool(ServiceTagActor, isActorService)
 			isERPCMethod, _ := anMethod.Bool(ServiceTagERPC, isERPCService)
-			isRPCMethod, _ := anMethod.Bool(ServiceTagRPC, isRPCService)
+			var isRPCMethod bool
+			// 张洛算法：
+			// 指定了actor的method不生成rpc
+			// 除非method或service里明确指定了rpc
+			if isActorMethod && !isRPCService {
+				isRPCMethod, _ = anMethod.Bool(ServiceTagRPC, false)
+			} else {
+				isRPCMethod, _ = anMethod.Bool(ServiceTagRPC, isRPCServiceWithRevision)
+			}
 			if p.cc.ForceGrpcStyle {
 				isGrpcStyle = true
 			}
