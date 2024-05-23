@@ -94,6 +94,9 @@ func goFieldName(s string) string {
 			continue
 		}
 		if toUpper {
+			if j == 1 && c == '_' {
+				continue
+			}
 			ns += strings.ToUpper(string(c))
 			toUpper = c == '_'
 			continue
