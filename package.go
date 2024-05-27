@@ -114,7 +114,13 @@ func goFieldName(s string) string {
 			ns += string(c)
 			toUpper = true
 			if j < len(s)-1 && '_' == s[j+1] {
-				skip = true
+				// 如果之后都是 _ 或者 数字，则不跳
+				for _j := j; _j < len(s); _j++ {
+					if s[_j] != '_' && !('0' <= s[_j] && s[_j] <= '9') {
+						skip = true
+						break
+					}
+				}
 			}
 		} else {
 			ns += string(c)

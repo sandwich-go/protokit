@@ -19,6 +19,10 @@ func TestProto(t *testing.T) {
 			{rawName: "__tags", golangName: "XTags"},
 			{rawName: "___tags", golangName: "X_Tags"},
 			{rawName: "____tags", golangName: "X__Tags"},
+			{rawName: "f_3__", golangName: "F_3__"},
+			{rawName: "f_3_", golangName: "F_3_"},
+			{rawName: "param1______args1", golangName: "Param1_____Args1"},
+			{rawName: "____tags_3_3", golangName: "X__Tags_3_3"},
 			{rawName: "param1_args1", golangName: "Param1Args1"},
 			{rawName: "param1__args1", golangName: "Param1_Args1"},
 		} {
