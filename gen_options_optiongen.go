@@ -36,6 +36,8 @@ type Options struct {
 	URIUsingGRPCWithoutPackage bool `xconf:"uri_using_grpc_without_package" usage:"service的uri使用GRPC模式时，是否带package名"`
 	// annotation@StrictMode(comment="是否为严格模式")
 	StrictMode bool `xconf:"strict_mode" usage:"是否为严格模式"`
+	// annotation@StrictNamingMode(comment="是否为检使用严格命名规范")
+	StrictNamingMode bool `xconf:"strict_naming_mode" usage:"是否为检使用严格命名规范"`
 	// annotation@QueryPathMapping(comment="query path映射关系,通过 {{key}} 方式访问值")
 	QueryPathMapping map[string]string `xconf:"query_path_mapping" usage:"query path映射关系,通过 {{key}} 方式访问值"`
 	// annotation@DefaultQueryPath(comment="默认query path，支持配置 {{key}}的方式索引QueryPathMapping的key")
@@ -98,15 +100,6 @@ func WithProtoImportPath(v ...string) Option {
 	}
 }
 
-// AppendProtoImportPath proto import路径
-func AppendProtoImportPath(v ...string) Option {
-	return func(cc *Options) Option {
-		previous := cc.ProtoImportPath
-		cc.ProtoImportPath = append(cc.ProtoImportPath, v...)
-		return WithProtoImportPath(previous...)
-	}
-}
-
 // WithProtoFileAccessor proto import路径
 func WithProtoFileAccessor(v FileAccessor) Option {
 	return func(cc *Options) Option {
@@ -130,15 +123,6 @@ func WithZapLogMapKeyTypes(v ...string) Option {
 	return func(cc *Options) Option {
 		previous := cc.ZapLogMapKeyTypes
 		cc.ZapLogMapKeyTypes = v
-		return WithZapLogMapKeyTypes(previous...)
-	}
-}
-
-// AppendZapLogMapKeyTypes 以类型为key的map的MarshalLogObject实现，使得可以直接使用zap.Object函数打印map数据
-func AppendZapLogMapKeyTypes(v ...string) Option {
-	return func(cc *Options) Option {
-		previous := cc.ZapLogMapKeyTypes
-		cc.ZapLogMapKeyTypes = append(cc.ZapLogMapKeyTypes, v...)
 		return WithZapLogMapKeyTypes(previous...)
 	}
 }
@@ -170,15 +154,6 @@ func WithImportSetExclude(v ...string) Option {
 	}
 }
 
-// AppendImportSetExclude import set忽略指定name的package
-func AppendImportSetExclude(v ...string) Option {
-	return func(cc *Options) Option {
-		previous := cc.ImportSetExclude
-		cc.ImportSetExclude = append(cc.ImportSetExclude, v...)
-		return WithImportSetExclude(previous...)
-	}
-}
-
 // WithURIUsingGRPC service的uri是否使用GRPC模式
 func WithURIUsingGRPC(v bool) Option {
 	return func(cc *Options) Option {
@@ -193,15 +168,6 @@ func WithInvalidServiceAnnotations(v ...string) Option {
 	return func(cc *Options) Option {
 		previous := cc.InvalidServiceAnnotations
 		cc.InvalidServiceAnnotations = v
-		return WithInvalidServiceAnnotations(previous...)
-	}
-}
-
-// AppendInvalidServiceAnnotations 非法的 service annotations
-func AppendInvalidServiceAnnotations(v ...string) Option {
-	return func(cc *Options) Option {
-		previous := cc.InvalidServiceAnnotations
-		cc.InvalidServiceAnnotations = append(cc.InvalidServiceAnnotations, v...)
 		return WithInvalidServiceAnnotations(previous...)
 	}
 }
@@ -221,6 +187,15 @@ func WithStrictMode(v bool) Option {
 		previous := cc.StrictMode
 		cc.StrictMode = v
 		return WithStrictMode(previous)
+	}
+}
+
+// WithStrictNamingMode 是否为检使用严格命名规范
+func WithStrictNamingMode(v bool) Option {
+	return func(cc *Options) Option {
+		previous := cc.StrictNamingMode
+		cc.StrictNamingMode = v
+		return WithStrictNamingMode(previous)
 	}
 }
 
@@ -257,8 +232,10 @@ func InstallOptionsWatchDog(dog func(cc *Options)) { watchDogOptions = dog }
 // watchDogOptions global watch dog
 var watchDogOptions func(cc *Options)
 
-// setOptionsDefaultValue default Options value
-func setOptionsDefaultValue(cc *Options) {
+// newDefaultOptions new default Options
+func newDefaultOptions() *Options {
+	cc := &Options{}
+
 	for _, opt := range [...]Option{
 		WithGolangBasePackagePath(""),
 		WithGolangRelative(true),
@@ -273,6 +250,7 @@ func setOptionsDefaultValue(cc *Options) {
 		WithInvalidServiceAnnotations(make([]string, 0)...),
 		WithURIUsingGRPCWithoutPackage(false),
 		WithStrictMode(true),
+		WithStrictNamingMode(true),
 		WithQueryPathMapping(map[string]string{
 			"root": "/",
 		}),
@@ -281,12 +259,7 @@ func setOptionsDefaultValue(cc *Options) {
 	} {
 		opt(cc)
 	}
-}
 
-// newDefaultOptions new default Options
-func newDefaultOptions() *Options {
-	cc := &Options{}
-	setOptionsDefaultValue(cc)
 	return cc
 }
 
@@ -343,6 +316,7 @@ func (cc *Options) GetURIUsingGRPC() bool                        { return cc.URI
 func (cc *Options) GetInvalidServiceAnnotations() []string       { return cc.InvalidServiceAnnotations }
 func (cc *Options) GetURIUsingGRPCWithoutPackage() bool          { return cc.URIUsingGRPCWithoutPackage }
 func (cc *Options) GetStrictMode() bool                          { return cc.StrictMode }
+func (cc *Options) GetStrictNamingMode() bool                    { return cc.StrictNamingMode }
 func (cc *Options) GetQueryPathMapping() map[string]string       { return cc.QueryPathMapping }
 func (cc *Options) GetDefaultQueryPath() string                  { return cc.DefaultQueryPath }
 func (cc *Options) GetForceGrpcStyle() bool                      { return cc.ForceGrpcStyle }
@@ -362,6 +336,7 @@ type OptionsVisitor interface {
 	GetInvalidServiceAnnotations() []string
 	GetURIUsingGRPCWithoutPackage() bool
 	GetStrictMode() bool
+	GetStrictNamingMode() bool
 	GetQueryPathMapping() map[string]string
 	GetDefaultQueryPath() string
 	GetForceGrpcStyle() bool

@@ -133,8 +133,10 @@ func InstallNamePatternWatchDog(dog func(cc *NamePattern)) { watchDogNamePattern
 // watchDogNamePattern global watch dog
 var watchDogNamePattern func(cc *NamePattern)
 
-// setNamePatternDefaultValue default NamePattern value
-func setNamePatternDefaultValue(cc *NamePattern) {
+// newDefaultNamePattern new default NamePattern
+func newDefaultNamePattern() *NamePattern {
+	cc := &NamePattern{}
+
 	for _, opt := range [...]NamePatternOption{
 		WithNamePatternServerHandler("ServerHandler%s"),
 		WithNamePatternRPCClient("RPCClient%s"),
@@ -147,12 +149,7 @@ func setNamePatternDefaultValue(cc *NamePattern) {
 	} {
 		opt(cc)
 	}
-}
 
-// newDefaultNamePattern new default NamePattern
-func newDefaultNamePattern() *NamePattern {
-	cc := &NamePattern{}
-	setNamePatternDefaultValue(cc)
 	return cc
 }
 
