@@ -42,6 +42,8 @@ func OptionsOptionDeclareWithDefault() interface{} {
 		"URIUsingGRPCWithoutPackage": false,
 		// annotation@StrictMode(comment="是否为严格模式")
 		"StrictMode": true,
+		// annotation@StrictNamingMode(comment="是否为检使用严格命名规范")
+		"StrictNamingMode": true,
 		// annotation@QueryPathMapping(comment="query path映射关系,通过 {{key}} 方式访问值")
 		"QueryPathMapping": (map[string]string)(map[string]string{
 			"root": "/",
