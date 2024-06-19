@@ -36,8 +36,6 @@ type Options struct {
 	URIUsingGRPCWithoutPackage bool `xconf:"uri_using_grpc_without_package" usage:"service的uri使用GRPC模式时，是否带package名"`
 	// annotation@StrictMode(comment="是否为严格模式")
 	StrictMode bool `xconf:"strict_mode" usage:"是否为严格模式"`
-	// annotation@StrictNamingMode(comment="是否为检使用严格命名规范")
-	StrictNamingMode bool `xconf:"strict_naming_mode" usage:"是否为检使用严格命名规范"`
 	// annotation@QueryPathMapping(comment="query path映射关系,通过 {{key}} 方式访问值")
 	QueryPathMapping map[string]string `xconf:"query_path_mapping" usage:"query path映射关系,通过 {{key}} 方式访问值"`
 	// annotation@DefaultQueryPath(comment="默认query path，支持配置 {{key}}的方式索引QueryPathMapping的key")
@@ -190,15 +188,6 @@ func WithStrictMode(v bool) Option {
 	}
 }
 
-// WithStrictNamingMode 是否为检使用严格命名规范
-func WithStrictNamingMode(v bool) Option {
-	return func(cc *Options) Option {
-		previous := cc.StrictNamingMode
-		cc.StrictNamingMode = v
-		return WithStrictNamingMode(previous)
-	}
-}
-
 // WithQueryPathMapping query path映射关系,通过 {{key}} 方式访问值
 func WithQueryPathMapping(v map[string]string) Option {
 	return func(cc *Options) Option {
@@ -250,7 +239,6 @@ func newDefaultOptions() *Options {
 		WithInvalidServiceAnnotations(make([]string, 0)...),
 		WithURIUsingGRPCWithoutPackage(false),
 		WithStrictMode(true),
-		WithStrictNamingMode(true),
 		WithQueryPathMapping(map[string]string{
 			"root": "/",
 		}),
@@ -316,7 +304,6 @@ func (cc *Options) GetURIUsingGRPC() bool                        { return cc.URI
 func (cc *Options) GetInvalidServiceAnnotations() []string       { return cc.InvalidServiceAnnotations }
 func (cc *Options) GetURIUsingGRPCWithoutPackage() bool          { return cc.URIUsingGRPCWithoutPackage }
 func (cc *Options) GetStrictMode() bool                          { return cc.StrictMode }
-func (cc *Options) GetStrictNamingMode() bool                    { return cc.StrictNamingMode }
 func (cc *Options) GetQueryPathMapping() map[string]string       { return cc.QueryPathMapping }
 func (cc *Options) GetDefaultQueryPath() string                  { return cc.DefaultQueryPath }
 func (cc *Options) GetForceGrpcStyle() bool                      { return cc.ForceGrpcStyle }
@@ -336,7 +323,6 @@ type OptionsVisitor interface {
 	GetInvalidServiceAnnotations() []string
 	GetURIUsingGRPCWithoutPackage() bool
 	GetStrictMode() bool
-	GetStrictNamingMode() bool
 	GetQueryPathMapping() map[string]string
 	GetDefaultQueryPath() string
 	GetForceGrpcStyle() bool
