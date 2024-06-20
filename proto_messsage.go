@@ -1,12 +1,11 @@
 package protokit
 
 import (
-	"strings"
-
+	"buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
+	"github.com/jhump/protoreflect/desc"
 	protokit2 "github.com/sandwich-go/protokit/option/gen/golang/protokit"
 	"google.golang.org/protobuf/proto"
-
-	"github.com/jhump/protoreflect/desc"
+	"strings"
 )
 
 type ProtoMessage struct {
@@ -20,6 +19,7 @@ type ProtoMessage struct {
 	ImportSet                     *ImportSet
 	Store                         map[interface{}]interface{}
 	Parser                        *Parser
+	ValidateOptions               *validate.MessageConstraints
 }
 
 func NewProtoMessage(pf *ProtoFile, md *desc.MessageDescriptor) *ProtoMessage {
@@ -32,6 +32,9 @@ func NewProtoMessage(pf *ProtoFile, md *desc.MessageDescriptor) *ProtoMessage {
 		ImportSet:                     NewImportSet(pf.GolangPackageName, pf.GolangPackagePath),
 		Store:                         map[interface{}]interface{}{},
 	}
+	if o, ok := proto.GetExtension(md.AsDescriptorProto().GetOptions(), validate.E_Message).(*validate.MessageConstraints); ok {
+		pm.ValidateOptions = o
+	}
 	return pm
 }
 
@@ -41,6 +44,18 @@ func (p *Parser) BuildProtoMessage(pf *ProtoFile, md *desc.MessageDescriptor) *P
 	pm.Comment = p.comments[pm.md.AsDescriptorProto()]
 	pm.Parser = p
 	return pm
+}
+
+func (pm *ProtoMessage) HasValidateOption() bool {
+	if pm.ValidateOptions != nil {
+		return true
+	}
+	for _, f := range pm.Fields {
+		if f.ValidateOptions != nil {
+			return true
+		}
+	}
+	return false
 }
 
 func (pm *ProtoMessage) AddToStore(k, v interface{})                  { pm.Store[k] = v }

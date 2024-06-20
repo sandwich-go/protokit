@@ -1,12 +1,10 @@
 package protokit
 
-const ValidateComment = "validate"
-
 func (p *Parser) filterValidatorMessage() map[string]*ProtoMessage {
 	msgs := make(map[string]*ProtoMessage)
 	for _, protoFile := range p.protoFilePathToProtoFile {
 		for _, msg := range protoFile.Messages {
-			if msg.HasCommentField(ValidateComment) {
+			if msg.HasValidateOption() {
 				msgs[msg.dotFullyQualifiedTypeName] = msg
 			}
 		}

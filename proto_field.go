@@ -1,6 +1,7 @@
 package protokit
 
 import (
+	"buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
 	"fmt"
 	"github.com/jhump/protoreflect/desc"
 	"github.com/sandwich-go/boost/xstrings"
@@ -92,13 +93,14 @@ var protoFieldTypeNameMapping = map[descriptorpb.FieldDescriptorProto_Type]Proto
 }
 
 type ProtoField struct {
-	fd            *desc.FieldDescriptor
-	RawName       string
-	Name          string   // proto field name
-	Comment       *Comment // 注释
-	Label         Label    // Label类型
-	KeyTypeName   string   // key的proto type name
-	ValueTypeName string   // value的proto type name（如果是map的话）
+	fd              *desc.FieldDescriptor
+	RawName         string
+	Name            string   // proto field name
+	Comment         *Comment // 注释
+	Label           Label    // Label类型
+	KeyTypeName     string   // key的proto type name
+	ValueTypeName   string   // value的proto type name（如果是map的话）
+	ValidateOptions *validate.FieldConstraints
 }
 
 func NewProtoField(pf *ProtoFile, fd *desc.FieldDescriptor) *ProtoField {
@@ -112,6 +114,9 @@ func NewProtoField(pf *ProtoFile, fd *desc.FieldDescriptor) *ProtoField {
 func (p *Parser) BuildProtoField(pf *ProtoFile, fd *desc.FieldDescriptor) *ProtoField {
 	f := NewProtoField(pf, fd)
 	f.Comment = p.comments[fd.AsFieldDescriptorProto()]
+	if o, ok := proto.GetExtension(fd.AsFieldDescriptorProto().GetOptions(), validate.E_Field).(*validate.FieldConstraints); ok {
+		f.ValidateOptions = o
+	}
 	switch fd.GetLabel() {
 	case descriptorpb.FieldDescriptorProto_LABEL_OPTIONAL, descriptorpb.FieldDescriptorProto_LABEL_REQUIRED:
 		f.Label = LabelOptional
