@@ -235,6 +235,7 @@ const (
 	NamespaceProtokit = "protokit" // protokit sdk
 	NamespaceUser     = "user"     // user proto files
 	NamespaceClaim    = "claim"
+	NamespaceValidate = "validate"
 )
 
 // NamespaceMessageRegistryPackageName namespace根目录下聚合message注册的包名
