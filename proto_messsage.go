@@ -20,6 +20,7 @@ type ProtoMessage struct {
 	Store                         map[interface{}]interface{}
 	Parser                        *Parser
 	ValidateOptions               *validate.MessageConstraints
+	hasValidateOption             *bool
 }
 
 func NewProtoMessage(pf *ProtoFile, md *desc.MessageDescriptor) *ProtoMessage {
@@ -47,15 +48,24 @@ func (p *Parser) BuildProtoMessage(pf *ProtoFile, md *desc.MessageDescriptor) *P
 }
 
 func (pm *ProtoMessage) HasValidateOption() bool {
-	if pm.ValidateOptions != nil {
-		return true
+	if pm.hasValidateOption != nil {
+		return *pm.hasValidateOption
 	}
-	for _, f := range pm.Fields {
-		if f.ValidateOptions != nil {
-			return true
+	var hasValidateOption bool
+	defer func() {
+		pm.hasValidateOption = &hasValidateOption
+	}()
+	if pm.ValidateOptions != nil {
+		hasValidateOption = true
+	} else {
+		for _, f := range pm.Fields {
+			if f.ValidateOptions != nil {
+				hasValidateOption = true
+				break
+			}
 		}
 	}
-	return false
+	return hasValidateOption
 }
 
 func (pm *ProtoMessage) AddToStore(k, v interface{})                  { pm.Store[k] = v }
