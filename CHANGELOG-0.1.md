@@ -1,4 +1,202 @@
-### v0.1.12 🌈 (2024-04-02 15:48:02)
+### v0.1.43 🌈 (2024-06-28 19:31:52)
+
+#### 🐛  Bug Fixed
+  * blank import ([9880c1b](https://github.com/sandwich-go/protokit/commit/9880c1b6c35edc786e64aa6de48286f9ed3ce492)) (<small>[hui.wang](hui.wang@centurygame.com)@2024-06-28 19:31:52 &#43;0800 &#43;0800</small>)
+
+### v0.1.42 (2024-06-28 17:21:58)
+
+#### 🐛  Bug Fixed
+  * rpc action method 覆盖 service option ([c6a5477](https://github.com/sandwich-go/protokit/commit/c6a547792b97e707ee0b800f0c7ebc812a7a6958)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-06-28 17:21:58 &#43;0800 &#43;0800</small>)
+
+### v0.1.41 (2024-06-26 10:56:09)
+
+#### 🛠  Refactor
+  * 移除 error option 定义 ([bc9eba6](https://github.com/sandwich-go/protokit/commit/bc9eba6266869944485ac46b36de91e72b687185)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-06-26 10:56:09 &#43;0800 &#43;0800</small>)
+
+### v0.1.40 (2024-06-21 11:14:27)
+
+#### 🛠  Refactor
+  * 优化 HasValidateOption 函数 ([f88eb53](https://github.com/sandwich-go/protokit/commit/f88eb533363904b7045e8334572d47cd8cc56122)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-06-21 11:14:27 &#43;0800 &#43;0800</small>)
+
+### v0.1.39 (2024-06-20 19:17:44)
+
+#### 🚀  New Feature
+  * validate 支持 option 方式 ([ae24059](https://github.com/sandwich-go/protokit/commit/ae240593fbbbc9f9d1feafb6e382ce023382b02d)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-06-20 19:17:44 &#43;0800 &#43;0800</small>)
+
+### v0.1.38 (2024-06-20 14:58:00)
+
+#### 🚀  New Feature
+  * 增加 namespace ([52d50a5](https://github.com/sandwich-go/protokit/commit/52d50a5ec8df6026066bd8ff044645162f523664)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-06-20 14:58:00 &#43;0800 &#43;0800</small>)
+
+#### 💪  Commit
+  * fix:去掉配置 ([5e3fd89](https://github.com/sandwich-go/protokit/commit/5e3fd892de0cfdcf3297852efc07bea25c2e555b)) (<small>[lanwangjinghui](wangjinghui.lan@centurygames.com)@2024-06-19 19:00:59 &#43;0800 &#43;0800</small>)
+
+### v0.1.37 (2024-06-19 18:19:26)
+
+#### 🐛  Bug Fixed
+  * alert_silent 单词错误 ([1385a8a](https://github.com/sandwich-go/protokit/commit/1385a8a1e6afa4f17d389bd5dce388f7c6b8aa4f)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-06-12 12:42:46 &#43;0800 &#43;0800</small>)
+
+#### 🚀  New Feature
+  * lock 增加分布式锁 ([4f46aff](https://github.com/sandwich-go/protokit/commit/4f46aff339c9800c6a8dd9a9e4c8e3f575d81d96)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-06-17 10:51:39 &#43;0800 &#43;0800</small>)
+
+#### 🛠  Refactor
+  * 编译 option ([79a1219](https://github.com/sandwich-go/protokit/commit/79a121922cdd407831cb36f8b47ccd4526883880)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-06-18 16:28:37 &#43;0800 &#43;0800</small>)
+
+#### 💪  Commit
+  * feat:新增命名规范选项 ([d2fdf25](https://github.com/sandwich-go/protokit/commit/d2fdf253fa60c8ca27ae503fe0357e85bd6014ea) , [f02eddf](https://github.com/sandwich-go/protokit/commit/f02eddfaa751f7de9b100a70a9804d1be2915d97)) (<small>[lanwangjinghui](wangjinghui.lan@centurygames.com)@2024-06-19 18:19:26 &#43;0800 &#43;0800</small>)
+
+### v0.1.36 (2024-05-27 21:34:17)
+
+#### 🐛  Bug Fixed
+  * 修复属性名 'xxx_数字_数字' 错误 ([784a7ba](https://github.com/sandwich-go/protokit/commit/784a7ba5e515dfdfe5ca7efbcf21f97297b9ec9a)) (<small>[祝黄清](huangqing.zhu@centurygame.com)@2024-05-27 21:34:17 &#43;0800 &#43;0800</small>)
+
+### v0.1.35 (2024-05-23 12:54:54)
+
+#### 🐛  Bug Fixed
+  * golang field '__' prefix error ([7bdf9cc](https://github.com/sandwich-go/protokit/commit/7bdf9cc9cdb0a5cda83df741e10fb29877a9ae8b)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-05-23 12:54:54 &#43;0800 &#43;0800</small>)
+
+### v0.1.34 (2024-05-23 10:55:00)
+
+#### 🛠  Refactor
+  * unique group 更改为 repeated group ([e9642cc](https://github.com/sandwich-go/protokit/commit/e9642ccc4f3583169927894ec5baf4d9a84f7963)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-05-23 10:55:00 &#43;0800 &#43;0800</small>)
+
+### v0.1.33 (2024-05-16 12:57:58)
+
+#### 🚀  New Feature
+  * actor method增加兼容判断 ([394d677](https://github.com/sandwich-go/protokit/commit/394d6770ff6af0adeb82fdb575517952904e3596)) (<small>[zhengyang.zhu](zhengyang.zhu@centurygame.com)@2024-05-16 12:57:58 &#43;0800 &#43;0800</small>)
+
+### v0.1.32 (2024-05-14 19:52:50)
+
+#### 🚀  New Feature
+  * add ForceGrpcStyle option ([8049011](https://github.com/sandwich-go/protokit/commit/8049011b1841d1f19bd7e88b90b54b73849d6e5e)) (<small>[zhengyang.zhu](zhengyang.zhu@centurygame.com)@2024-05-14 19:52:50 &#43;0800 &#43;0800</small>)
+
+### v0.1.31 (2024-05-14 19:08:04)
+
+#### 🚀  New Feature
+  * add grpc_style ([8c962bd](https://github.com/sandwich-go/protokit/commit/8c962bd5a664b351c30afcf72caa6dd977887e74)) (<small>[zhengyang.zhu](zhengyang.zhu@centurygame.com)@2024-05-14 19:08:04 &#43;0800 &#43;0800</small>)
+
+### v0.1.30 (2024-05-14 11:58:29)
+
+#### 🚀  New Feature
+  * 增加 claim protocol 特殊处理 ([a3dd7da](https://github.com/sandwich-go/protokit/commit/a3dd7da6f26052d47b29a6fafd9cdb3e25450167)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-05-14 11:58:29 &#43;0800 &#43;0800</small>)
+
+### v0.1.29 (2024-05-09 18:00:36)
+
+#### 🚀  New Feature
+  * 增加 char 类型 ([e860c8f](https://github.com/sandwich-go/protokit/commit/e860c8f5de1bac22af828dcc5cb8f2df4d9299e4)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-05-09 18:00:36 &#43;0800 &#43;0800</small>)
+
+### v0.1.28 (2024-05-09 13:13:41)
+
+#### 🚀  New Feature
+  * 增加 alter silent option ([d4f7bf6](https://github.com/sandwich-go/protokit/commit/d4f7bf68c357d08a5cec4cb964726d9935a48520)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-05-09 13:13:41 &#43;0800 &#43;0800</small>)
+
+### v0.1.27 (2024-05-08 16:53:26)
+
+#### 🚀  New Feature
+  * 枚举类型增加option ([1d0222f](https://github.com/sandwich-go/protokit/commit/1d0222f9525e26daf4ae8e9f3e78345ed609dc5d)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-05-08 16:53:26 &#43;0800 &#43;0800</small>)
+
+### v0.1.26 (2024-05-07 12:45:37)
+
+#### 🚀  New Feature
+  * **option**: 增加 no_log ([1cf3061](https://github.com/sandwich-go/protokit/commit/1cf3061e9201acb2d5b40c6eedab13bfc0d35286)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-05-07 12:45:37 &#43;0800 &#43;0800</small>)
+
+### v0.1.25 (2024-04-24 12:38:23)
+
+#### 🐛  Bug Fixed
+  * 覆盖问题 ([f645d07](https://github.com/sandwich-go/protokit/commit/f645d07ece621d90da5a8232a6518f24d1c2a652)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-04-24 12:38:23 &#43;0800 &#43;0800</small>)
+
+### v0.1.24 (2024-04-24 11:24:56)
+
+#### 🤖  Tools
+  * quit 方法遗漏 ([2954fc2](https://github.com/sandwich-go/protokit/commit/2954fc2e056f5699052ffa5d4c0f58f9120bdca0)) (<small>[jianwei.ma](jianwei.ma@centurygame.com)@2024-04-24 11:24:56 &#43;0800 &#43;0800</small>)
+
+### v0.1.23 (2024-04-23 14:29:50)
+
+#### 🤖  Tools
+  * actor quit 标记 ([676e2ab](https://github.com/sandwich-go/protokit/commit/676e2ab4520c4eec23d0ab4ee7c4b0b112afdafb)) (<small>[jianwei.ma](jianwei.ma@centurygame.com)@2024-04-23 14:29:50 &#43;0800 &#43;0800</small>)
+
+### v0.1.22 (2024-04-23 11:01:35)
+
+#### 🚀  New Feature
+  * bean 支持 dynamic ([913ae44](https://github.com/sandwich-go/protokit/commit/913ae444964f7534be5b4ac0cc66dd492cf7edab)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-04-23 11:01:35 &#43;0800 &#43;0800</small>)
+
+### v0.1.21 (2024-04-22 12:51:52)
+
+#### 🛠  Refactor
+  * bean 改为对象 ([711b88d](https://github.com/sandwich-go/protokit/commit/711b88d1d3473775c9881b514bef5905f0ae2843)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-04-22 12:51:52 &#43;0800 &#43;0800</small>)
+
+### v0.1.20 (2024-04-22 10:54:37)
+
+#### 🚀  New Feature
+  * 移除 job 依赖 ([c411eb8](https://github.com/sandwich-go/protokit/commit/c411eb86168519765e43febd9b1fb4f8f8e1d158)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-04-22 10:54:37 &#43;0800 &#43;0800</small>)
+
+### v0.1.19 (2024-04-19 18:20:07)
+
+#### 💪  Commit
+  * actor reentrant ([c6ae470](https://github.com/sandwich-go/protokit/commit/c6ae4705ee790624e63c44d62715e717d6963492)) (<small>[zhengyang.zhu](zhengyang.zhu@centurygame.com)@2024-04-19 18:20:07 &#43;0800 &#43;0800</small>)
+
+### v0.1.18 (2024-04-19 18:10:34)
+
+#### 🚀  New Feature
+  * 支持 alias ([672307a](https://github.com/sandwich-go/protokit/commit/672307ae9f046187f571f8a4681da308a98b8816)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-04-19 18:10:34 &#43;0800 &#43;0800</small>)
+
+### v0.1.17 (2024-04-19 17:02:00)
+
+#### 🚀  New Feature
+  * 增加 job 相关 orm ([022d077](https://github.com/sandwich-go/protokit/commit/022d077064da4d88d0d524198879380a34f1822f)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-04-19 16:02:21 &#43;0800 &#43;0800</small>)
+  * 增加 job 相关orm ([b6a5e8d](https://github.com/sandwich-go/protokit/commit/b6a5e8d1b6e053bdfb5813ee0caa06dfe66be90e)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-04-19 11:26:33 &#43;0800 &#43;0800</small>)
+
+#### 🛠  Refactor
+  * 重新编译 ([47bebfa](https://github.com/sandwich-go/protokit/commit/47bebfa795d63097cfab67b95ac086ec5c65da31)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-04-19 12:15:44 &#43;0800 &#43;0800</small>)
+  * 编译 ([d4a2f99](https://github.com/sandwich-go/protokit/commit/d4a2f9975ea67abcdc37107de069a7773f9f0389)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-04-19 12:03:50 &#43;0800 &#43;0800</small>)
+
+#### 💪  Commit
+  * feat ([d49238f](https://github.com/sandwich-go/protokit/commit/d49238f63907d3880712f94d0ddb57ac9f7440f0)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-04-19 17:02:00 &#43;0800 &#43;0800</small>)
+  * update option/build.sh ([8158bce](https://github.com/sandwich-go/protokit/commit/8158bce3bdf658a9a1577cba8b256f804cf738ed)) (<small>[zhengyang.zhu](zhengyang.zhu@centurygame.com)@2024-04-19 12:00:14 &#43;0800 &#43;0800</small>)
+
+### v0.1.16 (2024-04-17 16:13:03)
+
+#### 🛠  Refactor
+  * 错别字 ([a1351c8](https://github.com/sandwich-go/protokit/commit/a1351c82f43e103e434a9fbe002aadef0cde4148) , [e567f99](https://github.com/sandwich-go/protokit/commit/e567f992ab586d78aae99fb0457dea7ceb63b972)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-04-17 16:13:03 &#43;0800 &#43;0800</small>)
+
+### v0.1.15 (2024-04-17 14:31:52)
+
+#### 🚀  New Feature
+  * 增加意向锁 ([6bbd861](https://github.com/sandwich-go/protokit/commit/6bbd861e4b6d3d59efb4104e0d61e6fe2d3e8426)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-04-17 14:31:52 &#43;0800 &#43;0800</small>)
+  * 增加 version 属性标签 ([9cb4015](https://github.com/sandwich-go/protokit/commit/9cb4015f95123e49a2d721a93afca530ad3d02d7)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-04-12 18:45:41 &#43;0800 &#43;0800</small>)
+  * 增加 field option shard ([4316d0f](https://github.com/sandwich-go/protokit/commit/4316d0fdf3efa6bfeb46a79834447bf26e3996e2)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-04-12 14:14:22 &#43;0800 &#43;0800</small>)
+  * 增加 no_sync 属性 ([054a87e](https://github.com/sandwich-go/protokit/commit/054a87eaccec9aedb29b18ac46d7a8ddf677b909)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-04-11 15:43:38 &#43;0800 &#43;0800</small>)
+  * 更新 orm ([d5bc649](https://github.com/sandwich-go/protokit/commit/d5bc649e0b6ab7c87075681e1978f35dfd7bf939)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-04-09 19:37:04 &#43;0800 &#43;0800</small>)
+
+#### 🛠  Refactor
+  * 修改命名 ([1062f83](https://github.com/sandwich-go/protokit/commit/1062f83fcea112ff212d4d90c7b6c1972d8a2811)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-04-11 09:41:26 &#43;0800 &#43;0800</small>)
+  * 移除 LockAfter ([6994da5](https://github.com/sandwich-go/protokit/commit/6994da5968f742bd4c5c4fa6d87d48882e35ed20)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-04-09 16:17:34 &#43;0800 &#43;0800</small>)
+  * 整理 orm option ([cb99c8a](https://github.com/sandwich-go/protokit/commit/cb99c8acad3b90e63ab3a06fb16f2cb69910f220) , [f397f3d](https://github.com/sandwich-go/protokit/commit/f397f3dd69d505c5e71dca87fb8b88b6455c8361)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-04-08 19:00:28 &#43;0800 &#43;0800</small>)
+
+#### 💪  Commit
+  * LockAfter ([f8b59a2](https://github.com/sandwich-go/protokit/commit/f8b59a25d7911b5db27ea2d8f2a14ef241f4c830)) (<small>[zhengyang.zhu](zhengyang.zhu@centurygame.com)@2024-04-07 16:39:03 &#43;0800 &#43;0800</small>)
+
+### v0.1.14 (2024-04-07 15:13:40)
+
+#### 🐛  Bug Fixed
+  * 修复 go field 错误 ([77625af](https://github.com/sandwich-go/protokit/commit/77625afd9a413d6f93622c4588148d883ced5bbd)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-04-07 15:13:40 &#43;0800 &#43;0800</small>)
+
+### v0.1.13 (2024-04-03 20:47:37)
+
+#### 🚀  New Feature
+  * message 增加 parser ([99a121c](https://github.com/sandwich-go/protokit/commit/99a121ceb947ca388a995d4fef289a14ee8da9f0)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-04-03 20:47:37 &#43;0800 &#43;0800</small>)
+  * message 增加自定义的 store ([dcea89b](https://github.com/sandwich-go/protokit/commit/dcea89b10593bcd984b795f1356d8151fe653e13)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-04-03 12:53:04 &#43;0800 &#43;0800</small>)
+
+#### 🤖  Tools
+  * **sem**: make changelog ([3be46f5](https://github.com/sandwich-go/protokit/commit/3be46f5e2f6985e6f13ccb6009d0fb7f0c806aa2)) (<small>[zhengyang.zhu](zhengyang.zhu@centurygame.com)@2024-04-02 15:48:26 &#43;0800 &#43;0800</small>)
+
+#### 💪  Commit
+  * mod tidy ([25dba0c](https://github.com/sandwich-go/protokit/commit/25dba0c3df8c2650ae3eee02713df5990883bcfc)) (<small>[zhengyang.zhu](zhengyang.zhu@centurygame.com)@2024-04-03 15:49:38 &#43;0800 &#43;0800</small>)
+  * feat:标签改名字 ([f3b9b26](https://github.com/sandwich-go/protokit/commit/f3b9b266a429797182cbb67ea793c2afb11e88aa)) (<small>[mask3000](mask3000@users.noreply.github.com)@2024-04-03 14:09:44 &#43;0800 &#43;0800</small>)
+  * feat:可同步数据标签 ([8a99ee4](https://github.com/sandwich-go/protokit/commit/8a99ee46d72fa3b26105c1e88a2e4d281e1c3315)) (<small>[mask3000](mask3000@users.noreply.github.com)@2024-04-03 12:56:40 &#43;0800 &#43;0800</small>)
+  * update orm ([87b4acb](https://github.com/sandwich-go/protokit/commit/87b4acb87ea2f2a23be80ce6849bda833a13d54e)) (<small>[zhengyang.zhu](zhengyang.zhu@centurygame.com)@2024-04-02 17:56:52 &#43;0800 &#43;0800</small>)
+
+### v0.1.12 (2024-04-02 15:48:02)
 
 #### 🚀  New Feature
   * protokit/rpc.proto ([3796ea4](https://github.com/sandwich-go/protokit/commit/3796ea4ebfdc602475141c709e9dace902ef3566)) (<small>[zhengyang.zhu](zhengyang.zhu@centurygame.com)@2024-04-02 14:43:27 &#43;0800 &#43;0800</small>)
