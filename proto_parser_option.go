@@ -131,19 +131,43 @@ func (so *methodOptionAnnotation) Bool(key string, defaultVal ...bool) (bool, er
 	}
 	switch key {
 	case ServiceTagActor:
-		return so.Actor || dft, nil
+		if so.Actor == nil {
+			// 没有配置
+			return dft, nil
+		}
+		return *so.Actor, nil
 	case ServiceTagERPC:
-		return so.Erpc || dft, nil
+		if so.Erpc == nil {
+			// 没有配置
+			return dft, nil
+		}
+		return *so.Erpc, nil
 	case ServiceTagRPC:
-		return so.Rpc || dft, nil
+		if so.Rpc == nil {
+			// 没有配置
+			return dft, nil
+		}
+		return *so.Rpc, nil
 	case Tell:
-		return (so.AskTell == protokit2.MethodAskType_TELL) || dft, nil
+		if so.AskTell == nil {
+			// 没有配置
+			return dft, nil
+		}
+		return *so.AskTell == protokit2.MethodAskType_TELL, nil
 	case ActorAskReentrant:
-		return so.ActorAskReentrant, nil
+		if so.ActorAskReentrant == nil {
+			// 没有配置
+			return dft, nil
+		}
+		return *so.ActorAskReentrant, nil
 	case ServiceTagQuit:
 		return so.Quit, nil
 	case GrpcStyle:
-		return so.GrpcStyle || dft, nil
+		if so.GrpcStyle == nil {
+			// 没有配置
+			return dft, nil
+		}
+		return *so.GrpcStyle, nil
 	default:
 		panic(fmt.Sprintf("RpcMethodOptions get bool unknown key: %s", key))
 	}

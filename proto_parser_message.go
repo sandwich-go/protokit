@@ -40,7 +40,7 @@ func (p *Parser) parseProtoFileMessage(pf *ProtoFile, md *desc.MessageDescriptor
 	}
 	pm := p.BuildProtoMessage(pf, md)
 	for _, f := range md.GetFields() {
-		protoField := p.BuildProtoField(pf, f)
+		protoField := p.BuildProtoField(pf, pm, f)
 		pm.Fields = append(pm.Fields, protoField)
 		// 解析import
 		_, _ = p.addImportByDotFullyQualifiedTypeName(protoField.KeyTypeName, pm.ImportSet)

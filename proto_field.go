@@ -93,6 +93,7 @@ var protoFieldTypeNameMapping = map[descriptorpb.FieldDescriptorProto_Type]Proto
 }
 
 type ProtoField struct {
+	mm              *ProtoMessage
 	fd              *desc.FieldDescriptor
 	RawName         string
 	Name            string   // proto field name
@@ -103,16 +104,17 @@ type ProtoField struct {
 	ValidateOptions *validate.FieldConstraints
 }
 
-func NewProtoField(pf *ProtoFile, fd *desc.FieldDescriptor) *ProtoField {
+func NewProtoField(pf *ProtoFile, pm *ProtoMessage, fd *desc.FieldDescriptor) *ProtoField {
 	return &ProtoField{
+		mm:      pm,
 		RawName: fd.GetName(),
 		Name:    GoFieldName(fd.GetName()),
 		fd:      fd,
 	}
 }
 
-func (p *Parser) BuildProtoField(pf *ProtoFile, fd *desc.FieldDescriptor) *ProtoField {
-	f := NewProtoField(pf, fd)
+func (p *Parser) BuildProtoField(pf *ProtoFile, pm *ProtoMessage, fd *desc.FieldDescriptor) *ProtoField {
+	f := NewProtoField(pf, pm, fd)
 	f.Comment = p.comments[fd.AsFieldDescriptorProto()]
 	if o, ok := proto.GetExtension(fd.AsFieldDescriptorProto().GetOptions(), validate.E_Field).(*validate.FieldConstraints); ok {
 		f.ValidateOptions = o
@@ -196,8 +198,8 @@ func (pf *ProtoField) OrmFieldAlias() *OrmFieldAlias {
 
 func (pf *ProtoField) OrmNoLog() bool {
 	opts := pf.GetOrmField()
-	if opts == nil {
-		return false
+	if opts == nil || opts.NoLog == nil {
+		return pf.mm.OrmNoLog()
 	}
-	return opts.GetNoLog()
+	return *opts.NoLog
 }
