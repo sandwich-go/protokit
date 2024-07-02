@@ -146,10 +146,10 @@ func (p *Parser) method(
 
 	method.FullPathHTTPConstName = fmt.Sprintf("%s_%s_FullPathHTTP", serviceName, method.Name)
 
-	method.TypeInputGRPCConstName = fmt.Sprintf("%s_%s_FullGRPCName", serviceName, method.Name)
+	method.TypeInputGRPCConstName = fmt.Sprintf("%s_%s_GRPC_URI", serviceName, method.Name)
 	method.TypeInputAlias = strings.TrimSpace(nameAlias)
 	// {service}_{method}_FullMethodName
-	method.TypeInputAliasConstName = fmt.Sprintf("%s_%s_FullMethodName", serviceName, method.Name)
+	method.TypeInputAliasConstName = fmt.Sprintf("%s_%s_Method_URI", serviceName, method.Name)
 
 	method.LangOffTag = strings.Split(anMethod.String(LangOff), ",")
 	return method
