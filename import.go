@@ -60,7 +60,7 @@ func (e *ImportSet) Add(add *Import) {
 			break
 		}
 		// path不同但是package name相同，起别名
-		if i.GolangPackageName == add.GolangPackageName {
+		if i.GolangPackageName == add.GolangPackageName && i.GolangPackageName != "_" {
 			add.GolangPackageName = fmt.Sprintf("%s%d", add.GolangPackageName, e.importAliasMappingCount[originalName])
 			e.onGolangPackageNameChange(add)
 		}
