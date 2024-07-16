@@ -25,6 +25,7 @@ func TestProto(t *testing.T) {
 			{rawName: "____tags_3_3", golangName: "X__Tags_3_3"},
 			{rawName: "param1_args1", golangName: "Param1Args1"},
 			{rawName: "param1__args1", golangName: "Param1_Args1"},
+			{rawName: "xxx_ref_key_Int", golangName: "XxxRefKey_Int"},
 		} {
 			So(GoFieldName(test.rawName), ShouldEqual, test.golangName)
 		}
