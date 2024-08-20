@@ -1,4 +1,53 @@
-### v0.1.43 🌈 (2024-06-28 19:31:52)
+### v0.1.50 🌈 (2024-08-20 12:27:43)
+
+#### 🛠  Refactor
+  * erpc默认不生成rpc方法 ([303a6ec](https://github.com/sandwich-go/protokit/commit/303a6ec48155aeb842556e7ad625b3dd2d9cb6f2)) (<small>[Daming Yang](daming.yang@centurygame.com)@2024-08-20 12:27:43 &#43;0800 &#43;0800</small>)
+
+### v0.1.49 (2024-07-31 10:03:46)
+
+#### 🚀  New Feature
+  * 增加 no_nil ([8564699](https://github.com/sandwich-go/protokit/commit/8564699b84c8cc94cfa5a3f58a5f8d6eda91d5da)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-07-31 10:03:46 &#43;0800 &#43;0800</small>)
+
+### v0.1.48 (2024-07-19 13:04:03)
+
+#### 🚀  New Feature
+  * 增加 gmt dynamic ([b8838bc](https://github.com/sandwich-go/protokit/commit/b8838bcb74e9af830b5b4c807e8c7d20e527359b)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-07-19 13:04:03 &#43;0800 &#43;0800</small>)
+  * 增加 tags 支持 ([bb77941](https://github.com/sandwich-go/protokit/commit/bb7794169842b9693ef59acb67a658a78a9681e7)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-07-19 12:57:58 &#43;0800 &#43;0800</small>)
+
+#### 🧪  Testing
+  * 增加test ([6749e28](https://github.com/sandwich-go/protokit/commit/6749e2806fb6dc209bcf1616a8ce18d2abdb0854)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-07-16 14:48:06 &#43;0800 &#43;0800</small>)
+
+#### 💪  Commit
+  * feat:添加dynamic_keys ([bcf8561](https://github.com/sandwich-go/protokit/commit/bcf85617ec34d66aa2741415bbdbc2853d5f447f)) (<small>[lanwangjinghui](wangjinghui.lan@centurygames.com)@2024-07-15 17:11:50 &#43;0800 &#43;0800</small>)
+
+### v0.1.47 (2024-07-08 16:03:37)
+
+#### 🚀  New Feature
+  * 增加 field option chunking ([e0c7527](https://github.com/sandwich-go/protokit/commit/e0c7527683499d5d700cf57ae5128dd63f91f5ee)) (<small>[lanwangjinghui](wangjinghui.lan@centurygames.com)@2024-07-08 16:03:37 &#43;0800 &#43;0800</small>)
+  * 增加 field option  chunking ([cd3f626](https://github.com/sandwich-go/protokit/commit/cd3f6262e1e089995143c9db0e160bbcc092d4bd)) (<small>[lanwangjinghui](wangjinghui.lan@centurygames.com)@2024-07-08 15:56:25 &#43;0800 &#43;0800</small>)
+
+### v0.1.46 (2024-07-02 15:36:16)
+
+#### 🚀  New Feature
+  * 整理Path ([51f2790](https://github.com/sandwich-go/protokit/commit/51f279027068dfbef636e50af0abc93423f87319)) (<small>[lanwangjinghui](wangjinghui.lan@centurygames.com)@2024-07-02 15:36:16 &#43;0800 &#43;0800</small>)
+
+### v0.1.45 (2024-07-02 11:55:15)
+
+#### 🚀  New Feature
+  * 增加 ttl field option ([9ec1224](https://github.com/sandwich-go/protokit/commit/9ec122450bc826f34c22db4a1347b8fac72af424)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-07-02 11:55:15 &#43;0800 &#43;0800</small>)
+
+### v0.1.44 (2024-07-02 11:41:46)
+
+#### 🚀  New Feature
+  * 增加 ttl field option ([37852b7](https://github.com/sandwich-go/protokit/commit/37852b7bbc97ce5b81438ac09389352719b195fc)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-07-02 11:41:26 &#43;0800 &#43;0800</small>)
+
+#### 🤖  Tools
+  * **sem**: make changelog ([2f694fe](https://github.com/sandwich-go/protokit/commit/2f694feff65993c5e324dd546777e9d43a7cf50b)) (<small>[hui.wang](hui.wang@centurygame.com)@2024-06-28 19:32:09 &#43;0800 &#43;0800</small>)
+
+#### 💪  Commit
+  * Merge branch '0.1/release' of github.com:sandwich-go/protokit into 0.1/release ([b503da3](https://github.com/sandwich-go/protokit/commit/b503da3f8967801a33fdc629341ec8e81b2955a9)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-07-02 11:41:46 &#43;0800 &#43;0800</small>)
+
+### v0.1.43 (2024-06-28 19:31:52)
 
 #### 🐛  Bug Fixed
   * blank import ([9880c1b](https://github.com/sandwich-go/protokit/commit/9880c1b6c35edc786e64aa6de48286f9ed3ce492)) (<small>[hui.wang](hui.wang@centurygame.com)@2024-06-28 19:31:52 &#43;0800 &#43;0800</small>)
