@@ -160,9 +160,9 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 			isERPCMethod, _ := anMethod.Bool(ServiceTagERPC, isERPCService)
 			var isRPCMethod bool
 			// 张洛算法：
-			// 指定了actor的method不生成rpc
+			// 指定了actor/erpc的method不生成rpc
 			// 除非method或service里明确指定了rpc
-			if isActorMethod && !isRPCService {
+			if (isActorMethod || isERPCMethod) && !isRPCService {
 				isRPCMethod, _ = anMethod.Bool(ServiceTagRPC, false)
 			} else {
 				isRPCMethod, _ = anMethod.Bool(ServiceTagRPC, isRPCServiceWithRevision)
