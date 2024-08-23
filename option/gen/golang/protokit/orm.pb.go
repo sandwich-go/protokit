@@ -625,9 +625,9 @@ type OrmFieldOptions struct {
 	Tags map[string]string `protobuf:"bytes,34,rep,name=tags,proto3" json:"tags,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// 标记不为空，即从数据库返回时，若没有数据，也不会空
 	NoNil bool `protobuf:"varint,35,opt,name=no_nil,json=noNil,proto3" json:"no_nil,omitempty"`
-	// 标记属性是gmt对应的create属性，这个属性值是数据插入的当前时间。属性类型必须与pb2db.gmt_field_type保持一致
+	// 标记属性是gmt对应的create属性，这个属性值是数据插入的当前时间。属性类型可以是字符串，可以是uint64 类型
 	GmtCreate bool `protobuf:"varint,36,opt,name=gmt_create,json=gmtCreate,proto3" json:"gmt_create,omitempty"`
-	// 标记属性是gmt对应的modified属性，这个属性值是数据被修改的当前时间。属性类型必须与pb2db.gmt_field_type保持一致
+	// 标记属性是gmt对应的modified属性，这个属性值是数据被修改的当前时间。属性类型可以是字符串，可以是uint64 类型
 	GmtModified bool `protobuf:"varint,37,opt,name=gmt_modified,json=gmtModified,proto3" json:"gmt_modified,omitempty"`
 }
 
