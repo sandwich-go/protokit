@@ -27,6 +27,7 @@ func (p *Parser) method(
 	isAskReentrant bool,
 	isQuit bool,
 	isGrpcStyle bool,
+	withBackOffice bool,
 ) *Method {
 	// Note:
 	// 这里只是简单的换算一次格式合法的名称，具体请求名要通过ImportSet进行纠正
@@ -65,6 +66,9 @@ func (p *Parser) method(
 		IsTell:                         isTell,
 		IsQuit:                         isQuit,
 		IsActorAskReentrant:            isAskReentrant,
+	}
+	if withBackOffice || method.BackOfficeOption != nil {
+		method.WithBackOffice = true
 	}
 	if methodComment, exist := p.comments[protoMethod]; exist && methodComment != nil {
 		method.Comment = methodComment.Content
@@ -151,6 +155,11 @@ func (p *Parser) method(
 	// {service}_{method}_FullMethodName
 	method.TypeInputAliasConstName = fmt.Sprintf("%s_%s_Method_URI", serviceName, method.Name)
 
+	//
+	if method.WithBackOffice {
+		method.FullPathHttpBackOfficeConstName = fmt.Sprintf("%s_%s_%s_FullPathHTTP", serviceName, method.Name, "BackOffice")
+		method.FullPathHttpBackOffice = standardFullPathHTTP(method.TypeInputAlias, "/backoffice")
+	}
 	method.LangOffTag = strings.Split(anMethod.String(LangOff), ",")
 	return method
 }

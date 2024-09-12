@@ -72,6 +72,10 @@ type Method struct {
 	FullPathHTTP          string // HTTP模式下的请求路径
 	FullPathHTTPConstName string // HTTP模式下的请求路径 const 名
 
+	// backoffice 协议模拟器 http 请求路径
+	FullPathHttpBackOffice          string
+	FullPathHttpBackOfficeConstName string
+
 	HTTPPathComment                string   // HTTP模式下的请求路径注释，来源
 	IsAsk                          bool     // 是否为Ask方法
 	IsTell                         bool     // 是否为Tell方法
@@ -84,6 +88,7 @@ type Method struct {
 	TypeInputWithSelfPackage       string   // 只携带自身package信息
 	TypeOutputWithSelfPackage      string   // 只携带自身package信息
 	LangOffTag                     []string // 语言开启关闭标记
+	WithBackOffice                 bool     // 是否带有backoffice标记
 }
 
 func (m *Method) AsMethodDescriptor() *desc.MethodDescriptor { return m.md }

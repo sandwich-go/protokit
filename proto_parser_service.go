@@ -193,12 +193,13 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 			if isTell {
 				isAsk = false
 			}
+			withBackOffice := service.BackOfficeOption != nil
 			var m *Method
 			if service.IsJob {
 				jobMethodOption := getJobMethodOption(protoMethod)
 				if jobMethodOption != nil && jobMethodOption.Creator != nil {
 					if needJob {
-						m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], false, false, false, serviceUriAutoAlias, false, service.QueryPath, true, false, false, isGrpcStyle)
+						m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], false, false, false, serviceUriAutoAlias, false, service.QueryPath, true, false, false, isGrpcStyle, withBackOffice)
 						service.HasJobCreatorMethod = true
 						service.Methods = append(service.Methods, m)
 					}
@@ -206,21 +207,21 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 			}
 			if isActorMethod {
 				if needActor {
-					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], true, isAsk, isActorMethod, serviceUriAutoAlias, isERPCMethod, service.QueryPath, false, isAskReentrant, isQuit, isGrpcStyle)
+					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], true, isAsk, isActorMethod, serviceUriAutoAlias, isERPCMethod, service.QueryPath, false, isAskReentrant, isQuit, isGrpcStyle, withBackOffice)
 					service.Methods = append(service.Methods, m)
 					service.HasActorMethod = true
 				}
 			}
 			if isERPCMethod {
 				if needERPC {
-					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], isActorMethod, isAsk, isRPCMethod, serviceUriAutoAlias, isERPCMethod, service.QueryPath, false, false, false, isGrpcStyle)
+					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], isActorMethod, isAsk, isRPCMethod, serviceUriAutoAlias, isERPCMethod, service.QueryPath, false, false, false, isGrpcStyle, withBackOffice)
 					service.Methods = append(service.Methods, m)
 					service.HasERPCMethod = true
 				}
 			}
 			if isRPCMethod {
 				if needRPC {
-					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], false, isAsk, false, serviceUriAutoAlias, false, service.QueryPath, false, false, false, isGrpcStyle)
+					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], false, isAsk, false, serviceUriAutoAlias, false, service.QueryPath, false, false, false, isGrpcStyle, withBackOffice)
 					service.Methods = append(service.Methods, m)
 				}
 			}
