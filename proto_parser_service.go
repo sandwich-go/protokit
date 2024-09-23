@@ -158,6 +158,7 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 			isGrpcStyle, _ := anMethod.Bool(GrpcStyle, isServiceAllGrpcStyle)
 			isActorMethod, _ := anMethod.Bool(ServiceTagActor, isActorService)
 			isERPCMethod, _ := anMethod.Bool(ServiceTagERPC, isERPCService)
+
 			var isRPCMethod bool
 			// 张洛算法：
 			// 指定了actor/erpc的method不生成rpc
@@ -205,24 +206,36 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 					}
 				}
 			}
-			if isActorMethod {
-				if needActor {
-					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], true, isAsk, isActorMethod, serviceUriAutoAlias, isERPCMethod, service.QueryPath, false, isAskReentrant, isQuit, isGrpcStyle, withBackOffice)
-					service.Methods = append(service.Methods, m)
-					service.HasActorMethod = true
+
+			proxy := anMethod.String(CsProxyDefault, "None")
+			if st != ServiceTagJob && st != ServiceTagERPC && proxy != "None" {
+				m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], false, isAsk, false, serviceUriAutoAlias, false, service.QueryPath, false, false, false, isGrpcStyle, withBackOffice)
+				var rpcURI = m.TypeInputAlias
+				m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], true, isAsk, true, serviceUriAutoAlias, isERPCMethod, service.QueryPath, false, isAskReentrant, isQuit, isGrpcStyle, withBackOffice)
+				m.ProxyRPC = rpcURI
+				m.ProxyDefault = proxy
+				service.Methods = append(service.Methods, m)
+				service.HasActorMethod = true
+			} else {
+				if isActorMethod {
+					if needActor {
+						m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], true, isAsk, isActorMethod, serviceUriAutoAlias, isERPCMethod, service.QueryPath, false, isAskReentrant, isQuit, isGrpcStyle, withBackOffice)
+						service.Methods = append(service.Methods, m)
+						service.HasActorMethod = true
+					}
 				}
-			}
-			if isERPCMethod {
-				if needERPC {
-					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], isActorMethod, isAsk, isRPCMethod, serviceUriAutoAlias, isERPCMethod, service.QueryPath, false, false, false, isGrpcStyle, withBackOffice)
-					service.Methods = append(service.Methods, m)
-					service.HasERPCMethod = true
+				if isERPCMethod {
+					if needERPC {
+						m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], isActorMethod, isAsk, isRPCMethod, serviceUriAutoAlias, isERPCMethod, service.QueryPath, false, false, false, isGrpcStyle, withBackOffice)
+						service.Methods = append(service.Methods, m)
+						service.HasERPCMethod = true
+					}
 				}
-			}
-			if isRPCMethod {
-				if needRPC {
-					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], false, isAsk, false, serviceUriAutoAlias, false, service.QueryPath, false, false, false, isGrpcStyle, withBackOffice)
-					service.Methods = append(service.Methods, m)
+				if isRPCMethod {
+					if needRPC {
+						m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], false, isAsk, false, serviceUriAutoAlias, false, service.QueryPath, false, false, false, isGrpcStyle, withBackOffice)
+						service.Methods = append(service.Methods, m)
+					}
 				}
 			}
 			if m != nil {

@@ -927,9 +927,9 @@ type GMT struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// 是否是 gmt_create 属性
+	// 是否是 gmt_create 属性，支持 int64/uint64/string 类型
 	IsCreate bool `protobuf:"varint,1,opt,name=is_create,json=isCreate,proto3" json:"is_create,omitempty"`
-	// 是否是 gmt_modified 属性
+	// 是否是 gmt_modified 属性，支持 int64/uint64/string 类型
 	IsModified bool `protobuf:"varint,2,opt,name=is_modified,json=isModified,proto3" json:"is_modified,omitempty"`
 }
 
