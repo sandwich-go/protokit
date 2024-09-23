@@ -211,7 +211,9 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 			if st != ServiceTagJob && st != ServiceTagERPC && proxy != "None" {
 				m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], false, isAsk, false, serviceUriAutoAlias, false, service.QueryPath, false, false, false, isGrpcStyle, withBackOffice)
 				var rpcURI = m.TypeInputAlias
+				var n = m.Name
 				m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], true, isAsk, true, serviceUriAutoAlias, isERPCMethod, service.QueryPath, false, isAskReentrant, isQuit, isGrpcStyle, withBackOffice)
+				m.Name = n
 				m.ProxyRPC = rpcURI
 				m.ProxyDefault = proxy
 				service.Methods = append(service.Methods, m)
