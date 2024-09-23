@@ -90,8 +90,10 @@ type Method struct {
 	LangOffTag                     []string // 语言开启关闭标记
 	WithBackOffice                 bool     // 是否带有backoffice标记
 
+	ProxyName    string // 代理的rpc name
+	ProxyActor   string // 代理的actor URI
 	ProxyRPC     string // 代理的rpc URI
-	ProxyDefault string // 代理的Actor URI
+	ProxyDefault string // 代理的默认Proxy
 }
 
 func (m *Method) AsMethodDescriptor() *desc.MethodDescriptor { return m.md }
