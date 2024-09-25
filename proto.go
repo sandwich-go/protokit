@@ -72,9 +72,9 @@ type Method struct {
 	FullPathHTTP          string // HTTP模式下的请求路径
 	FullPathHTTPConstName string // HTTP模式下的请求路径 const 名
 
-	// backoffice 协议模拟器 http 请求路径
-	FullPathHttpBackOffice          string
-	FullPathHttpBackOfficeConstName string
+	// actor 启用时， backoffice 协议模拟器 http 请求路径
+	FullPathHttpBackOfficeForActor          string
+	FullPathHttpBackOfficeForActorConstName string
 
 	HTTPPathComment                string   // HTTP模式下的请求路径注释，来源
 	IsAsk                          bool     // 是否为Ask方法
@@ -88,12 +88,11 @@ type Method struct {
 	TypeInputWithSelfPackage       string   // 只携带自身package信息
 	TypeOutputWithSelfPackage      string   // 只携带自身package信息
 	LangOffTag                     []string // 语言开启关闭标记
-	WithBackOffice                 bool     // 是否带有backoffice标记
-
-	ProxyName    string // 代理的rpc name
-	ProxyActor   string // 代理的actor URI
-	ProxyRPC     string // 代理的rpc URI
-	ProxyDefault string // 代理的默认Proxy
+	WithBackOfficeForActor         bool     // 是否为 actor 带有 backoffice 标记
+	ProxyName                      string   // 代理的rpc name
+	ProxyActor                     string   // 代理的actor URI
+	ProxyRPC                       string   // 代理的rpc URI
+	ProxyDefault                   string   // 代理的默认Proxy
 }
 
 func (m *Method) AsMethodDescriptor() *desc.MethodDescriptor { return m.md }
