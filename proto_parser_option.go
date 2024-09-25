@@ -182,6 +182,8 @@ func (so *methodOptionAnnotation) String(key string, defaultVal ...string) strin
 		return so.ActorAlias
 	case LangOff:
 		return so.LangOff
+	case CsProxyDefault:
+		return so.GetCsProxyDefault().String()
 	default:
 		panic(fmt.Sprintf("RpcMethodOptions get string unknown key: %s", key))
 	}

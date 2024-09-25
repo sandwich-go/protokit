@@ -158,6 +158,7 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 			isGrpcStyle, _ := anMethod.Bool(GrpcStyle, isServiceAllGrpcStyle)
 			isActorMethod, _ := anMethod.Bool(ServiceTagActor, isActorService)
 			isERPCMethod, _ := anMethod.Bool(ServiceTagERPC, isERPCService)
+
 			var isRPCMethod bool
 			// 张洛算法：
 			// 指定了actor/erpc的method不生成rpc
@@ -205,9 +206,33 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 					}
 				}
 			}
+
+			var proxyRPC = ""
+			var proxyName = ""
+			var proxyActor = ""
+			var proxyDefault = ""
+			var proxyFlag = false
+			proxy := anMethod.String(CsProxyDefault, "NONE")
+			if st != ServiceTagJob && st != ServiceTagERPC && proxy != "NONE" {
+				m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], false, isAsk, false, serviceUriAutoAlias, false, service.QueryPath, false, false, false, isGrpcStyle, withBackOffice)
+				proxyRPC = m.TypeInputAlias
+				proxyName = m.Name
+				m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], true, isAsk, true, serviceUriAutoAlias, isERPCMethod, service.QueryPath, false, isAskReentrant, isQuit, isGrpcStyle, withBackOffice)
+				proxyActor = m.TypeInputAlias
+				proxyDefault = proxy
+				proxyFlag = true
+			}
+
 			if isActorMethod {
 				if needActor {
 					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], true, isAsk, isActorMethod, serviceUriAutoAlias, isERPCMethod, service.QueryPath, false, isAskReentrant, isQuit, isGrpcStyle, withBackOffice)
+					m.ProxyDefault = proxyDefault
+					if proxyFlag {
+						m.ProxyActor = proxyActor
+						m.ProxyName = proxyName
+						m.ProxyRPC = proxyRPC
+						proxyFlag = false
+					}
 					service.Methods = append(service.Methods, m)
 					service.HasActorMethod = true
 				}
@@ -215,6 +240,7 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 			if isERPCMethod {
 				if needERPC {
 					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], isActorMethod, isAsk, isRPCMethod, serviceUriAutoAlias, isERPCMethod, service.QueryPath, false, false, false, isGrpcStyle, withBackOffice)
+					m.ProxyDefault = proxyDefault
 					service.Methods = append(service.Methods, m)
 					service.HasERPCMethod = true
 				}
@@ -222,9 +248,16 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 			if isRPCMethod {
 				if needRPC {
 					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], false, isAsk, false, serviceUriAutoAlias, false, service.QueryPath, false, false, false, isGrpcStyle, withBackOffice)
+					m.ProxyDefault = proxyDefault
+					if proxyFlag {
+						m.ProxyActor = proxyActor
+						m.ProxyName = proxyName
+						m.ProxyRPC = proxyRPC
+					}
 					service.Methods = append(service.Methods, m)
 				}
 			}
+
 			if m != nil {
 				checkName := m.TypeInputDotFullQualifiedName
 				if m.TypeInputAlias != "" {
