@@ -98,8 +98,8 @@ func (p *Parser) parsePackage(nsList []*Namespace) {
 				if golangInputType != "" && method.TypeInputAlias != "" {
 					pp.AliasToGolangType[method.TypeInputAlias] = golangInputType
 				}
-				if golangInputType != "" && method.FullPathHttpBackOffice != "" {
-					pp.AliasToGolangType[method.FullPathHttpBackOffice] = golangInputType
+				if golangInputType != "" && method.FullPathHttpBackOfficeForActor != "" {
+					pp.AliasToGolangType[method.FullPathHttpBackOfficeForActor] = golangInputType
 				}
 				if method.IsActor {
 					golangInputType = pp.ImportSet.MessageDotFullQualifiedNameToGolangType[method.TypeInputDotFullQualifiedName]

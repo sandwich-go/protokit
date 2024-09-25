@@ -67,9 +67,11 @@ func (p *Parser) method(
 		IsQuit:                         isQuit,
 		IsActorAskReentrant:            isAskReentrant,
 	}
-	if withBackOffice || method.BackOfficeOption != nil {
-		method.WithBackOffice = true
+
+	if (withBackOffice || method.BackOfficeOption != nil) && method.IsActor {
+		method.WithBackOfficeForActor = true
 	}
+
 	if methodComment, exist := p.comments[protoMethod]; exist && methodComment != nil {
 		method.Comment = methodComment.Content
 	}
@@ -156,10 +158,11 @@ func (p *Parser) method(
 	method.TypeInputAliasConstName = fmt.Sprintf("%s_%s_Method_URI", serviceName, method.Name)
 
 	//
-	if method.WithBackOffice {
-		method.FullPathHttpBackOfficeConstName = fmt.Sprintf("%s_%s_%s_FullPathHTTP", serviceName, method.Name, "BackOffice")
-		method.FullPathHttpBackOffice = standardFullPathHTTP(method.TypeInputAlias, "/backoffice")
+	if method.WithBackOfficeForActor {
+		method.FullPathHttpBackOfficeForActorConstName = fmt.Sprintf("%s_%s_%s_FullPathHTTP", serviceName, method.Name, "BackOffice")
+		method.FullPathHttpBackOfficeForActor = standardFullPathHTTP(method.TypeInputAlias, "/backoffice")
 	}
+
 	method.LangOffTag = strings.Split(anMethod.String(LangOff), ",")
 	return method
 }
