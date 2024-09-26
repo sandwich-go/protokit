@@ -1,4 +1,67 @@
-### v0.1.50 🌈 (2024-08-20 12:27:43)
+### v0.1.60 🌈 (2024-09-26 16:19:35)
+
+#### 🚀  New Feature
+  * 合并option mod ([82d1e64](https://github.com/sandwich-go/protokit/commit/82d1e64758d605e4e01762b1688c596ed1149ce6)) (<small>[zhengyang.zhu](zhengyang.zhu@centurygame.com)@2024-09-26 16:19:35 &#43;0800 &#43;0800</small>)
+
+### v0.1.59 (2024-09-25 13:03:41)
+
+#### 🚀  New Feature
+  * index 支持数组 ([2041acd](https://github.com/sandwich-go/protokit/commit/2041acd488719791e435f90c17d3f4fac1080e54)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-09-25 13:03:28 &#43;0800 &#43;0800</small>)
+
+#### 💪  Commit
+  * Merge branch '0.1/release' of github.com:sandwich-go/protokit into 0.1/release ([80d3db9](https://github.com/sandwich-go/protokit/commit/80d3db9447b7560e004305703512bab89edd4f5c)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-09-25 13:03:41 &#43;0800 &#43;0800</small>)
+
+### v0.1.58 (2024-09-25 12:21:52)
+
+#### 🤖  Tools
+  * rename backoffice -> backofficeForActor ([91522c6](https://github.com/sandwich-go/protokit/commit/91522c65151f219aa7153f1cadf9ae2eeda8a94d)) (<small>[jianwei.ma](jianwei.ma@centurygame.com)@2024-09-25 12:12:44 &#43;0800 &#43;0800</small>)
+
+#### 💪  Commit
+  * Merge branch '0.1/release' of github.com:sandwich-go/protokit into 0.1/release ([87aa4f6](https://github.com/sandwich-go/protokit/commit/87aa4f69164600a937a86775631f31d78b34bbdd)) (<small>[jianwei.ma](jianwei.ma@centurygame.com)@2024-09-25 12:21:52 &#43;0800 &#43;0800</small>)
+  * feat:增加cs_proxy_default选项 ([8e64846](https://github.com/sandwich-go/protokit/commit/8e6484602b8e00e6ecc2791f924ec8b6df9c2e8b)) (<small>[lanwangjinghui](wangjinghui.lan@centurygames.com)@2024-09-23 17:10:41 &#43;0800 &#43;0800</small>)
+
+### v0.1.57 (2024-09-23 17:04:25)
+
+#### 💪  Commit
+  * feat:增加cs_proxy_default选项 ([36d4eec](https://github.com/sandwich-go/protokit/commit/36d4eecb5d76cce3e0f736e03563ef718438d295)) (<small>[lanwangjinghui](wangjinghui.lan@centurygames.com)@2024-09-23 17:04:25 &#43;0800 &#43;0800</small>)
+
+### v0.1.56 (2024-09-23 14:36:30)
+
+#### 💪  Commit
+  * feat:增加cs_proxy_default选项 ([e0f3815](https://github.com/sandwich-go/protokit/commit/e0f38159e6a314e8e8c4181c97d375b4baf43569)) (<small>[lanwangjinghui](wangjinghui.lan@centurygames.com)@2024-09-23 14:36:30 &#43;0800 &#43;0800</small>)
+
+### v0.1.55 (2024-09-23 12:27:38)
+
+#### 💪  Commit
+  * feat:增加cs_proxy_default选项 ([c40d461](https://github.com/sandwich-go/protokit/commit/c40d4616bc4aad3451686f0f2511ca193368b88f)) (<small>[lanwangjinghui](wangjinghui.lan@centurygames.com)@2024-09-23 12:27:38 &#43;0800 &#43;0800</small>)
+
+### v0.1.54 (2024-09-13 21:57:25)
+
+#### 🚀  New Feature
+  * 增加 gmt 支持 ([05cacc8](https://github.com/sandwich-go/protokit/commit/05cacc8dc520bece6f26aa7ae75bbbefea6bfa6b)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-09-13 21:57:25 &#43;0800 &#43;0800</small>)
+
+### v0.1.53 (2024-09-12 11:39:52)
+
+#### 🤖  Tools
+  * 添加了对于actor-协议模拟器支持 ([c3865ad](https://github.com/sandwich-go/protokit/commit/c3865ad050966504c13e25141e219ec4fd33df3e)) (<small>[jianwei.ma](jianwei.ma@centurygame.com)@2024-09-12 11:39:52 &#43;0800 &#43;0800</small>)
+
+#### 💪  Commit
+  * feat:增加view level option ([e774fba](https://github.com/sandwich-go/protokit/commit/e774fbaac414de355f21734947cf2ee28bc6d9de)) (<small>[lanwangjinghui](wangjinghui.lan@centurygames.com)@2024-09-05 12:00:09 &#43;0800 &#43;0800</small>)
+
+### v0.1.52 (2024-08-23 13:46:19)
+
+#### 🛠  Refactor
+  * 修改注释 ([5b7b9b8](https://github.com/sandwich-go/protokit/commit/5b7b9b8dac1c2c566431933b5924a3b4f13ddc2d) , [5f2b0ac](https://github.com/sandwich-go/protokit/commit/5f2b0ac7433351117d4b65477f510af0deeb2170)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-08-23 13:46:19 &#43;0800 &#43;0800</small>)
+
+### v0.1.51 (2024-08-23 11:57:29)
+
+#### 🚀  New Feature
+  * **option**: 增加 gmt_create/gmt_modified 两个属性标记 ([8002d5e](https://github.com/sandwich-go/protokit/commit/8002d5e2a5281b6cb3f3630d698390a0f7db863a)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2024-08-23 11:57:29 &#43;0800 &#43;0800</small>)
+
+#### 🤖  Tools
+  * **sem**: make changelog ([cf3178e](https://github.com/sandwich-go/protokit/commit/cf3178e0ec51fb76dc580021cba30b984cb4a804)) (<small>[Daming Yang](daming.yang@centurygame.com)@2024-08-20 12:28:00 &#43;0800 &#43;0800</small>)
+
+### v0.1.50 (2024-08-20 12:27:43)
 
 #### 🛠  Refactor
   * erpc默认不生成rpc方法 ([303a6ec](https://github.com/sandwich-go/protokit/commit/303a6ec48155aeb842556e7ad625b3dd2d9cb6f2)) (<small>[Daming Yang](daming.yang@centurygame.com)@2024-08-20 12:27:43 &#43;0800 &#43;0800</small>)
