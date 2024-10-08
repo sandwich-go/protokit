@@ -259,6 +259,7 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 			}
 
 			if m != nil {
+				m.ReturnPacket, _ = anMethod.Bool(ReturnPacket, false)
 				checkName := m.TypeInputDotFullQualifiedName
 				if m.TypeInputAlias != "" {
 					checkName = m.TypeInputAlias

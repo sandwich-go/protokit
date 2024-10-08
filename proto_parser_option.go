@@ -168,6 +168,12 @@ func (so *methodOptionAnnotation) Bool(key string, defaultVal ...bool) (bool, er
 			return dft, nil
 		}
 		return *so.GrpcStyle, nil
+	case ReturnPacket:
+		if so.ReturnPacket == nil {
+			// 没有配置
+			return dft, nil
+		}
+		return *so.ReturnPacket, nil
 	default:
 		panic(fmt.Sprintf("RpcMethodOptions get bool unknown key: %s", key))
 	}
