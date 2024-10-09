@@ -174,6 +174,12 @@ func (so *methodOptionAnnotation) Bool(key string, defaultVal ...bool) (bool, er
 			return dft, nil
 		}
 		return *so.ReturnPacket, nil
+	case AsyncCall:
+		if so.AsyncCall == nil {
+			// 没有配置
+			return dft, nil
+		}
+		return *so.AsyncCall, nil
 	default:
 		panic(fmt.Sprintf("RpcMethodOptions get bool unknown key: %s", key))
 	}

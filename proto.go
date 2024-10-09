@@ -94,6 +94,7 @@ type Method struct {
 	ProxyRPC                       string   // 代理的rpc URI
 	ProxyDefault                   string   // 代理的默认Proxy
 	ReturnPacket                   bool     // 返回额外参数
+	AsyncCall                      bool     // 异步调用模式
 }
 
 func (m *Method) AsMethodDescriptor() *desc.MethodDescriptor { return m.md }

@@ -194,6 +194,19 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 			if isTell {
 				isAsk = false
 			}
+			asyncCall, _ := anMethod.Bool(AsyncCall, false)
+			if isTell && asyncCall {
+				log.Fatal().
+					Str("proto service", protoService.GetName()).
+					Str("method", protoMethod.GetName()).
+					Msg("AsyncCall 和 isTell 只能存在一个")
+			}
+			if isQuit && asyncCall {
+				log.Fatal().
+					Str("proto service", protoService.GetName()).
+					Str("method", protoMethod.GetName()).
+					Msg("AsyncCall 和 isQuit 只能存在一个")
+			}
 			withBackOffice := service.BackOfficeOption != nil
 			var m *Method
 			if service.IsJob {
@@ -260,6 +273,7 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 
 			if m != nil {
 				m.ReturnPacket, _ = anMethod.Bool(ReturnPacket, false)
+				m.AsyncCall = asyncCall
 				checkName := m.TypeInputDotFullQualifiedName
 				if m.TypeInputAlias != "" {
 					checkName = m.TypeInputAlias
