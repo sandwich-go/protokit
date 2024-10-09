@@ -1,4 +1,12 @@
-### v0.1.61 🌈 (2024-10-08 16:02:53)
+### v0.1.62 🌈 (2024-10-09 11:47:57)
+
+#### 🤖  Tools
+  * **sem**: make changelog ([49770d1](https://github.com/sandwich-go/protokit/commit/49770d18f74f227d7c179929a4c2b7195504a215)) (<small>[lanwangjinghui](wangjinghui.lan@centurygames.com)@2024-10-08 16:05:04 &#43;0800 &#43;0800</small>)
+
+#### 💪  Commit
+  * feat:增加客户端rpc异步调用 ([b7023a3](https://github.com/sandwich-go/protokit/commit/b7023a3379f8a4fc134387b3186b922d57831054)) (<small>[lanwangjinghui](wangjinghui.lan@centurygames.com)@2024-10-09 11:47:57 &#43;0800 &#43;0800</small>)
+
+### v0.1.61 (2024-10-08 16:02:53)
 
 #### 🤖  Tools
   * **sem**: make changelog ([ab15a9d](https://github.com/sandwich-go/protokit/commit/ab15a9d4075b949dd73ede08f2a2988056fa37a2)) (<small>[zhengyang.zhu](zhengyang.zhu@centurygame.com)@2024-09-26 16:19:52 &#43;0800 &#43;0800</small>)
