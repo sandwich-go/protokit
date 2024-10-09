@@ -1,4 +1,12 @@
-### v0.1.62 🌈 (2024-10-09 11:47:57)
+### v0.1.63 🌈 (2024-10-09 18:36:24)
+
+#### 🤖  Tools
+  * **sem**: make changelog ([00541dd](https://github.com/sandwich-go/protokit/commit/00541dd28703b5a0892d96e4c51dc4ba61ca8367)) (<small>[lanwangjinghui](wangjinghui.lan@centurygames.com)@2024-10-09 11:49:06 &#43;0800 &#43;0800</small>)
+
+#### 💪  Commit
+  * feat:客户端actor system和id标签 ([c9258e4](https://github.com/sandwich-go/protokit/commit/c9258e464b497e844f0d1abbaabb1d80c2432c58)) (<small>[lanwangjinghui](wangjinghui.lan@centurygames.com)@2024-10-09 18:36:24 &#43;0800 &#43;0800</small>)
+
+### v0.1.62 (2024-10-09 11:47:57)
 
 #### 🤖  Tools
   * **sem**: make changelog ([49770d1](https://github.com/sandwich-go/protokit/commit/49770d18f74f227d7c179929a4c2b7195504a215)) (<small>[lanwangjinghui](wangjinghui.lan@centurygames.com)@2024-10-08 16:05:04 &#43;0800 &#43;0800</small>)
