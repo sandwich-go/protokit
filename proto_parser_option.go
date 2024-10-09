@@ -106,6 +106,8 @@ func (so *serviceOptionAnnotation) String(key string, defaultVal ...string) stri
 		return so.QueryPath
 	case LangOff:
 		return so.LangOff
+	case ActorSystemName:
+		return so.ActorSystemName
 	default:
 		panic(fmt.Sprintf("RpcServiceOptions get string unknown key: %s", key))
 	}
@@ -196,6 +198,8 @@ func (so *methodOptionAnnotation) String(key string, defaultVal ...string) strin
 		return so.LangOff
 	case CsProxyDefault:
 		return so.GetCsProxyDefault().String()
+	case CsActorIdSource:
+		return so.GetCsActorIdSource()
 	default:
 		panic(fmt.Sprintf("RpcMethodOptions get string unknown key: %s", key))
 	}

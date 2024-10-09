@@ -96,6 +96,7 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 		snakeCase, _ := an.Bool(QueryPathSnakeCase, true)
 
 		service.QueryPath = standardQueryPath(an.String(QueryPath, p.cc.DefaultQueryPath), snakeCase, p.cc.QueryPathMapping)
+		service.ActorSystemName = an.String(ActorSystemName, "")
 
 		for _, v := range p.cc.GetInvalidServiceAnnotations() {
 			if an.Contains(strings.TrimSpace(v)) {
@@ -274,6 +275,7 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 			if m != nil {
 				m.ReturnPacket, _ = anMethod.Bool(ReturnPacket, false)
 				m.AsyncCall = asyncCall
+				m.ActorIdSource = anMethod.String(CsActorIdSource, "")
 				checkName := m.TypeInputDotFullQualifiedName
 				if m.TypeInputAlias != "" {
 					checkName = m.TypeInputAlias
