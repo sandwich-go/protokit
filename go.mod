@@ -13,7 +13,6 @@ require (
 	github.com/mattn/go-colorable v0.1.12
 	github.com/rs/zerolog v1.26.1
 	github.com/sandwich-go/boost v1.3.1
-	github.com/sandwich-go/protokit/option v0.0.1
 	github.com/smartystreets/goconvey v1.7.2
 	google.golang.org/genproto v0.0.0-20220405205423-9d709892a2bf
 	google.golang.org/protobuf v1.34.2
@@ -35,5 +34,3 @@ require (
 	golang.org/x/crypto v0.5.0 // indirect
 	golang.org/x/sys v0.5.0 // indirect
 )
-
-replace github.com/sandwich-go/protokit/option => ./option

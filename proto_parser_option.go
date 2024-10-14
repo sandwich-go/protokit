@@ -106,6 +106,8 @@ func (so *serviceOptionAnnotation) String(key string, defaultVal ...string) stri
 		return so.QueryPath
 	case LangOff:
 		return so.LangOff
+	case ActorSystemName:
+		return so.ActorSystemName
 	default:
 		panic(fmt.Sprintf("RpcServiceOptions get string unknown key: %s", key))
 	}
@@ -168,6 +170,18 @@ func (so *methodOptionAnnotation) Bool(key string, defaultVal ...bool) (bool, er
 			return dft, nil
 		}
 		return *so.GrpcStyle, nil
+	case ReturnPacket:
+		if so.ReturnPacket == nil {
+			// 没有配置
+			return dft, nil
+		}
+		return *so.ReturnPacket, nil
+	case AsyncCall:
+		if so.AsyncCall == nil {
+			// 没有配置
+			return dft, nil
+		}
+		return *so.AsyncCall, nil
 	default:
 		panic(fmt.Sprintf("RpcMethodOptions get bool unknown key: %s", key))
 	}
@@ -184,6 +198,8 @@ func (so *methodOptionAnnotation) String(key string, defaultVal ...string) strin
 		return so.LangOff
 	case CsProxyDefault:
 		return so.GetCsProxyDefault().String()
+	case CsActorIdSource:
+		return so.GetCsActorIdSource()
 	default:
 		panic(fmt.Sprintf("RpcMethodOptions get string unknown key: %s", key))
 	}

@@ -9,6 +9,9 @@ import (
 func TestParser(t *testing.T) {
 	Convey("parse all proto files", t, func() {
 		var nsList []*Namespace
+		nsList = append(nsList, NewNamespace(NamespaceProtokit, "../protokitgo/sdk/protokit"))
+		nsList = append(nsList, NewNamespace(NamespaceValidate, "../protokitgo/sdk/proto_validate"))
+		nsList = append(nsList, NewNamespace(NamespaceClaim, "../protokitgo/sdk/proto_claim"))
 		nsList = append(nsList, NewNamespace(NamespaceGoogle, "../protokitgo/sdk/proto_google"))
 		nsList = append(nsList, NewNamespace(NamespaceNetutils, "../protokitgo/sdk/proto_netutils_queue"))
 		nsList = append(nsList, NewNamespace(NamespaceUser, "../protokitgo/example/protos"))

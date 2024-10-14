@@ -10,7 +10,7 @@ type FileAccessor = func(fielRelativePath string) (io.ReadCloser, error)
 
 // 默认过滤器
 func defaultFileExcludeFilter(filePath string) bool {
-	return strings.Contains(filePath, "_exclude")
+	return strings.Contains(filePath, "rawdata_client")
 }
 
 //go:generate optionGen   --xconf=true --usage_tag_name=usage --xconf=true

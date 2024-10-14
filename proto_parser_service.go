@@ -97,6 +97,7 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 		snakeCase, _ := an.Bool(QueryPathSnakeCase, true)
 
 		service.QueryPath = standardQueryPath(an.String(QueryPath, p.cc.DefaultQueryPath), snakeCase, p.cc.QueryPathMapping)
+		service.ActorSystemName = an.String(ActorSystemName, "")
 
 		for _, v := range p.cc.GetInvalidServiceAnnotations() {
 			if an.Contains(strings.TrimSpace(v)) {
@@ -195,6 +196,19 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 			if isTell {
 				isAsk = false
 			}
+			asyncCall, _ := anMethod.Bool(AsyncCall, false)
+			if isTell && asyncCall {
+				log.Fatal().
+					Str("proto service", protoService.GetName()).
+					Str("method", protoMethod.GetName()).
+					Msg("AsyncCall 和 isTell 只能存在一个")
+			}
+			if isQuit && asyncCall {
+				log.Fatal().
+					Str("proto service", protoService.GetName()).
+					Str("method", protoMethod.GetName()).
+					Msg("AsyncCall 和 isQuit 只能存在一个")
+			}
 			withBackOffice := service.BackOfficeOption != nil
 
 			onlyForSimulator := service.BackOfficeOption != nil && service.BackOfficeOption.OnlyForSimulator
@@ -263,6 +277,9 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 			}
 
 			if m != nil {
+				m.ReturnPacket, _ = anMethod.Bool(ReturnPacket, false)
+				m.AsyncCall = asyncCall
+				m.ActorIdSource = anMethod.String(CsActorIdSource, "")
 				checkName := m.TypeInputDotFullQualifiedName
 				if m.TypeInputAlias != "" {
 					checkName = m.TypeInputAlias
