@@ -28,6 +28,7 @@ func (p *Parser) method(
 	isQuit bool,
 	isGrpcStyle bool,
 	withBackOffice bool,
+	onlyForSimulator bool,
 ) *Method {
 	// Note:
 	// 这里只是简单的换算一次格式合法的名称，具体请求名要通过ImportSet进行纠正
@@ -70,6 +71,10 @@ func (p *Parser) method(
 
 	if (withBackOffice || method.BackOfficeOption != nil) && method.IsActor {
 		method.WithBackOfficeForActor = true
+	}
+
+	if onlyForSimulator || (method.BackOfficeOption != nil && method.BackOfficeOption.OnlyForSimulator) {
+		method.OnlyForSimulator = true
 	}
 
 	if methodComment, exist := p.comments[protoMethod]; exist && methodComment != nil {

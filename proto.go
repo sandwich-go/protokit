@@ -89,10 +89,12 @@ type Method struct {
 	TypeOutputWithSelfPackage      string   // 只携带自身package信息
 	LangOffTag                     []string // 语言开启关闭标记
 	WithBackOfficeForActor         bool     // 是否为 actor 带有 backoffice 标记
-	ProxyName                      string   // 代理的rpc name
-	ProxyActor                     string   // 代理的actor URI
-	ProxyRPC                       string   // 代理的rpc URI
-	ProxyDefault                   string   // 代理的默认Proxy
+	OnlyForSimulator               bool     // 仅支持模拟器使用
+
+	ProxyName    string // 代理的rpc name
+	ProxyActor   string // 代理的actor URI
+	ProxyRPC     string // 代理的rpc URI
+	ProxyDefault string // 代理的默认Proxy
 }
 
 func (m *Method) AsMethodDescriptor() *desc.MethodDescriptor { return m.md }
