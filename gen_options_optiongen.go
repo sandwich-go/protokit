@@ -48,7 +48,7 @@ type Options struct {
 func NewOptions(opts ...Option) *Options {
 	cc := newDefaultOptions()
 	for _, opt := range opts {
-		opt(cc)
+		opt.Apply(cc)
 	}
 	if watchDogOptions != nil {
 		watchDogOptions(cc)
@@ -63,17 +63,27 @@ func NewOptions(opts ...Option) *Options {
 func (cc *Options) ApplyOption(opts ...Option) []Option {
 	var previous []Option
 	for _, opt := range opts {
-		previous = append(previous, opt(cc))
+		previous = append(previous, opt.Apply(cc))
 	}
 	return previous
 }
 
-// Option option func
-type Option func(cc *Options) Option
+// OptionFunc option func
+type Option interface {
+	Apply(cc *Options) Option
+}
+
+var _ Option = OptionFunc(nil)
+
+type OptionFunc func(cc *Options) OptionFunc
+
+func (f OptionFunc) Apply(cc *Options) Option {
+	return f(cc)
+}
 
 // WithGolangBasePackagePath golang基础package path
-func WithGolangBasePackagePath(v string) Option {
-	return func(cc *Options) Option {
+func WithGolangBasePackagePath(v string) OptionFunc {
+	return func(cc *Options) OptionFunc {
 		previous := cc.GolangBasePackagePath
 		cc.GolangBasePackagePath = v
 		return WithGolangBasePackagePath(previous)
@@ -81,8 +91,8 @@ func WithGolangBasePackagePath(v string) Option {
 }
 
 // WithGolangRelative 是否启用golang relative模式
-func WithGolangRelative(v bool) Option {
-	return func(cc *Options) Option {
+func WithGolangRelative(v bool) OptionFunc {
+	return func(cc *Options) OptionFunc {
 		previous := cc.GolangRelative
 		cc.GolangRelative = v
 		return WithGolangRelative(previous)
@@ -90,17 +100,26 @@ func WithGolangRelative(v bool) Option {
 }
 
 // WithProtoImportPath proto import路径
-func WithProtoImportPath(v ...string) Option {
-	return func(cc *Options) Option {
+func WithProtoImportPath(v ...string) OptionFunc {
+	return func(cc *Options) OptionFunc {
 		previous := cc.ProtoImportPath
 		cc.ProtoImportPath = v
 		return WithProtoImportPath(previous...)
 	}
 }
 
+// AppendProtoImportPath proto import路径
+func AppendProtoImportPath(v ...string) OptionFunc {
+	return func(cc *Options) OptionFunc {
+		previous := cc.ProtoImportPath
+		cc.ProtoImportPath = append(cc.ProtoImportPath, v...)
+		return WithProtoImportPath(previous...)
+	}
+}
+
 // WithProtoFileAccessor proto import路径
-func WithProtoFileAccessor(v FileAccessor) Option {
-	return func(cc *Options) Option {
+func WithProtoFileAccessor(v FileAccessor) OptionFunc {
+	return func(cc *Options) OptionFunc {
 		previous := cc.ProtoFileAccessor
 		cc.ProtoFileAccessor = v
 		return WithProtoFileAccessor(previous)
@@ -108,8 +127,8 @@ func WithProtoFileAccessor(v FileAccessor) Option {
 }
 
 // WithProtoFileExcludeFilter proto过滤
-func WithProtoFileExcludeFilter(v FileExcludeFilter) Option {
-	return func(cc *Options) Option {
+func WithProtoFileExcludeFilter(v FileExcludeFilter) OptionFunc {
+	return func(cc *Options) OptionFunc {
 		previous := cc.ProtoFileExcludeFilter
 		cc.ProtoFileExcludeFilter = v
 		return WithProtoFileExcludeFilter(previous)
@@ -117,17 +136,26 @@ func WithProtoFileExcludeFilter(v FileExcludeFilter) Option {
 }
 
 // WithZapLogMapKeyTypes 以类型为key的map的MarshalLogObject实现，使得可以直接使用zap.Object函数打印map数据
-func WithZapLogMapKeyTypes(v ...string) Option {
-	return func(cc *Options) Option {
+func WithZapLogMapKeyTypes(v ...string) OptionFunc {
+	return func(cc *Options) OptionFunc {
 		previous := cc.ZapLogMapKeyTypes
 		cc.ZapLogMapKeyTypes = v
 		return WithZapLogMapKeyTypes(previous...)
 	}
 }
 
+// AppendZapLogMapKeyTypes 以类型为key的map的MarshalLogObject实现，使得可以直接使用zap.Object函数打印map数据
+func AppendZapLogMapKeyTypes(v ...string) OptionFunc {
+	return func(cc *Options) OptionFunc {
+		previous := cc.ZapLogMapKeyTypes
+		cc.ZapLogMapKeyTypes = append(cc.ZapLogMapKeyTypes, v...)
+		return WithZapLogMapKeyTypes(previous...)
+	}
+}
+
 // WithZapLogBytesMode zap以何种方式输出[]byte, 可以使用base64或者bytes, 默认bytes
-func WithZapLogBytesMode(v string) Option {
-	return func(cc *Options) Option {
+func WithZapLogBytesMode(v string) OptionFunc {
+	return func(cc *Options) OptionFunc {
 		previous := cc.ZapLogBytesMode
 		cc.ZapLogBytesMode = v
 		return WithZapLogBytesMode(previous)
@@ -135,8 +163,8 @@ func WithZapLogBytesMode(v string) Option {
 }
 
 // WithNamePattern 名称格式化空自己
-func WithNamePattern(v *NamePattern) Option {
-	return func(cc *Options) Option {
+func WithNamePattern(v *NamePattern) OptionFunc {
+	return func(cc *Options) OptionFunc {
 		previous := cc.NamePattern
 		cc.NamePattern = v
 		return WithNamePattern(previous)
@@ -144,17 +172,26 @@ func WithNamePattern(v *NamePattern) Option {
 }
 
 // WithImportSetExclude import set忽略指定name的package
-func WithImportSetExclude(v ...string) Option {
-	return func(cc *Options) Option {
+func WithImportSetExclude(v ...string) OptionFunc {
+	return func(cc *Options) OptionFunc {
 		previous := cc.ImportSetExclude
 		cc.ImportSetExclude = v
 		return WithImportSetExclude(previous...)
 	}
 }
 
+// AppendImportSetExclude import set忽略指定name的package
+func AppendImportSetExclude(v ...string) OptionFunc {
+	return func(cc *Options) OptionFunc {
+		previous := cc.ImportSetExclude
+		cc.ImportSetExclude = append(cc.ImportSetExclude, v...)
+		return WithImportSetExclude(previous...)
+	}
+}
+
 // WithURIUsingGRPC service的uri是否使用GRPC模式
-func WithURIUsingGRPC(v bool) Option {
-	return func(cc *Options) Option {
+func WithURIUsingGRPC(v bool) OptionFunc {
+	return func(cc *Options) OptionFunc {
 		previous := cc.URIUsingGRPC
 		cc.URIUsingGRPC = v
 		return WithURIUsingGRPC(previous)
@@ -162,17 +199,26 @@ func WithURIUsingGRPC(v bool) Option {
 }
 
 // WithInvalidServiceAnnotations 非法的 service annotations
-func WithInvalidServiceAnnotations(v ...string) Option {
-	return func(cc *Options) Option {
+func WithInvalidServiceAnnotations(v ...string) OptionFunc {
+	return func(cc *Options) OptionFunc {
 		previous := cc.InvalidServiceAnnotations
 		cc.InvalidServiceAnnotations = v
 		return WithInvalidServiceAnnotations(previous...)
 	}
 }
 
+// AppendInvalidServiceAnnotations 非法的 service annotations
+func AppendInvalidServiceAnnotations(v ...string) OptionFunc {
+	return func(cc *Options) OptionFunc {
+		previous := cc.InvalidServiceAnnotations
+		cc.InvalidServiceAnnotations = append(cc.InvalidServiceAnnotations, v...)
+		return WithInvalidServiceAnnotations(previous...)
+	}
+}
+
 // WithURIUsingGRPCWithoutPackage service的uri使用GRPC模式时，是否带package名
-func WithURIUsingGRPCWithoutPackage(v bool) Option {
-	return func(cc *Options) Option {
+func WithURIUsingGRPCWithoutPackage(v bool) OptionFunc {
+	return func(cc *Options) OptionFunc {
 		previous := cc.URIUsingGRPCWithoutPackage
 		cc.URIUsingGRPCWithoutPackage = v
 		return WithURIUsingGRPCWithoutPackage(previous)
@@ -180,8 +226,8 @@ func WithURIUsingGRPCWithoutPackage(v bool) Option {
 }
 
 // WithStrictMode 是否为严格模式
-func WithStrictMode(v bool) Option {
-	return func(cc *Options) Option {
+func WithStrictMode(v bool) OptionFunc {
+	return func(cc *Options) OptionFunc {
 		previous := cc.StrictMode
 		cc.StrictMode = v
 		return WithStrictMode(previous)
@@ -189,8 +235,8 @@ func WithStrictMode(v bool) Option {
 }
 
 // WithQueryPathMapping query path映射关系,通过 {{key}} 方式访问值
-func WithQueryPathMapping(v map[string]string) Option {
-	return func(cc *Options) Option {
+func WithQueryPathMapping(v map[string]string) OptionFunc {
+	return func(cc *Options) OptionFunc {
 		previous := cc.QueryPathMapping
 		cc.QueryPathMapping = v
 		return WithQueryPathMapping(previous)
@@ -198,8 +244,8 @@ func WithQueryPathMapping(v map[string]string) Option {
 }
 
 // WithDefaultQueryPath 默认query path，支持配置 {{key}}的方式索引QueryPathMapping的key
-func WithDefaultQueryPath(v string) Option {
-	return func(cc *Options) Option {
+func WithDefaultQueryPath(v string) OptionFunc {
+	return func(cc *Options) OptionFunc {
 		previous := cc.DefaultQueryPath
 		cc.DefaultQueryPath = v
 		return WithDefaultQueryPath(previous)
@@ -207,8 +253,8 @@ func WithDefaultQueryPath(v string) Option {
 }
 
 // WithForceGrpcStyle rpc actor erpc改用grpc风格的名称，不可同时存在
-func WithForceGrpcStyle(v bool) Option {
-	return func(cc *Options) Option {
+func WithForceGrpcStyle(v bool) OptionFunc {
+	return func(cc *Options) OptionFunc {
 		previous := cc.ForceGrpcStyle
 		cc.ForceGrpcStyle = v
 		return WithForceGrpcStyle(previous)
@@ -221,11 +267,9 @@ func InstallOptionsWatchDog(dog func(cc *Options)) { watchDogOptions = dog }
 // watchDogOptions global watch dog
 var watchDogOptions func(cc *Options)
 
-// newDefaultOptions new default Options
-func newDefaultOptions() *Options {
-	cc := &Options{}
-
-	for _, opt := range [...]Option{
+// setOptionsDefaultValue default Options value
+func setOptionsDefaultValue(cc *Options) {
+	for _, opt := range [...]OptionFunc{
 		WithGolangBasePackagePath(""),
 		WithGolangRelative(true),
 		WithProtoImportPath(make([]string, 0)...),
@@ -247,7 +291,12 @@ func newDefaultOptions() *Options {
 	} {
 		opt(cc)
 	}
+}
 
+// newDefaultOptions new default Options
+func newDefaultOptions() *Options {
+	cc := &Options{}
+	setOptionsDefaultValue(cc)
 	return cc
 }
 
