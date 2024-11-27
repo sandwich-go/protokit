@@ -41,10 +41,14 @@ func (p *Parser) parseImport() {
 					method.TypeOutput, _ = p.addImportByDotFullyQualifiedTypeName(method.TypeOutputDotFullQualifiedName, sg.ImportSet)
 					var cns = method.md.GetInputType().GetFile().GetOptions().(*descriptorpb.FileOptions).CsharpNamespace
 					var cn = method.md.GetInputType().GetName()
-					method.CSTypeInput = fmt.Sprintf("%v.%v", *cns, cn)
+					if cns != nil {
+						method.CSTypeInput = fmt.Sprintf("%v.%v", *cns, cn)
+					}
 					cns = method.md.GetOutputType().GetFile().GetOptions().(*descriptorpb.FileOptions).CsharpNamespace
 					cn = method.md.GetOutputType().GetName()
-					method.CSTypeOutput = fmt.Sprintf("%v.%v", *cns, cn)
+					if cns != nil {
+						method.CSTypeOutput = fmt.Sprintf("%v.%v", *cns, cn)
+					}
 					service.InputOutputTypes = xslice.StringsSetAdd(service.InputOutputTypes, method.TypeInput, method.TypeOutput)
 					// 请求使用使用的uri名称, 需要用这个名字来作为http请求的路径，携带自由的package名称
 					uriUsing := method.TypeInputWithSelfPackage
