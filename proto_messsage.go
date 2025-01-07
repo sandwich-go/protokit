@@ -1,14 +1,17 @@
 package protokit
 
 import (
+	"strings"
+
 	"buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
+
 	"github.com/jhump/protoreflect/desc"
 	protokit2 "github.com/sandwich-go/protokit/option/gen/golang/protokit"
 	"google.golang.org/protobuf/proto"
-	"strings"
 )
 
 type ProtoMessage struct {
+	EnumOrMessage
 	dotFullyQualifiedTypeName     string
 	md                            *desc.MessageDescriptor
 	Name                          string // proto message name
@@ -67,7 +70,7 @@ func (pm *ProtoMessage) HasValidateOption() bool {
 	}
 	return hasValidateOption
 }
-
+func (pm *ProtoMessage) GetProtoFile() *ProtoFile                     { return pm.ProtoFile }
 func (pm *ProtoMessage) AddToStore(k, v interface{})                  { pm.Store[k] = v }
 func (pm *ProtoMessage) GetFromStore(k interface{}) interface{}       { return pm.Store[k] }
 func (pm *ProtoMessage) AsMessageDescriptor() *desc.MessageDescriptor { return pm.md }

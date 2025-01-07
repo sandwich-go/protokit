@@ -1,10 +1,11 @@
 package protokit
 
 import (
+	"strings"
+
 	"github.com/jhump/protoreflect/desc"
 	protokit2 "github.com/sandwich-go/protokit/option/gen/golang/protokit"
 	"google.golang.org/protobuf/proto"
-	"strings"
 )
 
 type ProtoEnumField struct {
@@ -13,6 +14,7 @@ type ProtoEnumField struct {
 	Field  *desc.EnumValueDescriptor
 }
 type ProtoEnum struct {
+	EnumOrMessage
 	dotFullyQualifiedTypeName string
 	ed                        *desc.EnumDescriptor
 	Fields                    []*ProtoEnumField
@@ -37,7 +39,7 @@ func NewProtoEnum(pf *ProtoFile, ed *desc.EnumDescriptor) *ProtoEnum {
 	}
 	return v
 }
-
+func (pe *ProtoEnum) GetProtoFile() *ProtoFile               { return pe.ProtoFile }
 func (pe *ProtoEnum) DotFullyQualifiedTypeName() string      { return pe.dotFullyQualifiedTypeName }
 func (pe *ProtoEnum) AsEnumDescriptor() *desc.EnumDescriptor { return pe.ed }
 func (pe *ProtoEnum) GoNameWithGolangPackage() string {

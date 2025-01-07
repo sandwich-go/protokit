@@ -27,6 +27,8 @@ type ParserVisitor interface {
 	ProtoFilePathToProtoFile(protoFilePath string) (*ProtoFile, bool)
 	// DotFullyQualifiedTypeNameToDescriptor 由dot名称获取Descriptor
 	DotFullyQualifiedTypeNameToDescriptor(dotName string) (desc.Descriptor, bool)
+	// DotFullyQualifiedTypeNameToEnumOrMessage 由dot名称获取Descriptor
+	DotFullyQualifiedTypeNameToEnumOrMessage(dotName string) (EnumOrMessage, bool)
 	// DotFullyQualifiedTypeNameToProtoFile 由dot名称获取对应的ProtoFile
 	DotFullyQualifiedTypeNameToProtoFile(dotName string) (*ProtoFile, bool)
 	// DotFullyQualifiedTypeNameToProtoMessage 由dot名称获取对应的ProtoMessage
@@ -202,6 +204,16 @@ func (p *Parser) MustGetFieldTypeName(fd *desc.FieldDescriptor) string {
 	panic(fmt.Sprintf("Unknown field type, %s", fd.GetType()))
 }
 
+func (p *Parser) DotFullyQualifiedTypeNameToEnumOrMessage(dotName string) (EnumOrMessage, bool) {
+	if v, ok := p.DotFullyQualifiedTypeNameToProtoMessage(dotName); ok {
+		return v, true
+	}
+
+	if v, ok := p.DotFullyQualifiedTypeNameToProtoEnum(dotName); ok {
+		return v, true
+	}
+	return nil, false
+}
 func (p *Parser) DotFullyQualifiedTypeNameToDescriptor(dotName string) (desc.Descriptor, bool) {
 	v, ok := p.dotFullyQualifiedTypeNameToDescriptor[dotName]
 	if ok {
