@@ -2,6 +2,7 @@ package protokit
 
 import (
 	"fmt"
+	"google.golang.org/protobuf/types/descriptorpb"
 	"path"
 	"sort"
 	"strings"
@@ -38,6 +39,16 @@ func (p *Parser) parseImport() {
 					// 名称需要做一次修复，根据import的package名称
 					method.TypeInput, _ = p.addImportByDotFullyQualifiedTypeName(method.TypeInputDotFullQualifiedName, sg.ImportSet)
 					method.TypeOutput, _ = p.addImportByDotFullyQualifiedTypeName(method.TypeOutputDotFullQualifiedName, sg.ImportSet)
+					var cns = method.md.GetInputType().GetFile().GetOptions().(*descriptorpb.FileOptions).CsharpNamespace
+					var cn = method.md.GetInputType().GetName()
+					if cns != nil {
+						method.CSTypeInput = fmt.Sprintf("%v.%v", *cns, cn)
+					}
+					cns = method.md.GetOutputType().GetFile().GetOptions().(*descriptorpb.FileOptions).CsharpNamespace
+					cn = method.md.GetOutputType().GetName()
+					if cns != nil {
+						method.CSTypeOutput = fmt.Sprintf("%v.%v", *cns, cn)
+					}
 					service.InputOutputTypes = xslice.StringsSetAdd(service.InputOutputTypes, method.TypeInput, method.TypeOutput)
 					// 请求使用使用的uri名称, 需要用这个名字来作为http请求的路径，携带自由的package名称
 					uriUsing := method.TypeInputWithSelfPackage

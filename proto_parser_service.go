@@ -45,6 +45,7 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 		}
 		service.RpcOption = getRpcServiceOption(service.sd)
 		service.BackOfficeOption = getBackOfficeServiceOption(service.sd)
+
 		service.IsJob = isJobService(service.sd)
 		needActor := true
 		needRPC := true
@@ -96,6 +97,7 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 		snakeCase, _ := an.Bool(QueryPathSnakeCase, true)
 
 		service.QueryPath = standardQueryPath(an.String(QueryPath, p.cc.DefaultQueryPath), snakeCase, p.cc.QueryPathMapping)
+		service.ActorSystemName = an.String(ActorSystemName, "")
 
 		for _, v := range p.cc.GetInvalidServiceAnnotations() {
 			if an.Contains(strings.TrimSpace(v)) {
@@ -158,6 +160,7 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 			isGrpcStyle, _ := anMethod.Bool(GrpcStyle, isServiceAllGrpcStyle)
 			isActorMethod, _ := anMethod.Bool(ServiceTagActor, isActorService)
 			isERPCMethod, _ := anMethod.Bool(ServiceTagERPC, isERPCService)
+
 			var isRPCMethod bool
 			// 张洛算法：
 			// 指定了actor/erpc的method不生成rpc
@@ -193,38 +196,90 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 			if isTell {
 				isAsk = false
 			}
+			asyncCall, _ := anMethod.Bool(AsyncCall, false)
+			if isTell && asyncCall {
+				log.Fatal().
+					Str("proto service", protoService.GetName()).
+					Str("method", protoMethod.GetName()).
+					Msg("AsyncCall 和 isTell 只能存在一个")
+			}
+			if isQuit && asyncCall {
+				log.Fatal().
+					Str("proto service", protoService.GetName()).
+					Str("method", protoMethod.GetName()).
+					Msg("AsyncCall 和 isQuit 只能存在一个")
+			}
+			withBackOffice := service.BackOfficeOption != nil
+
+			onlyForSimulator := service.BackOfficeOption != nil && service.BackOfficeOption.OnlyForSimulator
+
 			var m *Method
 			if service.IsJob {
 				jobMethodOption := getJobMethodOption(protoMethod)
 				if jobMethodOption != nil && jobMethodOption.Creator != nil {
 					if needJob {
-						m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], false, false, false, serviceUriAutoAlias, false, service.QueryPath, true, false, false, isGrpcStyle)
+						m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], false, false, false, serviceUriAutoAlias, false, service.QueryPath, true, false, false, isGrpcStyle, withBackOffice, onlyForSimulator)
 						service.HasJobCreatorMethod = true
 						service.Methods = append(service.Methods, m)
 					}
 				}
 			}
+
+			var proxyRPC = ""
+			var proxyName = ""
+			var proxyActor = ""
+			var proxyDefault = ""
+			var proxyFlag = false
+			proxy := anMethod.String(CsProxyDefault, "NONE")
+			if st != ServiceTagJob && st != ServiceTagERPC && proxy != "NONE" {
+				m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], false, isAsk, false, serviceUriAutoAlias, false, service.QueryPath, false, false, false, isGrpcStyle, withBackOffice, onlyForSimulator)
+				proxyRPC = m.TypeInputAlias
+				proxyName = m.Name
+				m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], true, isAsk, true, serviceUriAutoAlias, isERPCMethod, service.QueryPath, false, isAskReentrant, isQuit, isGrpcStyle, withBackOffice, onlyForSimulator)
+				proxyActor = m.TypeInputAlias
+				proxyDefault = proxy
+				proxyFlag = true
+			}
+
 			if isActorMethod {
 				if needActor {
-					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], true, isAsk, isActorMethod, serviceUriAutoAlias, isERPCMethod, service.QueryPath, false, isAskReentrant, isQuit, isGrpcStyle)
+					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], true, isAsk, isActorMethod, serviceUriAutoAlias, isERPCMethod, service.QueryPath, false, isAskReentrant, isQuit, isGrpcStyle, withBackOffice, onlyForSimulator)
+					m.ProxyDefault = proxyDefault
+					if proxyFlag {
+						m.ProxyActor = proxyActor
+						m.ProxyName = proxyName
+						m.ProxyRPC = proxyRPC
+						proxyFlag = false
+					}
 					service.Methods = append(service.Methods, m)
 					service.HasActorMethod = true
 				}
 			}
 			if isERPCMethod {
 				if needERPC {
-					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], isActorMethod, isAsk, isRPCMethod, serviceUriAutoAlias, isERPCMethod, service.QueryPath, false, false, false, isGrpcStyle)
+					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], isActorMethod, isAsk, isRPCMethod, serviceUriAutoAlias, isERPCMethod, service.QueryPath, false, false, false, isGrpcStyle, withBackOffice, onlyForSimulator)
+					m.ProxyDefault = proxyDefault
 					service.Methods = append(service.Methods, m)
 					service.HasERPCMethod = true
 				}
 			}
 			if isRPCMethod {
 				if needRPC {
-					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], false, isAsk, false, serviceUriAutoAlias, false, service.QueryPath, false, false, false, isGrpcStyle)
+					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], false, isAsk, false, serviceUriAutoAlias, false, service.QueryPath, false, false, false, isGrpcStyle, withBackOffice, onlyForSimulator)
+					m.ProxyDefault = proxyDefault
+					if proxyFlag {
+						m.ProxyActor = proxyActor
+						m.ProxyName = proxyName
+						m.ProxyRPC = proxyRPC
+					}
 					service.Methods = append(service.Methods, m)
 				}
 			}
+
 			if m != nil {
+				m.ReturnPacket, _ = anMethod.Bool(ReturnPacket, false)
+				m.AsyncCall = asyncCall
+				m.ActorIdSource = anMethod.String(CsActorIdSource, "")
 				checkName := m.TypeInputDotFullQualifiedName
 				if m.TypeInputAlias != "" {
 					checkName = m.TypeInputAlias
