@@ -1,4 +1,12 @@
-### v0.1.77 🌈 (2025-01-07 19:49:33)
+### v0.1.78 🌈 (2025-01-08 12:40:37)
+
+#### 🐛  Bug Fixed
+  * add mask encrypt support ([dd466b4](https://github.com/sandwich-go/protokit/commit/dd466b4211153851c3417b1fa23bfd639a36997d)) (<small>[hui.wang](hui.wang@centurygame.com)@2025-01-08 12:40:37 &#43;0800 &#43;0800</small>)
+
+#### 🤖  Tools
+  * **sem**: make changelog ([414e816](https://github.com/sandwich-go/protokit/commit/414e816778de62b9023ae2033c3c21a7fd357ada)) (<small>[hui.wang](hui.wang@centurygame.com)@2025-01-07 19:49:55 &#43;0800 &#43;0800</small>)
+
+### v0.1.77 (2025-01-07 19:49:33)
 
 #### 🚀  New Feature
   * enum or message ([b84992b](https://github.com/sandwich-go/protokit/commit/b84992bdfb2cb1cdf6a49d07ab796c71ef95d9e8)) (<small>[hui.wang](hui.wang@centurygame.com)@2025-01-07 19:49:22 &#43;0800 &#43;0800</small>)
