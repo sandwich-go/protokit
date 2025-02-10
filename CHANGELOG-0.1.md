@@ -1,4 +1,18 @@
-### v0.1.78 🌈 (2025-01-08 12:40:37)
+### v0.1.80 🌈 (2025-02-10 18:44:00)
+
+#### 🛠  Refactor
+  * add slgcore ([157c726](https://github.com/sandwich-go/protokit/commit/157c726aaf6e2251f56d8ab4899cb3c8f10b97d6)) (<small>[Daming Yang](daming.yang@centurygame.com)@2025-02-10 18:43:34 &#43;0800 &#43;0800</small>)
+
+#### 💪  Commit
+  * Merge branch '0.1/release' of github.com:sandwich-go/protokit into 0.1/release ([68a34a4](https://github.com/sandwich-go/protokit/commit/68a34a43c27a326672121f1443b44d02677b43b5)) (<small>[Daming Yang](daming.yang@centurygame.com)@2025-02-10 18:44:00 &#43;0800 &#43;0800</small>)
+
+### v0.1.79 (2025-02-10 18:06:05)
+
+#### 🤖  Tools
+  * 添加了 label 标签，标识 service 的 基本属性 ([ac2e49e](https://github.com/sandwich-go/protokit/commit/ac2e49e0c0a46d9ca35748c6d7a9f47a27c0aaf7)) (<small>[jianwei.ma](jianwei.ma@centurygame.com)@2025-02-10 18:06:05 &#43;0800 &#43;0800</small>)
+  * **sem**: make changelog ([ba5c0a1](https://github.com/sandwich-go/protokit/commit/ba5c0a1b5938d32bd9233f626b415e6110a5e21f)) (<small>[hui.wang](hui.wang@centurygame.com)@2025-01-08 12:41:00 &#43;0800 &#43;0800</small>)
+
+### v0.1.78 (2025-01-08 12:40:37)
 
 #### 🐛  Bug Fixed
   * add mask encrypt support ([dd466b4](https://github.com/sandwich-go/protokit/commit/dd466b4211153851c3417b1fa23bfd639a36997d)) (<small>[hui.wang](hui.wang@centurygame.com)@2025-01-08 12:40:37 &#43;0800 &#43;0800</small>)
