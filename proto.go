@@ -96,6 +96,7 @@ type Method struct {
 	ReturnPacket                   bool     // 返回额外参数
 	AsyncCall                      bool     // 异步调用模式
 	ActorIdSource                  string   // ActorId的字段来源
+	Labels                         []string // 标签
 }
 
 func (m *Method) AsMethodDescriptor() *desc.MethodDescriptor { return m.md }
@@ -127,6 +128,7 @@ type Service struct {
 	LangOffTag                 []string  // 语言开启关闭标记
 	QueryPath                  string    // query path
 	ActorSystemName            string    // actor system name
+	Labels                     []string  // 标签
 }
 
 func (s *Service) AsServiceDescriptor() *desc.ServiceDescriptor { return s.sd }

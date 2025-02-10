@@ -108,6 +108,8 @@ func (so *serviceOptionAnnotation) String(key string, defaultVal ...string) stri
 		return so.LangOff
 	case ActorSystemName:
 		return so.ActorSystemName
+	case Labels:
+		return so.Labels
 	default:
 		panic(fmt.Sprintf("RpcServiceOptions get string unknown key: %s", key))
 	}
@@ -200,6 +202,8 @@ func (so *methodOptionAnnotation) String(key string, defaultVal ...string) strin
 		return so.GetCsProxyDefault().String()
 	case CsActorIdSource:
 		return so.GetCsActorIdSource()
+	case Labels:
+		return so.GetLabels()
 	default:
 		panic(fmt.Sprintf("RpcMethodOptions get string unknown key: %s", key))
 	}
@@ -212,6 +216,8 @@ func (so *methodOptionAnnotation) Contains(key string) bool {
 		return so.Alias != ""
 	case ActorAlias:
 		return so.ActorAlias != ""
+	case Labels:
+		return so.Labels != nil
 	}
 	return false
 }
