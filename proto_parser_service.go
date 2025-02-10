@@ -146,6 +146,8 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 		}
 
 		service.LangOffTag = strings.Split(an.String(LangOff), ",")
+		service.Labels = []string{an.String(Labels)}
+
 		for j, protoMethod := range protoService.Method {
 			// actor参数，是否为actor是否为tell
 			isAsk := true
@@ -218,7 +220,9 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 				jobMethodOption := getJobMethodOption(protoMethod)
 				if jobMethodOption != nil && jobMethodOption.Creator != nil {
 					if needJob {
-						m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], false, false, false, serviceUriAutoAlias, false, service.QueryPath, true, false, false, isGrpcStyle, withBackOffice, onlyForSimulator)
+						m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j],
+							false, false, false, serviceUriAutoAlias, false, service.QueryPath,
+							true, false, false, isGrpcStyle, withBackOffice, onlyForSimulator)
 						service.HasJobCreatorMethod = true
 						service.Methods = append(service.Methods, m)
 					}
@@ -295,6 +299,19 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 						Msg("duplicated request uri")
 				}
 				reqMap[checkName] = m.TypeInputGRPC
+
+				// 标签字符串 解析成 Array
+				var label string
+				if len(m.Labels) != 0 {
+					label = m.Labels[0]
+				} else if len(service.Labels) != 0 {
+					label = service.Labels[0]
+				}
+				if len(label) == 0 {
+					m.Labels = nil
+				} else {
+					m.Labels = strings.Split(label, ",")
+				}
 			}
 		}
 		if len(service.Methods) > 0 {
