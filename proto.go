@@ -1,15 +1,14 @@
 package protokit
 
 import (
+	"github.com/jhump/protoreflect/desc"
+	"github.com/sandwich-go/boost/misc/annotation"
+	"github.com/sandwich-go/boost/xslice"
+	protokit2 "github.com/sandwich-go/protokit/option/gen/golang/protokit"
+	"google.golang.org/protobuf/proto"
 	"path"
 	"path/filepath"
 	"strings"
-
-	protokit2 "github.com/sandwich-go/protokit/option/gen/golang/protokit"
-
-	"github.com/jhump/protoreflect/desc"
-	"github.com/sandwich-go/boost/misc/annotation"
-	"google.golang.org/protobuf/proto"
 )
 
 // 引用计数的规则过于依赖于golang的package等属性，可以考虑完全归结到proto的package上去
@@ -250,7 +249,10 @@ const (
 	NamespaceUser     = "user"     // user proto files
 	NamespaceClaim    = "claim"
 	NamespaceValidate = "validate"
+	NamespaceSlgcore  = "slgcore"
 )
+
+var sdkNamespace = []string{NamespaceNetutils, NamespaceSlgcore}
 
 // NamespaceMessageRegistryPackageName namespace根目录下聚合message注册的包名
 const NamespaceMessageRegistryPackageName = "message_registry"
@@ -284,4 +286,8 @@ func NewNamespace(name string, path string) *Namespace {
 		Files:    make(map[string]*ProtoFile),
 		Packages: map[string]*Package{NamespaceMessageRegistryPackageName: messageRegistryPackage},
 	}
+}
+
+func IsSdkNamespace(name string) bool {
+	return xslice.StringsContain(sdkNamespace, name)
 }
