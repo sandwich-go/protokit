@@ -1,4 +1,12 @@
-### v0.1.80 🌈 (2025-02-10 18:44:00)
+### v0.1.81 🌈 (2025-02-26 12:58:11)
+
+#### 🛠  Refactor
+  * add protokit option for enum ([8b720ca](https://github.com/sandwich-go/protokit/commit/8b720ca58c3fa216df6be0453a70e5510cabeee4)) (<small>[Daming Yang](daming.yang@centurygame.com)@2025-02-26 12:58:11 &#43;0800 &#43;0800</small>)
+
+#### 🤖  Tools
+  * **sem**: make changelog ([dae9dd2](https://github.com/sandwich-go/protokit/commit/dae9dd23e3d70fd31f7d3204e48f59372c110871)) (<small>[Daming Yang](daming.yang@centurygame.com)@2025-02-10 18:44:35 &#43;0800 &#43;0800</small>)
+
+### v0.1.80 (2025-02-10 18:44:00)
 
 #### 🛠  Refactor
   * add slgcore ([157c726](https://github.com/sandwich-go/protokit/commit/157c726aaf6e2251f56d8ab4899cb3c8f10b97d6)) (<small>[Daming Yang](daming.yang@centurygame.com)@2025-02-10 18:43:34 &#43;0800 &#43;0800</small>)
