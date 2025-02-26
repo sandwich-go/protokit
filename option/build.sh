@@ -3,4 +3,5 @@
 -Iprotos --go_out=module=github.com/sandwich-go/protokit/option:. \
 --plugin=protoc-gen-go=../../protokitgo/bin/osx/protoc-gen-go  \
 protos/protokit/orm.proto \
-protos/protokit/rpc.proto
+protos/protokit/rpc.proto \
+protos/protokit/misc.proto

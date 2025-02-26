@@ -1,0 +1,15 @@
+syntax = "proto3";
+import "google/protobuf/descriptor.proto";
+
+package protokit;
+option go_package = "github.com/sandwich-go/protokit/option/gen/golang/protokit";
+
+// 定义通用的 EnumOption
+message CommonEnumOptions {
+  bool gen_error = 1; // 是否生成ErrorCode快速方法
+}
+
+// 扩展 google.protobuf.EnumOptions
+extend google.protobuf.EnumOptions {
+  CommonEnumOptions enum_opts = 55801;
+}
