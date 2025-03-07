@@ -108,6 +108,15 @@ func (pm *ProtoMessage) GetOrmOption() *protokit2.OrmMessageOptions {
 	return nil
 }
 
+func (pm *ProtoMessage) GetMessageOption() *protokit2.RpcMessageOptions {
+	msgO := pm.AsMessageDescriptor().GetMessageOptions()
+	opts, ok := proto.GetExtension(msgO, protokit2.E_RpcMessage).(*protokit2.RpcMessageOptions)
+	if ok {
+		return opts
+	}
+	return nil
+}
+
 func (pm *ProtoMessage) OrmNoLog() bool {
 	opts := pm.GetOrmOption()
 	if opts == nil {
