@@ -108,6 +108,7 @@ func (pm *ProtoMessage) GetOrmOption() *protokit2.OrmMessageOptions {
 	return nil
 }
 
+// 获取message option
 func (pm *ProtoMessage) GetMessageOption() *protokit2.RpcMessageOptions {
 	msgO := pm.AsMessageDescriptor().GetMessageOptions()
 	opts, ok := proto.GetExtension(msgO, protokit2.E_RpcMessage).(*protokit2.RpcMessageOptions)
