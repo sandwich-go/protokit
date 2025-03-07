@@ -17,6 +17,10 @@ extend google.protobuf.MethodOptions {
   JobMethodOptions job_method = 68803;
 }
 
+extend google.protobuf.MessageOptions {
+  RpcMessageOptions rpc_message = 68804;
+}
+
 message JobMethodOptions {
     JobCreatorMethodOptions creator = 1;
 }
@@ -89,4 +93,8 @@ message BackOfficeMethodOptions {
   string name = 2;
   string comment = 3;
   bool only_for_simulator = 4;
+}
+
+message RpcMessageOptions {
+  bool notify = 1; //是否是notify
 }
