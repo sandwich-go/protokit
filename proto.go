@@ -97,6 +97,8 @@ type Method struct {
 	AsyncCall                      bool     // 异步调用模式
 	ActorIdSource                  string   // ActorId的字段来源
 	Labels                         []string // 标签
+	CsParam                        string   // req的c#参数
+	CsParamInit                    []string // req的c#参数赋值
 }
 
 func (m *Method) AsMethodDescriptor() *desc.MethodDescriptor { return m.md }
