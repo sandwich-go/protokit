@@ -86,6 +86,7 @@ message RpcMethodOptions {
   optional bool async_call = 20; //客户端支持异步调用 只支持rpc 默认false
   optional string cs_actor_id_source = 21;//协议的meta的actor id的来源，这个值对应request协议里面的字段名，字段支持数字和string类型。默认为空协议使用用户id
   optional string labels = 22; // 自定义标签，描述该RPC的类型与属性
+  optional string server_type_metadata = 23; // 自定义区分不同服的metadata，会在发送时自动添加
 }
 
 message BackOfficeMethodOptions {
