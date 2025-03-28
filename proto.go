@@ -131,7 +131,7 @@ type Service struct {
 	QueryPath                  string    // query path
 	ActorSystemName            string    // actor system name
 	Labels                     []string  // 标签
-	ServerTypeMetadata         string    // 自定义区分不同服的metadata，会在发送时自动添加
+	ServerType                 string    // 所属服务器类型
 }
 
 func (s *Service) AsServiceDescriptor() *desc.ServiceDescriptor { return s.sd }

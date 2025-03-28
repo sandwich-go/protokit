@@ -43,7 +43,7 @@ message RpcServiceOptions {
   bool grpc_style = 16; // 保持命名和grpc规则一致
   string actor_system_name = 17;//协议的actor system name，客户端在协议的meta中使用，默认为空不生成代码
   string labels = 18; // 自定义标签，描述该 Service 的类型与属性
-  string server_type_metadata = 19; //自定义区分不同服的metadata，会在发送时自动添加
+  string server_type = 19; // 协议所属的服务器类型
 }
 
 enum MethodAskType {

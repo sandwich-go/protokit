@@ -110,8 +110,8 @@ func (so *serviceOptionAnnotation) String(key string, defaultVal ...string) stri
 		return so.ActorSystemName
 	case Labels:
 		return so.Labels
-	case ServerTypeMetadata:
-		return so.ServerTypeMetadata
+	case ServerType:
+		return so.ServerType
 	default:
 		panic(fmt.Sprintf("RpcServiceOptions get string unknown key: %s", key))
 	}
