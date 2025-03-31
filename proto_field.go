@@ -1,14 +1,16 @@
 package protokit
 
 import (
-	"buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
 	"fmt"
+	"strings"
+
+	"buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
+
 	"github.com/jhump/protoreflect/desc"
 	"github.com/sandwich-go/boost/xstrings"
 	protokit2 "github.com/sandwich-go/protokit/option/gen/golang/protokit"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/descriptorpb"
-	"strings"
 )
 
 type Label = string

@@ -8,7 +8,7 @@ import (
 	"github.com/jhump/protoreflect/desc"
 )
 
-// 获取fd这个文件的golang package path，relative模式下有特殊处理
+// GolangPackagePathAndName 获取fd这个文件的golang package path，relative模式下有特殊处理
 func GolangPackagePathAndName(fd *desc.FileDescriptor, basePackagePath string, golangRelative bool) (string, string) {
 	packageName := ""
 	packagePath := ""
@@ -56,7 +56,7 @@ func GolangPackagePathAndName(fd *desc.FileDescriptor, basePackagePath string, g
 //(*Outer_TestT8__)(nil),          // 9: msg.Outer.Test_t8__
 //(*Outer_Test____T9__)(nil),      // 10: msg.Outer.Test_____t9__
 
-// goPackageName通过方法GetGolangPackageName获取,如果传入.或者空，则返回struct名称不带package名字
+// GoStructNameWithGolangPackage goPackageName通过方法GetGolangPackageName获取,如果传入.或者空，则返回struct名称不带package名字
 func GoStructNameWithGolangPackage(fullyQualifiedName string, protoPackagePath, goPackageName string) string {
 	protoPackageWithDot := strings.ReplaceAll(protoPackagePath, "/", ".")
 	fullyQualifiedName = strings.TrimPrefix(fullyQualifiedName, ".")
@@ -67,6 +67,17 @@ func GoStructNameWithGolangPackage(fullyQualifiedName string, protoPackagePath, 
 		return strings.TrimPrefix(structName, ".")
 	}
 	return goPackageName + "." + strings.TrimPrefix(structName, ".")
+}
+func CsharpStructNameWithPackage(fullyQualifiedName string, protoPackagePath, csNamespaceName string) string {
+	protoPackageWithDot := strings.ReplaceAll(protoPackagePath, "/", ".")
+	fullyQualifiedName = strings.TrimPrefix(fullyQualifiedName, ".")
+	nameWithoutProtoPackage := strings.TrimPrefix(fullyQualifiedName, protoPackageWithDot)
+	structName := CsharpStructNameFromFullyQualifiedNameTrimProtoPackage(nameWithoutProtoPackage)
+	structName = strings.TrimPrefix(structName, "/")
+	if csNamespaceName == "." || csNamespaceName == "" {
+		return strings.TrimPrefix(structName, ".")
+	}
+	return csNamespaceName + "." + strings.TrimPrefix(structName, ".")
 }
 
 var keywords = map[string]struct{}{
@@ -156,6 +167,7 @@ func goName(s string) string {
 	return ns
 }
 
+// GoStructNameFromFullyQualifiedNameTrimProtoPackage
 // 由fullyQualifiedName 转换到 golang struct名称，fullyQualifiedName需要去除掉proto package的名称
 // 底层无法自动判定proto package名称依赖上层传递
 // FunPlus.ServerCommon.Config.ActivityData : proto package名称为FunPlus.ServerCommon.Config
@@ -171,4 +183,8 @@ func GoStructNameFromFullyQualifiedNameTrimProtoPackage(fullyQualifiedNameWithou
 		ret += goName(strings.Title(s))
 	}
 	return ret
+}
+
+func CsharpStructNameFromFullyQualifiedNameTrimProtoPackage(fullyQualifiedNameWithoutProtoPackage string) string {
+	return GoStructNameFromFullyQualifiedNameTrimProtoPackage(fullyQualifiedNameWithoutProtoPackage)
 }

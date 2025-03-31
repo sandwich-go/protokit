@@ -23,6 +23,8 @@ func (e *ImportSet) AddWithDotFullQualifiedName(dotFullyQualifiedName string, pf
 	// 根据item的名字调节使用的struct名称
 	structName := GoStructNameWithGolangPackage(dotFullyQualifiedName, pf.Package, item.GolangPackageName)
 	e.MessageDotFullQualifiedNameToGolangType[dotFullyQualifiedName] = structName
+	csName := CsharpStructNameWithPackage(dotFullyQualifiedName, pf.Package, item.CSNamespaceName)
+	e.MessageDotFullQualifiedNameToCSharpType[dotFullyQualifiedName] = csName
 	return structName, item
 }
 

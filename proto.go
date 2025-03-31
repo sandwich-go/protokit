@@ -31,8 +31,9 @@ type ImportSet struct {
 	GolangPackagePath                       string            // 宿主文件的package path
 	Set                                     []*Import         // 当前import set
 	MessageDotFullQualifiedNameToGolangType map[string]string // GolangType是经过import纠正过package名称的，可能带着1，2之类的标记
-	PythonModules                           []*PythonModule   // python module 辅助python代码生成
-	importAliasMappingCount                 map[string]int    // 构建中使用的临时数据，记录同名但不同路径的import
+	MessageDotFullQualifiedNameToCSharpType map[string]string
+	PythonModules                           []*PythonModule // python module 辅助python代码生成
+	importAliasMappingCount                 map[string]int  // 构建中使用的临时数据，记录同名但不同路径的import
 	ExcludeImportName                       []string
 }
 
@@ -41,6 +42,7 @@ func NewImportSet(golangPackageName, golangPackagePath string) *ImportSet {
 		GolangPackageName:                       golangPackageName,
 		GolangPackagePath:                       golangPackagePath,
 		MessageDotFullQualifiedNameToGolangType: make(map[string]string),
+		MessageDotFullQualifiedNameToCSharpType: make(map[string]string),
 		importAliasMappingCount:                 make(map[string]int),
 	}
 }
