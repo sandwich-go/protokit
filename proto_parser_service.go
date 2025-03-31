@@ -147,7 +147,7 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 
 		service.LangOffTag = strings.Split(an.String(LangOff), ",")
 		service.Labels = []string{an.String(Labels)}
-		service.ServerType = an.String(ServerType, "")
+		service.ShortId = an.String(ShortId, "")
 
 		for j, protoMethod := range protoService.Method {
 			// actor参数，是否为actor是否为tell

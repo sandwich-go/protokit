@@ -31,7 +31,7 @@ const Tell = "tell"
 const LangOff = "lang_off"
 const ActorSystemName = "actor_system_name"
 const Labels = "labels"
-const ServerType = "server_type_metadata"
+const ShortId = "short_id"
 
 const Alias = "alias"
 const ActorAlias = "actor_alias"
