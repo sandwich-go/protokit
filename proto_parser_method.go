@@ -162,6 +162,10 @@ func (p *Parser) method(
 	// {service}_{method}_FullMethodName
 	method.TypeInputAliasConstName = fmt.Sprintf("%s_%s_Method_URI", serviceName, method.Name)
 
+	if anMethod.Contains(Labels) {
+		method.Labels = []string{anMethod.String(Labels)}
+	}
+
 	//
 	if method.WithBackOfficeForActor {
 		method.FullPathHttpBackOfficeForActorConstName = fmt.Sprintf("%s_%s_%s_FullPathHTTP", serviceName, method.Name, "BackOffice")

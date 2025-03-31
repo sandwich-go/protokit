@@ -1,15 +1,14 @@
 package protokit
 
 import (
+	"github.com/jhump/protoreflect/desc"
+	"github.com/sandwich-go/boost/misc/annotation"
+	"github.com/sandwich-go/boost/xslice"
+	protokit2 "github.com/sandwich-go/protokit/option/gen/golang/protokit"
+	"google.golang.org/protobuf/proto"
 	"path"
 	"path/filepath"
 	"strings"
-
-	protokit2 "github.com/sandwich-go/protokit/option/gen/golang/protokit"
-
-	"github.com/jhump/protoreflect/desc"
-	"github.com/sandwich-go/boost/misc/annotation"
-	"google.golang.org/protobuf/proto"
 )
 
 // 引用计数的规则过于依赖于golang的package等属性，可以考虑完全归结到proto的package上去
@@ -99,6 +98,9 @@ type Method struct {
 	ReturnPacket                   bool     // 返回额外参数
 	AsyncCall                      bool     // 异步调用模式
 	ActorIdSource                  string   // ActorId的字段来源
+	Labels                         []string // 标签
+	CsParam                        string   // req的c#参数
+	CsParamInit                    []string // req的c#参数赋值
 }
 
 func (m *Method) AsMethodDescriptor() *desc.MethodDescriptor { return m.md }
@@ -130,6 +132,8 @@ type Service struct {
 	LangOffTag                 []string  // 语言开启关闭标记
 	QueryPath                  string    // query path
 	ActorSystemName            string    // actor system name
+	Labels                     []string  // 标签
+	ShortId                    string    // 短id
 }
 
 func (s *Service) AsServiceDescriptor() *desc.ServiceDescriptor { return s.sd }
@@ -252,7 +256,10 @@ const (
 	NamespaceUser     = "user"     // user proto files
 	NamespaceClaim    = "claim"
 	NamespaceValidate = "validate"
+	NamespaceSlgcore  = "slgcore"
 )
+
+var sdkNamespace = []string{NamespaceNetutils, NamespaceSlgcore}
 
 // NamespaceMessageRegistryPackageName namespace根目录下聚合message注册的包名
 const NamespaceMessageRegistryPackageName = "message_registry"
@@ -286,4 +293,8 @@ func NewNamespace(name string, path string) *Namespace {
 		Files:    make(map[string]*ProtoFile),
 		Packages: map[string]*Package{NamespaceMessageRegistryPackageName: messageRegistryPackage},
 	}
+}
+
+func IsSdkNamespace(name string) bool {
+	return xslice.StringsContain(sdkNamespace, name)
 }

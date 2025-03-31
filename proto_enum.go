@@ -63,6 +63,14 @@ func (pe *ProtoEnum) GetOrmOption() *protokit2.OrmEnumOptions {
 	return nil
 }
 
+func (pe *ProtoEnum) GetEnumOption() *protokit2.CommonEnumOptions {
+	opts, ok := proto.GetExtension(pe.AsEnumDescriptor().GetEnumOptions(), protokit2.E_EnumOpts).(*protokit2.CommonEnumOptions)
+	if ok {
+		return opts
+	}
+	return nil
+}
+
 func (pe *ProtoEnumField) GetEnumValueOptions() *protokit2.EnumValueOptions {
 	opts, ok := proto.GetExtension(pe.Field.GetEnumValueOptions(), protokit2.E_EnumValue).(*protokit2.EnumValueOptions)
 	if ok {
