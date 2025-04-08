@@ -186,6 +186,11 @@ func (so *methodOptionAnnotation) Bool(key string, defaultVal ...bool) (bool, er
 			return dft, nil
 		}
 		return *so.AsyncCall, nil
+	case HandleTimeout:
+		if so.HandleTimeout == nil {
+			return dft, nil
+		}
+		return *so.HandleTimeout, nil
 	default:
 		panic(fmt.Sprintf("RpcMethodOptions get bool unknown key: %s", key))
 	}

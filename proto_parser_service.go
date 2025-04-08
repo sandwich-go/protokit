@@ -285,6 +285,7 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 				m.ReturnPacket, _ = anMethod.Bool(ReturnPacket, false)
 				m.AsyncCall = asyncCall
 				m.ActorIdSource = anMethod.String(CsActorIdSource, "")
+				m.HandleTimeout, _ = anMethod.Bool(HandleTimeout, false)
 				checkName := m.TypeInputDotFullQualifiedName
 				if m.TypeInputAlias != "" {
 					checkName = m.TypeInputAlias

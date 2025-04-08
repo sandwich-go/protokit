@@ -32,6 +32,7 @@ const LangOff = "lang_off"
 const ActorSystemName = "actor_system_name"
 const Labels = "labels"
 const ShortId = "short_id"
+const HandleTimeout = "handle_timeout"
 
 const Alias = "alias"
 const ActorAlias = "actor_alias"

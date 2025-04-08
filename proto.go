@@ -99,6 +99,7 @@ type Method struct {
 	Labels                         []string // 标签
 	CsParam                        string   // req的c#参数
 	CsParamInit                    []string // req的c#参数赋值
+	HandleTimeout                  bool     // 生成timeout handler
 }
 
 func (m *Method) AsMethodDescriptor() *desc.MethodDescriptor { return m.md }
