@@ -211,6 +211,8 @@ func (so *methodOptionAnnotation) String(key string, defaultVal ...string) strin
 		return so.GetCsActorIdSource()
 	case Labels:
 		return so.GetLabels()
+	case CsAutoResend:
+		return so.GetCsAutoResend()
 	default:
 		panic(fmt.Sprintf("RpcMethodOptions get string unknown key: %s", key))
 	}
