@@ -150,7 +150,9 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 		service.ShortId = an.String(ShortId, "")
 
 		var addServiceMethod = func(m *Method) {
-			service.HasSymbiont = m.RpcOption != nil && m.RpcOption.GetSymbiont() != nil
+			if !service.HasSymbiont {
+				service.HasSymbiont = m.RpcOption != nil && m.RpcOption.GetSymbiont() != nil
+			}
 			service.Methods = append(service.Methods, m)
 		}
 
