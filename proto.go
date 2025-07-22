@@ -134,6 +134,7 @@ type Service struct {
 	ActorSystemName            string    // actor system name
 	Labels                     []string  // 标签
 	ShortId                    string    // 短id
+	HasSymbiont                bool
 }
 
 func (s *Service) AsServiceDescriptor() *desc.ServiceDescriptor { return s.sd }

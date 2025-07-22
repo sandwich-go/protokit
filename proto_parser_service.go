@@ -149,6 +149,11 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 		service.Labels = []string{an.String(Labels)}
 		service.ShortId = an.String(ShortId, "")
 
+		var addServiceMethod = func(m *Method) {
+			service.HasSymbiont = m.RpcOption != nil && m.RpcOption.GetSymbiont() != nil
+			service.Methods = append(service.Methods, m)
+		}
+
 		for j, protoMethod := range protoService.Method {
 			// actor参数，是否为actor是否为tell
 			isAsk := true
@@ -225,7 +230,7 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 							false, false, false, serviceUriAutoAlias, false, service.QueryPath,
 							true, false, false, isGrpcStyle, withBackOffice, onlyForSimulator)
 						service.HasJobCreatorMethod = true
-						service.Methods = append(service.Methods, m)
+						addServiceMethod(m)
 					}
 				}
 			}
@@ -256,7 +261,7 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 						m.ProxyRPC = proxyRPC
 						proxyFlag = false
 					}
-					service.Methods = append(service.Methods, m)
+					addServiceMethod(m)
 					service.HasActorMethod = true
 				}
 			}
@@ -264,7 +269,7 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 				if needERPC {
 					m = p.method(protoFile, service.Name, protoMethod, protoFile.fd.GetServices()[i].GetMethods()[j], isActorMethod, isAsk, isRPCMethod, serviceUriAutoAlias, isERPCMethod, service.QueryPath, false, false, false, isGrpcStyle, withBackOffice, onlyForSimulator)
 					m.ProxyDefault = proxyDefault
-					service.Methods = append(service.Methods, m)
+					addServiceMethod(m)
 					service.HasERPCMethod = true
 				}
 			}
@@ -277,7 +282,7 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 						m.ProxyName = proxyName
 						m.ProxyRPC = proxyRPC
 					}
-					service.Methods = append(service.Methods, m)
+					addServiceMethod(m)
 				}
 			}
 
