@@ -124,6 +124,7 @@ type methodeAnnotation interface {
 	Bool(key string, defaultVal ...bool) (bool, error)
 	String(key string, defaultVal ...string) string
 	Contains(key string) bool
+	Int32(key string, defaultVal ...int32) (int32, error)
 }
 
 type methodOptionAnnotation struct {
@@ -213,6 +214,8 @@ func (so *methodOptionAnnotation) String(key string, defaultVal ...string) strin
 		return so.GetLabels()
 	case CsAutoResend:
 		return so.GetCsAutoResend()
+	case CsRpcBlocking:
+		return so.GetCsBlocking()
 	default:
 		panic(fmt.Sprintf("RpcMethodOptions get string unknown key: %s", key))
 	}
@@ -229,4 +232,16 @@ func (so *methodOptionAnnotation) Contains(key string) bool {
 		return so.Labels != nil
 	}
 	return false
+}
+
+func (so *methodOptionAnnotation) Int32(key string, defaultVal ...int32) (int32, error) {
+	switch key {
+	case CsWeakNetworkThreshold:
+		return *so.CsWeakNetworkThreshold, nil
+	case CsDisconnectionThreshold:
+		return *so.CsDisconnectionThreshold, nil
+	default:
+		panic(fmt.Sprintf("RpcMethodOptions get int32 unknown key: %s", key))
+	}
+	return 0, nil
 }

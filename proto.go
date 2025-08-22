@@ -101,6 +101,9 @@ type Method struct {
 	CsParamInit                    []string // req的c#参数赋值
 	HandleTimeout                  bool     // 生成timeout handler
 	CsResend                       string   // 是否重传
+	CsRpcBlocking                  string   // 是否阻塞
+	CsWeakNetworkThreshold         int32    // 弱网阈值
+	CsDisconnectionThreshold       int32    // 断网阈值
 }
 
 func (m *Method) AsMethodDescriptor() *desc.MethodDescriptor { return m.md }

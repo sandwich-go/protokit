@@ -294,6 +294,9 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 				m.ActorIdSource = anMethod.String(CsActorIdSource, "")
 				m.HandleTimeout, _ = anMethod.Bool(HandleTimeout, false)
 				m.CsResend = anMethod.String(CsAutoResend, "")
+				m.CsRpcBlocking = anMethod.String(CsRpcBlocking, "")
+				m.CsWeakNetworkThreshold, _ = anMethod.Int32(CsWeakNetworkThreshold, 5)
+				m.CsDisconnectionThreshold, _ = anMethod.Int32(CsDisconnectionThreshold, 30)
 				checkName := m.TypeInputDotFullQualifiedName
 				if m.TypeInputAlias != "" {
 					checkName = m.TypeInputAlias
