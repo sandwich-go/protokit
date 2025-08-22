@@ -237,9 +237,9 @@ func (so *methodOptionAnnotation) Contains(key string) bool {
 func (so *methodOptionAnnotation) Int32(key string, defaultVal ...int32) (int32, error) {
 	switch key {
 	case CsWeakNetworkThreshold:
-		return *so.CsWeakNetworkThreshold, nil
+		return so.GetCsWeakNetworkThreshold(), nil
 	case CsDisconnectionThreshold:
-		return *so.CsDisconnectionThreshold, nil
+		return so.GetCsDisconnectionThreshold(), nil
 	default:
 		panic(fmt.Sprintf("RpcMethodOptions get int32 unknown key: %s", key))
 	}
