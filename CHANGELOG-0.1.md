@@ -1,4 +1,117 @@
-### v0.1.81 🌈 (2025-02-26 12:58:11)
+### v0.1.102 🌈 (2025-09-10 16:09:56)
+
+#### 🚀  New Feature
+  * etl ([8a4c463](https://github.com/sandwich-go/protokit/commit/8a4c4637dc0a5e97ffc702bfa03242383f080434)) (<small>[hui.wang](hui.wang@centurygame.com)@2025-09-10 16:09:56 &#43;0800 &#43;0800</small>)
+
+#### 💪  Commit
+  * Merge branch '0.1/release' of github.com:sandwich-go/protokit into 0.1/release ([5815912](https://github.com/sandwich-go/protokit/commit/5815912221b5ff741f0dfe77b86bf97397e0554d)) (<small>[hui.wang](hui.wang@centurygame.com)@2025-09-10 14:40:52 &#43;0800 &#43;0800</small>)
+
+### v0.1.101 (2025-08-22 16:22:53)
+
+### v0.1.100 (2025-08-22 11:16:40)
+
+#### 💪  Commit
+  * feat 增加blocking weak disconnection ([cbb8543](https://github.com/sandwich-go/protokit/commit/cbb854385510dc0ca012e387affa1ebcb55387cb)) (<small>[lanwangjinghui](wangjinghui.lan@centurygames.com)@2025-08-22 11:16:40 &#43;0800 &#43;0800</small>)
+
+### v0.1.99 (2025-08-22 11:02:27)
+
+#### 💪  Commit
+  * feat 增加blocking weak disconnection ([545e85a](https://github.com/sandwich-go/protokit/commit/545e85adda2c8ce63045e48afbcf543cd5928cac)) (<small>[lanwangjinghui](wangjinghui.lan@centurygames.com)@2025-08-22 11:02:27 &#43;0800 &#43;0800</small>)
+
+### v0.1.98 (2025-07-22 15:49:45)
+
+#### 🐛  Bug Fixed
+  * 修复 Symbiont ([d796432](https://github.com/sandwich-go/protokit/commit/d796432385ebe1d12eff8f1277f4de47fdae045d)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2025-07-22 15:49:45 &#43;0800 &#43;0800</small>)
+
+### v0.1.97 (2025-07-22 12:43:12)
+
+#### 🚀  New Feature
+  * 增加 symbiont ([f468f68](https://github.com/sandwich-go/protokit/commit/f468f68be9c8c8c3c56dc097ba3f64699238ae12)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2025-07-22 12:43:12 &#43;0800 &#43;0800</small>)
+
+### v0.1.96 (2025-07-22 11:55:24)
+
+#### 🚀  New Feature
+  * 增加 symbiont ([086fdd9](https://github.com/sandwich-go/protokit/commit/086fdd984287b3ae36025cd654caff5e887bff05)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2025-07-22 11:55:24 &#43;0800 &#43;0800</small>)
+
+### v0.1.95 (2025-06-11 16:16:40)
+
+#### 💪  Commit
+  * 增加orm rpc option cs_auto_resend ([838a218](https://github.com/sandwich-go/protokit/commit/838a218ccfff7c0dbb35834d2078a850de3b6066)) (<small>[lanwangjinghui](wangjinghui.lan@centurygames.com)@2025-06-11 16:16:40 &#43;0800 &#43;0800</small>)
+
+### v0.1.94 (2025-05-30 10:33:08)
+
+#### 🚀  New Feature
+  * phantom ([ac4d6ae](https://github.com/sandwich-go/protokit/commit/ac4d6ae2f536369501bbcf17c7a6c5a128fa4f19)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2025-05-30 10:33:08 &#43;0800 &#43;0800</small>)
+
+### v0.1.93 (2025-05-14 15:19:36)
+
+#### 🚀  New Feature
+  * 增加 hint 自定义变量名 ([8d420ba](https://github.com/sandwich-go/protokit/commit/8d420ba34bb0c3a33e6bfedec2a8586d1fea740a)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2025-05-14 15:19:36 &#43;0800 &#43;0800</small>)
+
+### v0.1.92 (2025-04-29 15:18:49)
+
+#### 💪  Commit
+  * 增加orm message option  cs_old_data ([7f5bcf8](https://github.com/sandwich-go/protokit/commit/7f5bcf8b90a5fecde8216b05f1de916ba2367332)) (<small>[lanwangjinghui](wangjinghui.lan@centurygames.com)@2025-04-29 15:18:49 &#43;0800 &#43;0800</small>)
+
+### v0.1.91 (2025-04-11 14:42:41)
+
+#### 🚀  New Feature
+  * 增加 job ([a3bb26e](https://github.com/sandwich-go/protokit/commit/a3bb26ee5204222a218251a2b9d3ea0455bd7610)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2025-04-11 14:42:41 &#43;0800 &#43;0800</small>)
+
+### v0.1.90 (2025-04-08 16:32:41)
+
+#### 🚀  New Feature
+  * 增加字段级别charset ([29c6e25](https://github.com/sandwich-go/protokit/commit/29c6e25d3722af7b8b486792d85004efaa0912c1)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2025-04-08 16:32:41 &#43;0800 &#43;0800</small>)
+
+### v0.1.89 (2025-04-08 13:42:33)
+
+#### 🐛  Bug Fixed
+  * cs type index ([e88702a](https://github.com/sandwich-go/protokit/commit/e88702a8a6b80e543219a7c6b86341cb64fed56e)) (<small>[hui.wang](hui.wang@centurygame.com)@2025-03-31 11:48:53 &#43;0800 &#43;0800</small>)
+
+#### 💪  Commit
+  * 增加method handle timeout option ([f5596b4](https://github.com/sandwich-go/protokit/commit/f5596b4c60b67f16c54bb4199f7397ed455d709d)) (<small>[lanwangjinghui](wangjinghui.lan@centurygames.com)@2025-04-08 13:42:33 &#43;0800 &#43;0800</small>)
+  * Merge branch '0.1/release' of github.com:sandwich-go/protokit into 0.1/release ([56095a2](https://github.com/sandwich-go/protokit/commit/56095a2a2b5c0a6284f4a746ec13f5034a4500b4)) (<small>[hui.wang](hui.wang@centurygame.com)@2025-03-31 11:49:08 &#43;0800 &#43;0800</small>)
+
+### v0.1.88 (2025-03-31 10:34:11)
+
+#### 💪  Commit
+  * 去掉server_type_metadata  增加short_id ([ed74784](https://github.com/sandwich-go/protokit/commit/ed7478469f30d3b19d45a1740809ea20a728c4d1)) (<small>[lanwangjinghui](wangjinghui.lan@centurygames.com)@2025-03-31 10:34:11 &#43;0800 &#43;0800</small>)
+  * 增加service option 。server_type ([a1bdd16](https://github.com/sandwich-go/protokit/commit/a1bdd16ef5c3d7c044d7e563d82119669b7d4582)) (<small>[lanwangjinghui](wangjinghui.lan@centurygames.com)@2025-03-28 16:23:39 &#43;0800 &#43;0800</small>)
+
+### v0.1.87 (2025-03-28 11:08:04)
+
+#### 💪  Commit
+  * 增加service option 。server_type_metadata ([272b82f](https://github.com/sandwich-go/protokit/commit/272b82ffc49bb5c92b4502ef351798d5f4eb2609)) (<small>[lanwangjinghui](wangjinghui.lan@centurygames.com)@2025-03-28 11:08:04 &#43;0800 &#43;0800</small>)
+
+### v0.1.86 (2025-03-28 10:46:06)
+
+#### 💪  Commit
+  * 增加server type metadata ([b5fecdb](https://github.com/sandwich-go/protokit/commit/b5fecdbb8ad005906a631f434f95e8182a390bf9)) (<small>[lanwangjinghui](wangjinghui.lan@centurygames.com)@2025-03-28 10:46:06 &#43;0800 &#43;0800</small>)
+
+### v0.1.85 (2025-03-18 11:14:42)
+
+#### 💪  Commit
+  * 增加method的参数 ([c9d459e](https://github.com/sandwich-go/protokit/commit/c9d459ebe7411feb8635114f07dcddb5352051b0)) (<small>[lanwangjinghui](wangjinghui.lan@centurygames.com)@2025-03-18 11:14:42 &#43;0800 &#43;0800</small>)
+
+### v0.1.84 (2025-03-07 17:45:23)
+
+#### 💪  Commit
+  * 增加标记notify的option2 ([bb17620](https://github.com/sandwich-go/protokit/commit/bb17620b2ee6f3dd70e51b814e7481486843b31e)) (<small>[lanwangjinghui](wangjinghui.lan@centurygames.com)@2025-03-07 17:45:23 &#43;0800 &#43;0800</small>)
+
+### v0.1.83 (2025-03-07 17:35:30)
+
+#### 💪  Commit
+  * 增加标记notify的option ([f6927e5](https://github.com/sandwich-go/protokit/commit/f6927e532877f025718567518eb64d409ce34bee)) (<small>[lanwangjinghui](wangjinghui.lan@centurygames.com)@2025-03-07 17:35:30 &#43;0800 &#43;0800</small>)
+
+### v0.1.82 (2025-03-07 17:24:08)
+
+#### 🤖  Tools
+  * **sem**: make changelog ([38e72b2](https://github.com/sandwich-go/protokit/commit/38e72b22a7578cb4d43cdca9e13e30b11f898db4)) (<small>[Daming Yang](daming.yang@centurygame.com)@2025-02-26 12:59:36 &#43;0800 &#43;0800</small>)
+
+#### 💪  Commit
+  * 增加标记notify的option ([70e0916](https://github.com/sandwich-go/protokit/commit/70e0916aacf0434054b1713504469357ee18941f)) (<small>[lanwangjinghui](wangjinghui.lan@centurygames.com)@2025-03-07 17:24:08 &#43;0800 &#43;0800</small>)
+
+### v0.1.81 (2025-02-26 12:58:11)
 
 #### 🛠  Refactor
   * add protokit option for enum ([8b720ca](https://github.com/sandwich-go/protokit/commit/8b720ca58c3fa216df6be0453a70e5510cabeee4)) (<small>[Daming Yang](daming.yang@centurygame.com)@2025-02-26 12:58:11 &#43;0800 &#43;0800</small>)
