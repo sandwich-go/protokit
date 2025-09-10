@@ -2,10 +2,11 @@ package protokit
 
 import (
 	"fmt"
-	"google.golang.org/protobuf/types/descriptorpb"
 	"path"
 	"sort"
 	"strings"
+
+	"google.golang.org/protobuf/types/descriptorpb"
 
 	"github.com/sandwich-go/boost/xslice"
 )

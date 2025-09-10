@@ -72,7 +72,7 @@ func CsharpStructNameWithPackage(fullyQualifiedName string, protoPackagePath, cs
 	protoPackageWithDot := strings.ReplaceAll(protoPackagePath, "/", ".")
 	fullyQualifiedName = strings.TrimPrefix(fullyQualifiedName, ".")
 	nameWithoutProtoPackage := strings.TrimPrefix(fullyQualifiedName, protoPackageWithDot)
-	structName := CsharpStructNameFromFullyQualifiedNameTrimProtoPackage(nameWithoutProtoPackage)
+	structName := GoStructNameFromFullyQualifiedNameTrimProtoPackage(nameWithoutProtoPackage)
 	structName = strings.TrimPrefix(structName, "/")
 	if csNamespaceName == "." || csNamespaceName == "" {
 		return strings.TrimPrefix(structName, ".")
