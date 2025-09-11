@@ -107,9 +107,9 @@ func (pm *ProtoMessage) GetETLExport() *protokit2.ETLExport {
 	return nil
 }
 
-func (pm *ProtoMessage) GetETLFieldProcessor() *protokit2.ETLFieldProcessor {
+func (pm *ProtoMessage) GetETLFieldProcessor() []*protokit2.ETLFieldProcessor {
 	msgO := pm.AsMessageDescriptor().GetMessageOptions()
-	opts, ok := proto.GetExtension(msgO, protokit2.E_EtlFieldProcessors).(*protokit2.ETLFieldProcessor)
+	opts, ok := proto.GetExtension(msgO, protokit2.E_EtlFieldProcessors).([]*protokit2.ETLFieldProcessor)
 	if ok {
 		return opts
 	}
