@@ -32,7 +32,7 @@ type NamePattern struct {
 func NewNamePattern(opts ...NamePatternOption) *NamePattern {
 	cc := newDefaultNamePattern()
 	for _, opt := range opts {
-		opt(cc)
+		opt.Apply(cc)
 	}
 	if watchDogNamePattern != nil {
 		watchDogNamePattern(cc)
@@ -47,17 +47,27 @@ func NewNamePattern(opts ...NamePatternOption) *NamePattern {
 func (cc *NamePattern) ApplyOption(opts ...NamePatternOption) []NamePatternOption {
 	var previous []NamePatternOption
 	for _, opt := range opts {
-		previous = append(previous, opt(cc))
+		previous = append(previous, opt.Apply(cc))
 	}
 	return previous
 }
 
-// NamePatternOption option func
-type NamePatternOption func(cc *NamePattern) NamePatternOption
+// NamePatternOptionFunc option func
+type NamePatternOption interface {
+	Apply(cc *NamePattern) NamePatternOption
+}
+
+var _ NamePatternOption = NamePatternOptionFunc(nil)
+
+type NamePatternOptionFunc func(cc *NamePattern) NamePatternOptionFunc
+
+func (f NamePatternOptionFunc) Apply(cc *NamePattern) NamePatternOption {
+	return f(cc)
+}
 
 // WithNamePatternServerHandler code server handler名称格式化
-func WithNamePatternServerHandler(v string) NamePatternOption {
-	return func(cc *NamePattern) NamePatternOption {
+func WithNamePatternServerHandler(v string) NamePatternOptionFunc {
+	return func(cc *NamePattern) NamePatternOptionFunc {
 		previous := cc.NamePatternServerHandler
 		cc.NamePatternServerHandler = v
 		return WithNamePatternServerHandler(previous)
@@ -65,8 +75,8 @@ func WithNamePatternServerHandler(v string) NamePatternOption {
 }
 
 // WithNamePatternRPCClient code rpc client名称格式化
-func WithNamePatternRPCClient(v string) NamePatternOption {
-	return func(cc *NamePattern) NamePatternOption {
+func WithNamePatternRPCClient(v string) NamePatternOptionFunc {
+	return func(cc *NamePattern) NamePatternOptionFunc {
 		previous := cc.NamePatternRPCClient
 		cc.NamePatternRPCClient = v
 		return WithNamePatternRPCClient(previous)
@@ -74,8 +84,8 @@ func WithNamePatternRPCClient(v string) NamePatternOption {
 }
 
 // WithNamePatternActorClient code actor client名称格式化
-func WithNamePatternActorClient(v string) NamePatternOption {
-	return func(cc *NamePattern) NamePatternOption {
+func WithNamePatternActorClient(v string) NamePatternOptionFunc {
+	return func(cc *NamePattern) NamePatternOptionFunc {
 		previous := cc.NamePatternActorClient
 		cc.NamePatternActorClient = v
 		return WithNamePatternActorClient(previous)
@@ -83,8 +93,8 @@ func WithNamePatternActorClient(v string) NamePatternOption {
 }
 
 // WithNamePatternERPCClient code erpc client名称格式化
-func WithNamePatternERPCClient(v string) NamePatternOption {
-	return func(cc *NamePattern) NamePatternOption {
+func WithNamePatternERPCClient(v string) NamePatternOptionFunc {
+	return func(cc *NamePattern) NamePatternOptionFunc {
 		previous := cc.NamePatternERPCClient
 		cc.NamePatternERPCClient = v
 		return WithNamePatternERPCClient(previous)
@@ -92,8 +102,8 @@ func WithNamePatternERPCClient(v string) NamePatternOption {
 }
 
 // WithNamePatternHTTPPath 自动生成的HTTP PATHG格式
-func WithNamePatternHTTPPath(v string) NamePatternOption {
-	return func(cc *NamePattern) NamePatternOption {
+func WithNamePatternHTTPPath(v string) NamePatternOptionFunc {
+	return func(cc *NamePattern) NamePatternOptionFunc {
 		previous := cc.NamePatternHTTPPath
 		cc.NamePatternHTTPPath = v
 		return WithNamePatternHTTPPath(previous)
@@ -101,8 +111,8 @@ func WithNamePatternHTTPPath(v string) NamePatternOption {
 }
 
 // WithNamePatternJobClient job client 的名称格式化
-func WithNamePatternJobClient(v string) NamePatternOption {
-	return func(cc *NamePattern) NamePatternOption {
+func WithNamePatternJobClient(v string) NamePatternOptionFunc {
+	return func(cc *NamePattern) NamePatternOptionFunc {
 		previous := cc.NamePatternJobClient
 		cc.NamePatternJobClient = v
 		return WithNamePatternJobClient(previous)
@@ -110,8 +120,8 @@ func WithNamePatternJobClient(v string) NamePatternOption {
 }
 
 // WithNamePatternJobService job service 的名称格式化
-func WithNamePatternJobService(v string) NamePatternOption {
-	return func(cc *NamePattern) NamePatternOption {
+func WithNamePatternJobService(v string) NamePatternOptionFunc {
+	return func(cc *NamePattern) NamePatternOptionFunc {
 		previous := cc.NamePatternJobService
 		cc.NamePatternJobService = v
 		return WithNamePatternJobService(previous)
@@ -119,8 +129,8 @@ func WithNamePatternJobService(v string) NamePatternOption {
 }
 
 // WithNamePatternJobMethod job method 的名称格式化
-func WithNamePatternJobMethod(v string) NamePatternOption {
-	return func(cc *NamePattern) NamePatternOption {
+func WithNamePatternJobMethod(v string) NamePatternOptionFunc {
+	return func(cc *NamePattern) NamePatternOptionFunc {
 		previous := cc.NamePatternJobMethod
 		cc.NamePatternJobMethod = v
 		return WithNamePatternJobMethod(previous)
@@ -133,11 +143,9 @@ func InstallNamePatternWatchDog(dog func(cc *NamePattern)) { watchDogNamePattern
 // watchDogNamePattern global watch dog
 var watchDogNamePattern func(cc *NamePattern)
 
-// newDefaultNamePattern new default NamePattern
-func newDefaultNamePattern() *NamePattern {
-	cc := &NamePattern{}
-
-	for _, opt := range [...]NamePatternOption{
+// setNamePatternDefaultValue default NamePattern value
+func setNamePatternDefaultValue(cc *NamePattern) {
+	for _, opt := range [...]NamePatternOptionFunc{
 		WithNamePatternServerHandler("ServerHandler%s"),
 		WithNamePatternRPCClient("RPCClient%s"),
 		WithNamePatternActorClient("ActorClient%s"),
@@ -149,7 +157,12 @@ func newDefaultNamePattern() *NamePattern {
 	} {
 		opt(cc)
 	}
+}
 
+// newDefaultNamePattern new default NamePattern
+func newDefaultNamePattern() *NamePattern {
+	cc := &NamePattern{}
+	setNamePatternDefaultValue(cc)
 	return cc
 }
 
