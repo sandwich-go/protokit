@@ -1,4 +1,12 @@
-### v0.1.105 🌈 (2025-09-12 16:33:10)
+### v0.1.106 🌈 (2025-09-12 19:06:39)
+
+#### 🚀  New Feature
+  * etl params ([65e875e](https://github.com/sandwich-go/protokit/commit/65e875e30428e70ed10072dcd42998e86a70b2b1) , [288eef2](https://github.com/sandwich-go/protokit/commit/288eef2a35cb0a8471b33afeec7237e86d1b6a86)) (<small>[hui.wang](hui.wang@centurygame.com)@2025-09-12 19:06:39 &#43;0800 &#43;0800</small>)
+
+#### 🤖  Tools
+  * **sem**: make changelog ([e971a3d](https://github.com/sandwich-go/protokit/commit/e971a3d1f8904c6a86ed43bacec557087f84291d)) (<small>[hui.wang](hui.wang@centurygame.com)@2025-09-12 16:47:07 &#43;0800 &#43;0800</small>)
+
+### v0.1.105 (2025-09-12 16:33:10)
 
 #### 🚀  New Feature
   * etl params ([6e71ef3](https://github.com/sandwich-go/protokit/commit/6e71ef3a906010bc8e646bd12741994efe2791a1)) (<small>[hui.wang](hui.wang@centurygame.com)@2025-09-12 16:33:10 &#43;0800 &#43;0800</small>)
