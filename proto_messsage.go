@@ -98,23 +98,6 @@ func (pm *ProtoMessage) HasCommentField(comment string) bool {
 	}
 	return false
 }
-func (pm *ProtoMessage) GetETLExport() *protokit2.ETLExport {
-	msgO := pm.AsMessageDescriptor().GetMessageOptions()
-	opts, ok := proto.GetExtension(msgO, protokit2.E_EtlExport).(*protokit2.ETLExport)
-	if ok {
-		return opts
-	}
-	return nil
-}
-
-func (pm *ProtoMessage) GetETLFieldProcessor() []*protokit2.ETLFieldProcessor {
-	msgO := pm.AsMessageDescriptor().GetMessageOptions()
-	opts, ok := proto.GetExtension(msgO, protokit2.E_EtlFieldProcessors).([]*protokit2.ETLFieldProcessor)
-	if ok {
-		return opts
-	}
-	return nil
-}
 
 func (pm *ProtoMessage) GetOrmOption() *protokit2.OrmMessageOptions {
 	msgO := pm.AsMessageDescriptor().GetMessageOptions()
