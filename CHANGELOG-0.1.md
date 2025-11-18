@@ -1,4 +1,20 @@
-### v0.1.111 🌈 (2025-09-26 16:11:59)
+### v0.1.113 🌈 (2025-11-18 14:20:48)
+
+#### 🐛  Bug Fixed
+  * global field ([c989aa2](https://github.com/sandwich-go/protokit/commit/c989aa2cd3befe41a46f77d8f40ac6b5f4e9ac0f)) (<small>[hui.wang](hui.wang@centurygame.com)@2025-11-18 14:20:16 &#43;0800 &#43;0800</small>)
+
+#### 💪  Commit
+  * Merge branch '0.1/release' of github.com:sandwich-go/protokit into 0.1/release ([03ea9d7](https://github.com/sandwich-go/protokit/commit/03ea9d7522aa9f973d22129490e7c78840e50cdb)) (<small>[hui.wang](hui.wang@centurygame.com)@2025-11-18 14:20:48 &#43;0800 &#43;0800</small>)
+
+### v0.1.112 (2025-10-17 12:42:00)
+
+#### 🚀  New Feature
+  * bean中增加phantom ([bae7458](https://github.com/sandwich-go/protokit/commit/bae7458c4201ca4a2e7ddc26cc53c674fd64cfa6)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2025-10-17 12:42:00 &#43;0800 &#43;0800</small>)
+
+#### 🤖  Tools
+  * **sem**: make changelog ([a669f69](https://github.com/sandwich-go/protokit/commit/a669f69367275317338cc9a5a5c3759af03c3295)) (<small>[hui.wang](hui.wang@centurygame.com)@2025-09-26 16:12:17 &#43;0800 &#43;0800</small>)
+
+### v0.1.111 (2025-09-26 16:11:59)
 
 #### 🐛  Bug Fixed
   * etl ([4cb0625](https://github.com/sandwich-go/protokit/commit/4cb062504fb51f0aa066688f49f79c3a51d2bc09)) (<small>[hui.wang](hui.wang@centurygame.com)@2025-09-26 16:11:59 &#43;0800 &#43;0800</small>)
