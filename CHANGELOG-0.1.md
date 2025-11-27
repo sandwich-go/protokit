@@ -1,4 +1,12 @@
-### v0.1.113 🌈 (2025-11-18 14:20:48)
+### v0.1.114 🌈 (2025-11-26 19:15:42)
+
+#### 🚀  New Feature
+  * OrmFieldOptions add cross index ([9c71302](https://github.com/sandwich-go/protokit/commit/9c71302d44e6ffc10bad85ed6c1b460d337d8fbf)) (<small>[mengchao](chao.meng@ddhd.cn)@2025-11-26 19:15:42 &#43;0800 &#43;0800</small>)
+
+#### 🤖  Tools
+  * **sem**: make changelog ([861f367](https://github.com/sandwich-go/protokit/commit/861f3670df21967e57bd77a5d8daed4051aaaa23)) (<small>[hui.wang](hui.wang@centurygame.com)@2025-11-18 14:21:13 &#43;0800 &#43;0800</small>)
+
+### v0.1.113 (2025-11-18 14:20:48)
 
 #### 🐛  Bug Fixed
   * global field ([c989aa2](https://github.com/sandwich-go/protokit/commit/c989aa2cd3befe41a46f77d8f40ac6b5f4e9ac0f)) (<small>[hui.wang](hui.wang@centurygame.com)@2025-11-18 14:20:16 &#43;0800 &#43;0800</small>)
