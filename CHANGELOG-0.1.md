@@ -1,4 +1,12 @@
-### v0.1.114 🌈 (2025-11-26 19:15:42)
+### v0.1.115 🌈 (2025-11-28 11:05:22)
+
+#### 🛠  Refactor
+  * rename cross_index to corss_world_index ([97188ce](https://github.com/sandwich-go/protokit/commit/97188ce792c09e79f2daa25258fec2305f828597)) (<small>[mengchao](chao.meng@ddhd.cn)@2025-11-28 11:05:22 &#43;0800 &#43;0800</small>)
+
+#### 🤖  Tools
+  * **sem**: make changelog ([7ae9b20](https://github.com/sandwich-go/protokit/commit/7ae9b2056ede473d256b67482dc31c58a433989c)) (<small>[mengchao](chao.meng@ddhd.cn)@2025-11-27 11:49:28 &#43;0800 &#43;0800</small>)
+
+### v0.1.114 (2025-11-26 19:15:42)
 
 #### 🚀  New Feature
   * OrmFieldOptions add cross index ([9c71302](https://github.com/sandwich-go/protokit/commit/9c71302d44e6ffc10bad85ed6c1b460d337d8fbf)) (<small>[mengchao](chao.meng@ddhd.cn)@2025-11-26 19:15:42 &#43;0800 &#43;0800</small>)
