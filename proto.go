@@ -106,6 +106,7 @@ type Method struct {
 	CsRpcBlocking                  string   // 是否阻塞
 	CsWeakNetworkThreshold         int32    // 弱网阈值
 	CsDisconnectionThreshold       int32    // 断网阈值
+	Custom                         string   // 自定义
 }
 
 func (m *Method) AsMethodDescriptor() *desc.MethodDescriptor { return m.md }
