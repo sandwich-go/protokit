@@ -216,6 +216,8 @@ func (so *methodOptionAnnotation) String(key string, defaultVal ...string) strin
 		return so.GetCsAutoResend()
 	case CsRpcBlocking:
 		return so.GetCsBlocking()
+	case Custom:
+		return so.GetCustom()
 	default:
 		panic(fmt.Sprintf("RpcMethodOptions get string unknown key: %s", key))
 	}
