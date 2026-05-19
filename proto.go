@@ -107,6 +107,10 @@ type Method struct {
 	CsWeakNetworkThreshold         int32    // 弱网阈值
 	CsDisconnectionThreshold       int32    // 断网阈值
 	Custom                         string   // 自定义
+
+	// saga 相关；仅当所属 Service 是 saga service 时填充
+	SagaStep      *protokit2.SagaStepOption // saga step 元数据，nil 表示该 method 不是 saga step
+	SagaStepIndex int                       // 在 saga service 内的声明顺序，从 0 起；只有 SagaStep != nil 时有效
 }
 
 func (m *Method) AsMethodDescriptor() *desc.MethodDescriptor { return m.md }
@@ -141,6 +145,9 @@ type Service struct {
 	Labels                     []string  // 标签
 	ShortId                    string    // 短id
 	HasSymbiont                bool
+
+	// saga 相关；非 nil 表示这个 service 是一条 saga chain
+	SagaChain *protokit2.SagaChainOption
 }
 
 func (s *Service) AsServiceDescriptor() *desc.ServiceDescriptor { return s.sd }
@@ -151,7 +158,7 @@ type ServiceGroup struct {
 	ImportSet     *ImportSet // 同一个ServiceGroup内的service共享同一个ImportSet，目的是生成到同一个文件
 }
 
-var allServiceTags = []ServiceTag{ServiceTagALL, ServiceTagRPC, ServiceTagActor, ServiceTagERPC, ServiceTagJob}
+var allServiceTags = []ServiceTag{ServiceTagALL, ServiceTagRPC, ServiceTagActor, ServiceTagERPC, ServiceTagJob, ServiceTagSaga}
 
 type ProtoFile struct {
 	Namespace           string                   // 当前文件所属的NameSpace名称，在构建package信息的时候需要使用

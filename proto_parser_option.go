@@ -63,6 +63,24 @@ func getBackOfficeMethodOption(md *descriptorpb.MethodDescriptorProto) *protokit
 	return nil
 }
 
+func getSagaChainOption(sd *desc.ServiceDescriptor) *protokit2.SagaChainOption {
+	msgO := sd.GetServiceOptions()
+	opts, ok := proto.GetExtension(msgO, protokit2.E_SagaChain).(*protokit2.SagaChainOption)
+	if ok {
+		return opts
+	}
+	return nil
+}
+
+func getSagaStepOption(md *descriptorpb.MethodDescriptorProto) *protokit2.SagaStepOption {
+	msgO := md.GetOptions()
+	opts, ok := proto.GetExtension(msgO, protokit2.E_SagaStep).(*protokit2.SagaStepOption)
+	if ok {
+		return opts
+	}
+	return nil
+}
+
 type serviceAnnotation interface {
 	Bool(key string, defaultVal ...bool) (bool, error)
 	String(key string, defaultVal ...string) string

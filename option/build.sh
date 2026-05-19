@@ -5,4 +5,5 @@
 protos/protokit/orm.proto \
 protos/protokit/rpc.proto \
 protos/protokit/misc.proto \
-protos/protokit/etl.proto
+protos/protokit/etl.proto \
+protos/protokit/saga.proto

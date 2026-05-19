@@ -4,8 +4,11 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/jhump/protoreflect/desc"
 	"github.com/rs/zerolog/log"
 	"github.com/sandwich-go/boost/xstrings"
+	protokit2 "github.com/sandwich-go/protokit/option/gen/golang/protokit"
+	"google.golang.org/protobuf/types/descriptorpb"
 )
 
 func nameMustHaveSuffix(s string, suffix string) string {
@@ -34,10 +37,27 @@ func (p *Parser) parseService() {
 func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, reqMap map[string]string) (ret []*Service) {
 	fdp := protoFile.fd.AsFileDescriptorProto()
 	for i, protoService := range fdp.Service {
+		sd := protoFile.fd.GetServices()[i]
+
+		// saga service 与其它 tag 严格互斥：
+		//   - st == ServiceTagSaga 时只接收 saga service
+		//   - st != ServiceTagSaga 时跳过 saga service
+		// 这样避免 saga service 被 RPC/Actor/ERPC/Job 等生成路径误处理。
+		sagaChain := getSagaChainOption(sd)
+		if (st == ServiceTagSaga) != (sagaChain != nil) {
+			continue
+		}
+		if st == ServiceTagSaga {
+			if svc := p.parseSagaService(protoFile, protoService, sd, sagaChain); svc != nil {
+				ret = append(ret, svc)
+			}
+			continue
+		}
+
 		name := protoService.GetName()
 		service := &Service{
 			Parser:         p,
-			sd:             protoFile.fd.GetServices()[i],
+			sd:             sd,
 			Name:           name,
 			DeprecatedName: xstrings.CamelCase(nameMustHaveSuffix(name, "Service")),
 			DescName:       fmt.Sprintf("%s.%s", fdp.GetPackage(), name),
@@ -343,4 +363,84 @@ func (p *Parser) typeStr(dotFullyQualifiedTypeName string) string {
 		return strings.Join([]string{protoFile.GolangPackageName, ss[len(ss)-1]}, ".")
 	}
 	return strings.Join(ss[len(ss)-2:], ".")
+}
+
+// parseSagaService 处理一条 saga chain (service+rpc 形式)。
+// 与 RPC/Actor/ERPC/Job 路径严格隔离：saga service 不参与 NamePattern* 命名、
+// query path、proxy、grpc style 等 RPC 概念。
+func (p *Parser) parseSagaService(
+	protoFile *ProtoFile,
+	protoService *descriptorpb.ServiceDescriptorProto,
+	sd *desc.ServiceDescriptor,
+	sagaChain *protokit2.SagaChainOption,
+) *Service {
+	fdp := protoFile.fd.AsFileDescriptorProto()
+	name := protoService.GetName()
+	service := &Service{
+		Parser:        p,
+		sd:            sd,
+		Name:          name,
+		ServiceName:   name, // saga service 不需要 NamePattern* 转换
+		DescName:      fmt.Sprintf("%s.%s", fdp.GetPackage(), name),
+		DescProtoFile: fdp.GetName(),
+		SagaChain:     sagaChain,
+	}
+	if comment, ok := p.comments[protoService]; ok {
+		service.Comment = comment.Content
+	}
+
+	for j, protoMethod := range protoService.Method {
+		m := p.sagaMethod(protoMethod, sd.GetMethods()[j], j)
+		service.Methods = append(service.Methods, m)
+	}
+
+	if len(service.Methods) == 0 {
+		return nil
+	}
+
+	// fail-fast 校验
+	for _, m := range service.Methods {
+		if m.SagaStep == nil {
+			log.Fatal().
+				Str("service", service.Name).
+				Str("method", m.Name).
+				Str("proto", fdp.GetName()).
+				Msg("saga service method missing (saga_step) option")
+		}
+	}
+	seenKey := make(map[string]string, len(service.Methods))
+	for _, m := range service.Methods {
+		if dup, ok := seenKey[m.SagaStep.Key]; ok {
+			log.Fatal().
+				Str("service", service.Name).
+				Str("key", m.SagaStep.Key).
+				Str("method_now", m.Name).
+				Str("method_prev", dup).
+				Msg("duplicate saga step key")
+		}
+		seenKey[m.SagaStep.Key] = m.Name
+	}
+
+	return service
+}
+
+// sagaMethod 仅填充 saga step 必需的最小字段集，保留 input/output 类型信息
+// 给下游生成器（protokitgo）解析 payload 用。
+func (p *Parser) sagaMethod(
+	protoMethod *descriptorpb.MethodDescriptorProto,
+	md *desc.MethodDescriptor,
+	index int,
+) *Method {
+	m := &Method{
+		md:                             md,
+		Name:                           protoMethod.GetName(),
+		SagaStep:                       getSagaStepOption(protoMethod),
+		SagaStepIndex:                  index,
+		TypeInputDotFullQualifiedName:  "." + md.GetInputType().GetFullyQualifiedName(),
+		TypeOutputDotFullQualifiedName: "." + md.GetOutputType().GetFullyQualifiedName(),
+	}
+	if comment, ok := p.comments[protoMethod]; ok {
+		m.Comment = comment.Content
+	}
+	return m
 }
