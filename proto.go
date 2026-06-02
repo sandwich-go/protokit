@@ -49,6 +49,7 @@ func NewImportSet(golangPackageName, golangPackagePath string) *ImportSet {
 type Method struct {
 	md               *desc.MethodDescriptor
 	RpcOption        *protokit2.RpcMethodOptions
+	PermissionOption *protokit2.ApiPermissionOptions
 	BackOfficeOption *protokit2.BackOfficeMethodOptions
 	JobOption        *protokit2.JobMethodOptions
 	Name             string // 方法名称，proto中获取到的原始名称
@@ -119,6 +120,7 @@ type Service struct {
 	Parser                     *Parser
 	sd                         *desc.ServiceDescriptor
 	RpcOption                  *protokit2.RpcServiceOptions
+	PermissionOption           *protokit2.ApiPermissionOptions
 	BackOfficeOption           *protokit2.BackOfficeServiceOptions
 	IsJob                      bool
 	Name                       string    // 通过proto获取到的原始名字

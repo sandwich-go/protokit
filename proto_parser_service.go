@@ -64,6 +64,7 @@ func (p *Parser) parseServiceForProtoFile(protoFile *ProtoFile, st ServiceTag, r
 			DescProtoFile:  fdp.GetName(),
 		}
 		service.RpcOption = getRpcServiceOption(service.sd)
+		service.PermissionOption = getApiPermissionServiceOption(service.sd)
 		service.BackOfficeOption = getBackOfficeServiceOption(service.sd)
 
 		service.IsJob = isJobService(service.sd)

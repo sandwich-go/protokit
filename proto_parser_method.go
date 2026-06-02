@@ -54,6 +54,7 @@ func (p *Parser) method(
 	method := &Method{
 		md:                             md,
 		RpcOption:                      getRpcMethodOption(protoMethod),
+		PermissionOption:               getApiPermissionMethodOption(protoMethod),
 		BackOfficeOption:               getBackOfficeMethodOption(protoMethod),
 		JobOption:                      getJobMethodOption(protoMethod),
 		Name:                           methodName,
