@@ -1,4 +1,45 @@
-### v0.1.115 🌈 (2025-11-28 11:05:22)
+### v0.1.122 🌈 (2026-06-13 15:28:36)
+
+#### 🚀  New Feature
+  * parse api permission options ([441ff87](https://github.com/sandwich-go/protokit/commit/441ff8704ec5eabf48eb93da1a5a30537f4ee05b)) (<small>[daming.yang](daming.yang@centurygame.com)@2026-06-03 07:35:26 &#43;0800 &#43;0800</small>)
+
+#### 🛠  Refactor
+  * PMT添加生成permisson代码 ([2f24548](https://github.com/sandwich-go/protokit/commit/2f245488e458eb533a17c891874dbc714ad10971)) (<small>[daming.yang](daming.yang@centurygame.com)@2026-06-13 15:28:36 &#43;0800 &#43;0800</small>)
+
+### v0.1.121 (2026-05-19 18:50:09)
+
+#### 🚀  New Feature
+  * 增加saga ([9c31a17](https://github.com/sandwich-go/protokit/commit/9c31a175661d357805b50b9cab72cabd7c68a1f7)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2026-05-19 18:50:09 &#43;0800 &#43;0800</small>)
+
+### v0.1.120 (2026-05-13 15:31:08)
+
+#### 🚀  New Feature
+  * bean 增加 server ([6cf81bc](https://github.com/sandwich-go/protokit/commit/6cf81bc881c4bb23e22b20faa2a55748d9d069d5)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2026-05-13 15:31:08 &#43;0800 &#43;0800</small>)
+
+### v0.1.119 (2026-04-20 15:33:09)
+
+#### 💪  Commit
+  * bean的option ([8d1d882](https://github.com/sandwich-go/protokit/commit/8d1d882e5b3875e7db7a6c4218ac890cc1819c58)) (<small>[lanwangjinghui](wangjinghui.lan@centurygames.com)@2026-04-20 15:33:09 &#43;0800 &#43;0800</small>)
+
+### v0.1.118 (2026-04-10 11:10:45)
+
+#### 💪  Commit
+  * view level ([7ffab5d](https://github.com/sandwich-go/protokit/commit/7ffab5df3e9f79e2a7aaa9786519051efdfe8d39)) (<small>[lanwangjinghui](wangjinghui.lan@centurygames.com)@2026-04-10 11:10:45 &#43;0800 &#43;0800</small>)
+
+### v0.1.117 (2026-01-12 19:11:47)
+
+#### 💪  Commit
+  * feat 新option ([559e51a](https://github.com/sandwich-go/protokit/commit/559e51aea2a59d3f52c34554e19673eac56d04b0)) (<small>[lanwangjinghui](wangjinghui.lan@centurygames.com)@2026-01-12 19:11:47 &#43;0800 &#43;0800</small>)
+
+### v0.1.116 (2026-01-12 19:00:47)
+
+#### 🤖  Tools
+  * **sem**: make changelog ([c2a975b](https://github.com/sandwich-go/protokit/commit/c2a975bc58b506f3cc00639aa6817d255c9f6c46)) (<small>[mengchao](chao.meng@ddhd.cn)@2025-11-28 11:05:48 &#43;0800 &#43;0800</small>)
+
+#### 💪  Commit
+  * feat 新option ([ab119e5](https://github.com/sandwich-go/protokit/commit/ab119e54f7a6f767a438c5875baa21b99ed33e6d)) (<small>[lanwangjinghui](wangjinghui.lan@centurygames.com)@2026-01-12 19:00:47 &#43;0800 &#43;0800</small>)
+
+### v0.1.115 (2025-11-28 11:05:22)
 
 #### 🛠  Refactor
   * rename cross_index to corss_world_index ([97188ce](https://github.com/sandwich-go/protokit/commit/97188ce792c09e79f2daa25258fec2305f828597)) (<small>[mengchao](chao.meng@ddhd.cn)@2025-11-28 11:05:22 &#43;0800 &#43;0800</small>)
