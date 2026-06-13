@@ -601,7 +601,7 @@ type GMTDynamic struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// API-token permission metadata for generated dynamic CRUD service.
+	// 生成 dynamic CRUD 服务时使用的 API Token 权限元数据。
 	ApiPermission *GMTDynamicAPIPermission `protobuf:"bytes,1,opt,name=api_permission,json=apiPermission,proto3" json:"api_permission,omitempty"`
 }
 
@@ -649,7 +649,7 @@ type GMTDynamicAPIPermission struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// Permission resource name. Empty means do not generate API-token permission metadata.
+	// 权限资源名；为空时不生成 API Token 权限元数据。
 	Resource string `protobuf:"bytes,1,opt,name=resource,proto3" json:"resource,omitempty"`
 }
 
