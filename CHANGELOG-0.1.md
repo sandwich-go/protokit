@@ -1,4 +1,17 @@
-### v0.1.122 🌈 (2026-06-13 15:28:36)
+### v0.1.124 🌈 (2026-07-22 21:07:27)
+
+#### 🐛  Bug Fixed
+  * parse error ([b149e7a](https://github.com/sandwich-go/protokit/commit/b149e7aaf422d5ba7d9b04c37033232569a5a5b2)) (<small>[hui.wang](hui.wang@centurygame.com)@2026-07-22 21:07:27 &#43;0800 &#43;0800</small>)
+
+### v0.1.123 (2026-07-08 12:50:07)
+
+#### 🚀  New Feature
+  * BlobSize 新增 BLOB_SIZE_VARBINARY 支持定长 VARBINARY(size) 列 ([c0742ec](https://github.com/sandwich-go/protokit/commit/c0742ec3310421dc4586839d691e0f86a68dff72)) (<small>[huangqing.zhu](huangqing.zhu@centurygame.com)@2026-07-08 12:50:07 &#43;0800 &#43;0800</small>)
+
+#### 🤖  Tools
+  * **sem**: make changelog ([903363b](https://github.com/sandwich-go/protokit/commit/903363b38b25ec1f5cb83ece12e0e39980b3cffc)) (<small>[daming.yang](daming.yang@centurygame.com)@2026-06-13 15:29:46 &#43;0800 &#43;0800</small>)
+
+### v0.1.122 (2026-06-13 15:28:36)
 
 #### 🚀  New Feature
   * parse api permission options ([441ff87](https://github.com/sandwich-go/protokit/commit/441ff8704ec5eabf48eb93da1a5a30537f4ee05b)) (<small>[daming.yang](daming.yang@centurygame.com)@2026-06-03 07:35:26 &#43;0800 &#43;0800</small>)
