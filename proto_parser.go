@@ -83,6 +83,16 @@ func (p *Parser) Clean() {
 }
 
 func (p *Parser) Parse(nsList ...*Namespace) {
+	xpanic.WhenError(p.ParseE(nsList...))
+}
+
+func (p *Parser) ParseE(nsList ...*Namespace) (err error) {
+	defer func() {
+		if r := recover(); r != nil {
+			err = fmt.Errorf("parse proto failed: %v", r)
+		}
+	}()
+
 	parser := &protoparse.Parser{
 		IncludeSourceCodeInfo: true,
 		Accessor:              p.cc.ProtoFileAccessor,
@@ -95,7 +105,9 @@ func (p *Parser) Parse(nsList ...*Namespace) {
 		// 获取文件列表
 		fileListAbs := make([]string, 0)
 		err := xos.FilePathWalkFollowLink(pathProtoRoot, xos.FileWalkFuncWithExcludeFilter(&fileListAbs, p.cc.ProtoFileExcludeFilter, ".proto"))
-		xpanic.WhenErrorAsFmtFirst(err, "got error: %w while walk dir:%s", pathProtoRoot)
+		if err != nil {
+			return fmt.Errorf("walk proto dir %s: %w", pathProtoRoot, err)
+		}
 		// 路径替换为相对路径，Parser需求，按照相对proto文件名查找依赖
 		fileList := make([]string, len(fileListAbs))
 		for index, filePath := range fileListAbs {
@@ -106,7 +118,9 @@ func (p *Parser) Parse(nsList ...*Namespace) {
 		// 按照FileDescriptor解析所有proto文件
 		var fds []*desc.FileDescriptor
 		fds, err = parser.ParseFiles(fileList...)
-		xpanic.WhenErrorAsFmtFirst(err, "got error: %w while parse files under dir:%s", pathProtoRoot)
+		if err != nil {
+			return fmt.Errorf("parse proto files under dir %s: %w", pathProtoRoot, err)
+		}
 		for index, fd := range fds {
 			golangPackagePath, golangPackageName := GolangPackagePathAndName(fd, p.cc.GolangBasePackagePath, p.cc.GolangRelative)
 			pf := NewProtoFile(golangPackageName, golangPackagePath)
@@ -115,7 +129,9 @@ func (p *Parser) Parse(nsList ...*Namespace) {
 			pf.FilePath = fd.GetName()
 			filePath := fileListAbs[index]
 			bb, err := xos.FileGetContents(filePath)
-			xpanic.WhenErrorAsFmtFirst(err, "got error: %w while load file content:%s", filePath)
+			if err != nil {
+				return fmt.Errorf("load proto file content %s: %w", filePath, err)
+			}
 			pf.Content = string(bb)
 			pf.Package = fd.GetPackage()
 			if pf.Package == "" {
@@ -146,6 +162,7 @@ func (p *Parser) Parse(nsList ...*Namespace) {
 	// 解析package
 	p.parsePackage(nsList)
 	p.parseAnnotation()
+	return nil
 }
 
 func (p *Parser) setType(mdp *desc.MessageDescriptor, name string, pf *ProtoFile) {

@@ -24,6 +24,7 @@ type ProtoMessage struct {
 	Parser                        *Parser
 	ValidateOptions               *validate.MessageConstraints
 	hasValidateOption             *bool
+	FullName                      string
 }
 
 func NewProtoMessage(pf *ProtoFile, md *desc.MessageDescriptor) *ProtoMessage {

@@ -30,7 +30,7 @@ func (p *Parser) parsedMessageOrEnumGuard(d desc.Descriptor) bool {
 	return ok
 }
 
-func (p *Parser) parseProtoFileMessage(pf *ProtoFile, md *desc.MessageDescriptor) {
+func (p *Parser) parseProtoFileMessage(pf *ProtoFile, md *desc.MessageDescriptor, parent *desc.MessageDescriptor) {
 	if p.parsedMessageOrEnumGuard(md) {
 		return
 	}
@@ -39,6 +39,7 @@ func (p *Parser) parseProtoFileMessage(pf *ProtoFile, md *desc.MessageDescriptor
 		return
 	}
 	pm := p.BuildProtoMessage(pf, md)
+
 	for _, f := range md.GetFields() {
 		protoField := p.BuildProtoField(pf, pm, f)
 		pm.Fields = append(pm.Fields, protoField)
@@ -56,7 +57,7 @@ func (p *Parser) parseProtoFileMessage(pf *ProtoFile, md *desc.MessageDescriptor
 		if mt.IsMapEntry() {
 			continue
 		}
-		p.parseProtoFileMessage(pf, mt)
+		p.parseProtoFileMessage(pf, mt, md)
 	}
 	for _, et := range md.GetNestedEnumTypes() {
 		p.parseProtoFileEnum(pf, et)
@@ -74,7 +75,7 @@ func (p *Parser) parseProtoFileEnum(pf *ProtoFile, ed *desc.EnumDescriptor) {
 
 func (p *Parser) parseProtoFileMessages(pf *ProtoFile) {
 	for _, mt := range pf.fd.GetMessageTypes() {
-		p.parseProtoFileMessage(pf, mt)
+		p.parseProtoFileMessage(pf, mt, nil)
 	}
 	for _, et := range pf.fd.GetEnumTypes() {
 		p.parseProtoFileEnum(pf, et)
