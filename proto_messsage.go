@@ -119,6 +119,16 @@ func (pm *ProtoMessage) GetMessageOption() *protokit2.RpcMessageOptions {
 	return nil
 }
 
+// GetCommonMessageOption 获取通用 message option，未配置时返回 nil。
+func (pm *ProtoMessage) GetCommonMessageOption() *protokit2.CommonMessageOptions {
+	msgO := pm.AsMessageDescriptor().GetMessageOptions()
+	opts, ok := proto.GetExtension(msgO, protokit2.E_MessageOpts).(*protokit2.CommonMessageOptions)
+	if ok {
+		return opts
+	}
+	return nil
+}
+
 func (pm *ProtoMessage) OrmNoLog() bool {
 	opts := pm.GetOrmOption()
 	if opts == nil {
