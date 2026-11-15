@@ -62,3 +62,37 @@ message Outer {
 		})
 	}
 }
+
+func TestPhantomDomainOption(t *testing.T) {
+	dir := t.TempDir()
+	// 经过实际 proto 解析和扩展解码，确保 option 描述符与生成的 Go 类型一致。
+	const source = `syntax = "proto3";
+package example;
+import "protokit/orm.proto";
+message User {
+  option (protokit.orm_message).bean = {};
+  option (protokit.orm_message).phantom_domain = "user";
+}
+message TruckBrief {
+  option (protokit.orm_message).bean = {phantom: {depend_bean: "truck"}};
+  option (protokit.orm_message).phantom_domain = "user";
+}
+message Unconfigured {
+  option (protokit.orm_message).bean = {};
+}
+`
+	if err := os.WriteFile(filepath.Join(dir, "phantom_domain.proto"), []byte(source), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	parser := protoparse.Parser{ImportPaths: []string{dir, "option/protos"}}
+	files, err := parser.ParseFiles("phantom_domain.proto")
+	if err != nil {
+		t.Fatal(err)
+	}
+	for name, want := range map[string]string{"User": "user", "TruckBrief": "user", "Unconfigured": ""} {
+		message := NewProtoMessage(&ProtoFile{}, files[0].FindMessage("example."+name))
+		if got := message.GetOrmOption().GetPhantomDomain(); got != want {
+			t.Errorf("%s phantom_domain = %q, want %q", name, got, want)
+		}
+	}
+}
